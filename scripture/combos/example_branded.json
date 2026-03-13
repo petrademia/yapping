@@ -1,0 +1,142 @@
+[
+  {
+    "action": "Send to Graveyard",
+    "card_name": "Fallen of the White Dragon",
+    "card_code": 73819701
+  },
+  {
+    "action": "Send to Graveyard",
+    "card_name": "Albion the Branded Dragon",
+    "card_code": 87746184
+  },
+  {
+    "action": "Summon",
+    "card_name": "Incredible Ecclesia, the Virtuous",
+    "card_code": 55273560
+  },
+  {
+    "action": "Synchro Summon",
+    "card_name": "Incredible Ecclesia, the Virtuous",
+    "card_code": 55273560
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Incredible Ecclesia, the Virtuous",
+    "card_code": 55273560
+  },
+  {
+    "action": "Special Summon",
+    "card_name": "Blazing Cartesia, the Virtuous",
+    "card_code": 95515789
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Blazing Cartesia, the Virtuous",
+    "card_code": 95515789
+  },
+  {
+    "action": "Fusion Summon",
+    "card_name": "Granguignol the Dusk Dragon",
+    "card_code": 24915933
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Granguignol the Dusk Dragon",
+    "card_code": 24915933
+  },
+  {
+    "action": "Send to Graveyard",
+    "card_name": "Titaniklad the Ash Dragon",
+    "card_code": 41373230
+  },
+  {
+    "action": "Cancel",
+    "card_name": "End Phase",
+    "card_code": 0
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Titaniklad the Ash Dragon",
+    "card_code": 41373230
+  },
+  {
+    "action": "Special Summon",
+    "card_name": "Guiding Quem, the Virtuous",
+    "card_code": 45883110
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Guiding Quem, the Virtuous",
+    "card_code": 45883110
+  },
+  {
+    "action": "Send to Graveyard",
+    "card_name": "Branded in High Spirits",
+    "card_code": 29948294
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Albion the Branded Dragon",
+    "card_code": 87746184
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Incredible Ecclesia, the Virtuous",
+    "card_code": 55273560
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Blazing Cartesia, the Virtuous",
+    "card_code": 95515789
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Branded in High Spirits",
+    "card_code": 29948294
+  },
+  {
+    "action": "Activate Card",
+    "card_name": "Branded Opening",
+    "card_code": 36637374
+  },
+  {
+    "action": "Special Summon",
+    "card_name": "Aluber the Jester of Despia",
+    "card_code": 62962630
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Aluber the Jester of Despia",
+    "card_code": 62962630
+  },
+  {
+    "action": "Add to Hand",
+    "card_name": "Branded in Red",
+    "card_code": 82738008
+  },
+  {
+    "action": "Activate Card",
+    "card_name": "Branded in Red",
+    "card_code": 82738008
+  },
+  {
+    "action": "Fusion Summon",
+    "card_name": "Lubellion the Searing Dragon",
+    "card_code": 70534340
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Lubellion the Searing Dragon",
+    "card_code": 70534340
+  },
+  {
+    "action": "Activate Effect",
+    "card_name": "Guiding Quem, the Virtuous",
+    "card_code": 45883110
+  },
+  {
+    "action": "Fusion Summon",
+    "card_name": "Mirrorjade the Iceblade Dragon",
+    "card_code": 44146295
+  }
+]

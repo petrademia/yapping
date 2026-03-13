@@ -1,0 +1,242 @@
+{
+  "_comment": "Starter scored-trace rules for the seeded Branded line. Keep line-level bonuses in rules/order_bonus and use prompt_bias_rules for local candidate selection.",
+  "prompt_bias_rules": [
+    {
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [45883110, 29948294],
+      "reason": "wait_main_quem_plus_high_spirits"
+    },
+    {
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [45883110, 60242223],
+      "reason": "wait_main_quem_plus_saronir"
+    },
+    {
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [73819701, 95515790],
+      "reason": "wait_main_fallen_plus_cartesia"
+    },
+    {
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [73819701, 29948294],
+      "reason": "wait_main_fallen_plus_high_spirits"
+    },
+    {
+      "when_msg_id": 1,
+      "when_phase_in": ["main1", "main2", "main"],
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [45883110, 60242223, 29948294],
+      "prefer_codes": [45883110],
+      "prefer_act_ids": [4],
+      "bonus": 120,
+      "reason": "open_quem_when_quem_saronir_high_spirits"
+    },
+    {
+      "when_msg_id": 1,
+      "when_phase_in": ["main1", "main2", "main"],
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [45883110, 29948294],
+      "prefer_codes": [45883110],
+      "prefer_act_ids": [4],
+      "bonus": 78,
+      "reason": "open_quem_when_quem_plus_high_spirits"
+    },
+    {
+      "when_msg_id": 1,
+      "when_phase_in": ["main1", "main2", "main"],
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [45883110, 60242223],
+      "prefer_codes": [45883110],
+      "prefer_act_ids": [4],
+      "bonus": 82,
+      "reason": "open_quem_when_quem_plus_saronir"
+    },
+    {
+      "when_msg_id": 1,
+      "when_phase_in": ["main1", "main2", "main"],
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [73819701, 95515790],
+      "prefer_codes": [73819701],
+      "prefer_act_ids": [8],
+      "bonus": 34,
+      "reason": "open_fallen_when_fallen_plus_cartesia"
+    },
+    {
+      "when_msg_id": 1,
+      "when_phase_in": ["main1", "main2", "main"],
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [73819701, 29948294],
+      "prefer_codes": [73819701],
+      "prefer_act_ids": [8],
+      "bonus": 18,
+      "reason": "open_fallen_when_fallen_plus_high_spirits"
+    },
+    {
+      "when_msg_id": 1,
+      "when_phase_in": ["main1", "main2", "main"],
+      "requires_hand_codes": [29948294, 60242223],
+      "prefer_codes": [29948294],
+      "prefer_act_ids": [8],
+      "bonus": 44,
+      "reason": "open_high_spirits_when_high_spirits_plus_saronir"
+    },
+    {
+      "when_msg_id": 1,
+      "when_phase_in": ["main1", "main2", "main"],
+      "wait_for_main_phase": true,
+      "requires_hand_codes": [95515790, 29948294],
+      "prefer_codes": [45883110, 73819701],
+      "prefer_act_ids": [4, 8],
+      "bonus": 10,
+      "reason": "cartesia_plus_high_spirits_prefers_real_starter"
+    },
+    {
+      "when_label_contains": "Guiding Quem, the Virtuous",
+      "when_msg_id": 6,
+      "prefer_contains": ["Yes"],
+      "bonus": 45,
+      "reason": "quem_take_trigger"
+    },
+    {
+      "when_label_contains": "Branded in High Spirits",
+      "when_msg_id": 3,
+      "prefer_codes": [60242223],
+      "bonus": 42,
+      "reason": "high_spirits_pick_saronir"
+    },
+    {
+      "when_label_contains": "Branded in High Spirits",
+      "when_msg_id": 3,
+      "prefer_codes": [38811586],
+      "bonus": 42,
+      "reason": "high_spirits_send_sanctifire"
+    },
+    {
+      "when_label_contains": "Branded in High Spirits",
+      "when_msg_id": 3,
+      "prefer_codes": [51409648],
+      "bonus": 30,
+      "reason": "high_spirits_dogma_option"
+    },
+    {
+      "when_label_contains": "Branded in High Spirits",
+      "when_msg_id": 6,
+      "prefer_contains": ["Yes"],
+      "bonus": 40,
+      "reason": "high_spirits_take_followup"
+    },
+    {
+      "when_label_contains": "Fallen of the White Dragon",
+      "when_msg_id": 6,
+      "prefer_contains": ["Yes"],
+      "bonus": 30,
+      "reason": "fallen_take_trigger"
+    },
+    {
+      "when_label_contains": "Activate Fallen of the White Dragon",
+      "when_msg_id": 3,
+      "requires_hand_codes": [95515790],
+      "prefer_codes": [51409648],
+      "bonus": 38,
+      "reason": "fallen_prefers_dogma_if_cartesia_in_hand"
+    },
+    {
+      "when_label_contains": "Activate Fallen of the White Dragon",
+      "when_msg_id": 3,
+      "prefer_codes": [75500286],
+      "bonus": 18,
+      "reason": "fallen_gold_sarc_line"
+    },
+    {
+      "when_label_contains": "Bystial Saronir",
+      "when_msg_id": 6,
+      "prefer_contains": ["Yes"],
+      "bonus": 22,
+      "reason": "saronir_take_trigger"
+    },
+    {
+      "when_label_contains": "Blazing Cartesia, the Virtuous",
+      "when_msg_id": 6,
+      "prefer_contains": ["Yes"],
+      "bonus": 35,
+      "reason": "cartesia_take_trigger"
+    },
+    {
+      "when_label_contains": "Blazing Cartesia, the Virtuous",
+      "when_msg_id": 3,
+      "prefer_codes": [89631139],
+      "bonus": 45,
+      "reason": "cartesia_make_granguignol"
+    },
+    {
+      "when_label_contains": "Blazing Cartesia, the Virtuous",
+      "when_msg_id": 3,
+      "prefer_codes": [51409648],
+      "bonus": 22,
+      "reason": "cartesia_use_dogma"
+    },
+    {
+      "when_label_contains": "Blazing Cartesia, the Virtuous",
+      "when_msg_id": 3,
+      "prefer_codes": [45883110, 55273560],
+      "bonus": 14,
+      "reason": "cartesia_preserve_virtuous_materials"
+    }
+  ],
+  "rules": [
+    {
+      "contains": "Activate Fallen of the White Dragon (effect 2)",
+      "bonus": 120,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain Branded in High Spirits (Activate) effect 2",
+      "bonus": 80,
+      "max_count": 1
+    },
+    {
+      "contains": "Activate Bystial Saronir (effect 1)",
+      "bonus": 90,
+      "max_count": 1
+    },
+    {
+      "contains": "Activate Blazing Cartesia, the Virtuous (effect 1)",
+      "bonus": 100,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain Blazing Cartesia, the Virtuous (Activate) effect 1",
+      "bonus": 110,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain Bystial Saronir (Activate) effect 1",
+      "bonus": 90,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain The Dragon that Devours the Dogma (Activate) effect 2",
+      "bonus": 120,
+      "max_count": 1
+    }
+  ],
+  "order_bonus": [
+    {
+      "sequence": [
+        "Activate Fallen of the White Dragon (effect 2)",
+        "Activate Bystial Saronir (effect 1)",
+        "Activate Blazing Cartesia, the Virtuous (effect 1)"
+      ],
+      "bonus": 180
+    },
+    {
+      "sequence": [
+        "Activate Blazing Cartesia, the Virtuous (effect 1)",
+        "Chain Blazing Cartesia, the Virtuous (Activate) effect 1",
+        "Chain Bystial Saronir (Activate) effect 1",
+        "Chain The Dragon that Devours the Dogma (Activate) effect 2"
+      ],
+      "bonus": 220
+    }
+  ]
+}

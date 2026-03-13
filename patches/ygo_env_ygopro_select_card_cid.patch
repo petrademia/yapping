@@ -1,0 +1,19 @@
+--- a/ygoenv/ygoenv/ygopro/ygopro.h
++++ b/ygoenv/ygoenv/ygopro/ygopro.h
+@@ -5306,7 +5306,7 @@
+         {
+           for (int i = 0; i < size; ++i)
+           {
+-            dp_ += 4; // code
++            auto code = read_u32();
+             // loc is a u32, read as 4 bytes
+             auto controller = read_u8();
+             auto loc = read_u8();
+@@ -5316,6 +5316,7 @@
+             specs_for_ms.push_back(spec);
+ 
+             LegalAction la = LegalAction::from_spec(spec);
++            la.cid_ = c_get_card_id(code);
+             actions.push_back(la);
+           }
+         }

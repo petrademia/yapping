@@ -49,6 +49,8 @@ yapping/
 * An engine that uses OCGCore: **[izzak98/ygo-env](https://github.com/izzak98/ygo-env)** (recommended) or [sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent) — see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)** for setup
 * A `cards.cdb` SQLite database (standard for EDOPro/YGOPRO)
 
+**On Windows:** The C++ engine builds only on Linux. Use **WSL** and follow **[docs/WSL_SETUP.md](docs/WSL_SETUP.md)**.
+
 ### Installation
 ```bash
 git clone [https://github.com/yourusername/yapping.git](https://github.com/yourusername/yapping.git)

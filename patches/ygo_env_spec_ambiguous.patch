@@ -1,0 +1,10 @@
+--- a/ygoenv/ygoenv/core/env_spec.h
++++ b/ygoenv/ygoenv/core/env_spec.h
+@@ -38,7 +38,7 @@ auto common_state_spec =
+              "elapsed_step"_.Bind(Spec<int>({})), "done"_.Bind(Spec<bool>({})),
+              "reward"_.Bind(Spec<float>({-1})),
+-             "discount"_.Bind(Spec<float>({-1}, {0.0, 1.0})),
++             "discount"_.Bind(Spec<float>({-1}, std::tuple<float, float>{0.0f, 1.0f})),
+              "step_type"_.Bind(Spec<int>({})), "trunc"_.Bind(Spec<bool>({})));
+
+ /**

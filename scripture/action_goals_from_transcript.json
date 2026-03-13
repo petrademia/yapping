@@ -1,0 +1,59 @@
+{
+  "_comment": "Bonuses derived from rep_engine_transcript baseline (seed 224272955). Match by label substring.",
+  "rules": [
+    {
+      "contains": "Activate Fallen of the White Dragon (effect 2)",
+      "bonus": 120,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain Branded in High Spirits (Activate) effect 2",
+      "bonus": 80,
+      "max_count": 1
+    },
+    {
+      "contains": "Activate Bystial Saronir (effect 1)",
+      "bonus": 90,
+      "max_count": 1
+    },
+    {
+      "contains": "Activate Blazing Cartesia, the Virtuous (effect 1)",
+      "bonus": 100,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain Blazing Cartesia, the Virtuous (Activate) effect 1",
+      "bonus": 110,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain Bystial Saronir (Activate) effect 1",
+      "bonus": 90,
+      "max_count": 1
+    },
+    {
+      "contains": "Chain The Dragon that Devours the Dogma (Activate) effect 2",
+      "bonus": 120,
+      "max_count": 1
+    }
+  ],
+  "order_bonus": [
+    {
+      "sequence": [
+        "Activate Fallen of the White Dragon (effect 2)",
+        "Activate Bystial Saronir (effect 1)",
+        "Activate Blazing Cartesia, the Virtuous (effect 1)"
+      ],
+      "bonus": 180
+    },
+    {
+      "sequence": [
+        "Activate Blazing Cartesia, the Virtuous (effect 1)",
+        "Chain Blazing Cartesia, the Virtuous (Activate) effect 1",
+        "Chain Bystial Saronir (Activate) effect 1",
+        "Chain The Dragon that Devours the Dogma (Activate) effect 2"
+      ],
+      "bonus": 220
+    }
+  ]
+}

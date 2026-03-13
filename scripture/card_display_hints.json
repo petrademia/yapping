@@ -1,0 +1,10 @@
+{
+  "_comment": "Card name -> display hint. Activate labels include effect index (effect N) from engine. Values: fusion_materials, cost_send_ed, sent_to_gy, sent_to_gy_1, target_1/target_2/target_3 (show only first N selected). Append |draw_1 for '; draw 1'. Do NOT blanket multi-effect cards—use per-effect hints by effect index when needed. Materials shown with (x2) when same card twice.",
+  "Branded Fusion": "fusion_materials",
+  "Fallen of the White Dragon": "cost_send_ed",
+  "Albion the Shrouded Dragon": "sent_to_gy_1|draw_1",
+  "Gold Sarcophagus": "banish_1",
+  "Bystial Saronir": "banish_1",
+  "Tri-Brigade Springans Kitt": "no_target",
+  "Apex Polymerization": "no_target"
+}

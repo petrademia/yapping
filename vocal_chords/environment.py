@@ -20,6 +20,8 @@ def create_env(
     deck_path: str | Path,
     ygo_env_root: str | Path | None = None,
     seed: Optional[int] = None,
+    player: int = 0,
+    engine_verbose: bool = False,
 ) -> Any:
     """
     Create a Yu-Gi-Oh! env (ygoenv) ready for reset/step.
@@ -64,5 +66,7 @@ def create_env(
         deck_path=Path(deck_path),
         ygo_env_root=root,
         seed=seed,
+        player=player,
+        engine_verbose=engine_verbose,
     )
     return wrapper

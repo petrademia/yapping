@@ -95,7 +95,7 @@ If you prefer a sibling repo instead, clone to e.g. `~/Projects/ygo-env` and set
 - **`vocal_chords/wrapper.py`**: Wrap it so YAPPING sees `reset(deck_path, hand?)`, `get_legal_actions()`, `step(action)`.
 - **`vocal_chords/actions.py`**: Map between ygoenv’s action encoding and your high-level actions.
 
-Put your decks in `yapping/scripture/decks/` and pass the path to the wrapper when creating the env. You can reuse or symlink `ygo-env`’s assets (e.g. `cards.cdb`) with `yapping/scripture/` if you want a single place for card data.
+Put your decks in `yapping/scripture/decks/` and pass the path to the wrapper when creating the env. For how cards are loaded (cdb vs code list vs Lua scripts), see **[docs/CARDS_CDB_AND_SCRIPTS.md](CARDS_CDB_AND_SCRIPTS.md)**. You can reuse or symlink `ygo-env`’s assets (e.g. `cards.cdb`) with `yapping/scripture/` if you want a single place for card data.
 
 ### Run the Hand Simulator (raw data)
 
