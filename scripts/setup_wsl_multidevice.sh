@@ -96,10 +96,11 @@ echo "==> 9) Build ygo-env in vendor/"
 mkdir -p "$YAPPING_ROOT/vendor"
 if [[ ! -d "$YGO_ENV_ROOT/.git" ]]; then
   rm -rf "$YGO_ENV_ROOT"
-  git clone https://github.com/izzak98/ygo-env.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/ygo-env.git "$YGO_ENV_ROOT"
 fi
 
 cd "$YGO_ENV_ROOT"
+rm -rf .venv
 uv venv --python "$PYTHON_VERSION" --seed .venv
 source .venv/bin/activate
 
@@ -109,11 +110,10 @@ if [[ -d third_party/ygopro-scripts/.git ]]; then
 fi
 
 make
+# Remove stale ABI variants before building.
+rm -f ygoenv/ygoenv/ygopro/ygopro_ygoenv.cpython-*.so || true
 xmake f -c -m release -y
 xmake b ygopro_ygoenv
-
-# Keep only one ABI to avoid accidental wrong-module import.
-rm -f ygoenv/ygoenv/ygopro/ygopro_ygoenv.cpython-312-*.so || true
 
 # Append default deck codes to code_list.txt.
 if [[ -f "$YGO_ENV_ROOT/assets/deck/Branded.ydk" ]]; then

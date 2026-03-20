@@ -48,15 +48,16 @@ fi
 if [[ -d "$YGO_ENV_ROOT/.git" ]]; then
   echo "vendor/ygo-env already exists. Building/updating..."
 else
-  echo "Cloning izzak98/ygo-env into vendor/ygo-env..."
+  echo "Cloning petrademia/ygo-env into vendor/ygo-env..."
   mkdir -p "$YAPPING_ROOT/vendor"
   rm -rf "$YGO_ENV_ROOT"
-  git clone https://github.com/izzak98/ygo-env.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/ygo-env.git "$YGO_ENV_ROOT"
 fi
 cd "$YGO_ENV_ROOT"
 
 echo "Preparing Python environment (.venv)..."
 if require_cmd uv; then
+  rm -rf .venv
   uv venv --python "$PYTHON_VERSION" --seed .venv
 else
   python3 -m venv .venv
@@ -78,11 +79,11 @@ apply_patch_if_needed "$YAPPING_ROOT/patches/ygo_env_ygopro_select_card_cid.patc
 apply_patch_if_needed "$YAPPING_ROOT/patches/ygo_env_system_lua.patch"
 
 echo "Building native engine module (xmake)..."
+# Remove stale ABI variants before building, so we don't accidentally leave a
+# mismatched `.so` that Python can't import.
+rm -f ygoenv/ygoenv/ygopro/ygopro_ygoenv.cpython-*.so || true
 xmake f -c -m release -y
 xmake b ygopro_ygoenv
-
-# Keep only one ABI variant to avoid Python loading the wrong extension.
-rm -f ygoenv/ygoenv/ygopro/ygopro_ygoenv.cpython-312-*.so || true
 
 # Append default deck's card codes to code_list.txt (so re-clone doesn't lose them)
 if [[ -f "$YGO_ENV_ROOT/assets/deck/Branded.ydk" ]]; then

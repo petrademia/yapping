@@ -12,7 +12,7 @@
 YAPPING operates across three distinct layers:
 
 1.  **The Rules (Lua):** Utilizes existing `.lua` scripts from the OCGCore to ensure 100% accuracy with card effects, costs, and timing.
-2.  **The Bridge (C++/Python):** Powered by the **izzak98/ygo-env** fork, providing a high-performance interface to the simulation engine.
+2.  **The Bridge (C++/Python):** Powered by **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (fork of izzak98/ygo-env), providing a high-performance interface to the simulation engine.
 3.  **The Brain (Python):** A recursive Breadth-First Search (BFS) engine with **Heuristic Pruning** and **State Hashing** to prevent infinite loops.
 
 ---
@@ -46,7 +46,7 @@ yapping/
 
 ### Prerequisites
 * Python 3.10+
-* An engine that uses OCGCore: **[izzak98/ygo-env](https://github.com/izzak98/ygo-env)** (recommended) or [sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent) — see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)** for setup
+* An engine that uses OCGCore: **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (recommended for YAPPING) or upstream [izzak98/ygo-env](https://github.com/izzak98/ygo-env) / [sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent) — see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)** for setup
 * A `cards.cdb` SQLite database (standard for EDOPro/YGOPRO)
 
 **On Windows:** The C++ engine builds only on Linux. Use **WSL** and follow **[docs/WSL_SETUP.md](docs/WSL_SETUP.md)**.
@@ -56,3 +56,6 @@ yapping/
 git clone [https://github.com/yourusername/yapping.git](https://github.com/yourusername/yapping.git)
 cd yapping
 pip install -r requirements.txt
+```
+
+Build **ygo-env** (OCGCore bridge) on Linux/WSL; see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)**. After pulling engine changes, rebuild the native module: `cd vendor/ygo-env && xmake f -c -m release -y && xmake b ygopro_ygoenv` (or `make build_ext`). Short version: **[vendor/README.md](vendor/README.md)**.

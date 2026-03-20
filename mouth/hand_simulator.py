@@ -336,7 +336,7 @@ def _parse_args() -> argparse.Namespace:
         "--ygo-env",
         type=Path,
         default=os.environ.get("YGO_ENV_ROOT"),
-        help="Root of izzak98/ygo-env clone (default: env YGO_ENV_ROOT).",
+        help="Root of ygo-env clone, e.g. petrademia/ygo-env (default: env YGO_ENV_ROOT).",
     )
     parser.add_argument(
         "--seed",
@@ -393,7 +393,7 @@ def run(
         ygo_root = Path(ygo_root).resolve() if ygo_root else None
     if not ygo_root or not ygo_root.is_dir():
         print(
-            "YGO_ENV_ROOT not set or not a directory. Clone and build izzak98/ygo-env, then:\n"
+            "YGO_ENV_ROOT not set or not a directory. Clone and build ygo-env (see docs/ENGINE_SETUP.md), then:\n"
             "  export YGO_ENV_ROOT=/path/to/ygo-env\n"
             "  cd $YGO_ENV_ROOT   # so Lua scripts are found\n"
             "  python -m mouth.hand_simulator --deck /path/to/scripture/decks/YourDeck.ydk\n"
@@ -433,6 +433,16 @@ def run(
     # --- Step 4: create engine ---
     t = _step("Initialising ygo-env engine")
     try:
+        # UX: when fixed_hand is enabled, we intentionally brute-force a seed
+        # that matches the exact desired opening hand. In that mode, the
+        # caller-provided `--seed` is ignored.
+        if fixed_hand is not None and seed is not None:
+            print(
+                f"\n[warning] --seed={int(seed)} is ignored because --fixed-hand is enabled; "
+                "we will search for an engine seed that produces the exact fixed hand.",
+                file=sys.stderr,
+            )
+
         # When targeting a card/hand, we try many seeds so pass None and use reset(seed=...) in the loop
         env_seed = None if (target_code is not None or fixed_hand is not None) else seed
         env = create_env(
@@ -453,21 +463,24 @@ def run(
         wanted_counter = Counter(wanted)
         wanted_names = [code_to_name.get(str(c), str(c)) for c in wanted]
         t = _step(f"Drawing until hand exactly matches fixed hand: {', '.join(wanted_names)}")
-        max_attempts = 50000
-        for attempt in range(max_attempts):
-            try_seed = random.randint(1, 2**31 - 1)
+        # Seed search can be expensive; default cap previously limited exploration.
+        # We intentionally do not cap attempts here so that we can always find a
+        # reproducible seed when the exact fixed-hand multiset exists.
+        attempt = 0
+        while True:
+            attempt += 1
+            # Deterministic, no-repeat-ish scan across seeds.
+            # This is much more efficient than random sampling when trying
+            # to locate a specific opening hand multiset.
+            try_seed = attempt
             obs, hand, legal_actions = env.reset(seed=try_seed)
             hand_codes = [card_id_to_code.get(h, h) for h in hand]
             if Counter(hand_codes) == wanted_counter:
                 actual_seed = try_seed
-                _done(t, f"seed={actual_seed} (attempt {attempt + 1})")
+                _done(t, f"seed={actual_seed} (attempt {attempt})")
                 break
-            if (attempt + 1) % 5000 == 0:
-                print(f"    ... {attempt + 1} attempts", flush=True)
-        else:
-            _done(t, "failed")
-            print(f"  Could not draw exact fixed hand in {max_attempts} attempts.", file=sys.stderr)
-            sys.exit(1)
+            if attempt % 5000 == 0:
+                print(f"    ... {attempt} attempts", flush=True)
     elif target_code is not None:
         target_name = code_to_name.get(str(target_code), f"code {target_code}")
         t = _step(f"Drawing until hand contains {target_name}")

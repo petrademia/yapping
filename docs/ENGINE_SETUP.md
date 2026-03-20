@@ -1,12 +1,12 @@
 # Setting up the engine that uses OCGCore
 
-YAPPING needs a **headless** Yu-Gi-Oh! engine that uses OCGCore for correct card logic. The recommended option is **izzak98/ygo-env**, a minimal fork of ygo-agent focused on the environment only.
+YAPPING needs a **headless** Yu-Gi-Oh! engine that uses OCGCore for correct card logic. The recommended clone for this project is **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (fork of [izzak98/ygo-env](https://github.com/izzak98/ygo-env)), which carries **YAPPING-oriented build fixes** (Lua 5.3 pin, ygopro-core link, etc.). You can still use upstream **izzak98/ygo-env** if you apply the same patches yourself.
 
 ---
 
-## Option 1: **izzak98/ygo-env** (recommended)
+## Option 1: **ygo-env** (recommended: **petrademia/ygo-env**)
 
-**[izzak98/ygo-env](https://github.com/izzak98/ygo-env)** is a maintained fork of [sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent) stripped down to the **environment and engine interface**—no RL agents or training stack. It’s a good fit for YAPPING.
+**[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** is the fork used with YAPPING. It traces to [izzak98/ygo-env](https://github.com/izzak98/ygo-env), itself a minimal fork of [sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent) focused on the **environment and engine interface**—no RL agents or training stack.
 
 ### Why this fork
 
@@ -36,21 +36,36 @@ yapping/
 ```
 
 - Scripts and docs assume `YGO_ENV_ROOT` = `yapping/vendor/ygo-env` by default (no env var needed when using the run script).
-- `vendor/` is in `.gitignore`; remove that line if you want to commit your ygo-env fork.
+- `vendor/` is in `.gitignore`; see **Locking ygo-env changes** below if you want those patches in Git.
 
-To clone and build:
+### Locking ygo-env changes (fork + commit)
 
-```bash
-cd /path/to/yapping
-mkdir -p vendor
-git clone https://github.com/izzak98/ygo-env.git vendor/ygo-env
-cd vendor/ygo-env
-xmake f -m release -y
-xmake
-make
-```
+`vendor/ygo-env` is usually a **separate Git clone** (it has its own `.git`). YAPPING’s root repo ignores `vendor/*`, so **xmake / recipe / `ygopro.h` edits are committed inside that clone**, not in `yapping` unless you use a submodule.
 
-If you prefer a sibling repo instead, clone to e.g. `~/Projects/ygo-env` and set `export YGO_ENV_ROOT=/path/to/ygo-env`.
+1. **Commit in the engine repo** (paths are examples — adjust to what you changed):
+
+   ```bash
+   cd vendor/ygo-env
+   git status
+   git add xmake.lua \
+     repo/packages/y/ygopro-core/xmake.lua \
+     ygoenv/ygoenv/ygopro/ygopro.h
+   git commit -m "build: pin Lua 5.3, link ygopro-core+lua group, core API shims"
+   ```
+
+2. **Push to your fork** (recommended) so teammates can clone your fork instead of upstream:
+
+   ```bash
+   git remote add myfork https://github.com/<you>/ygo-env.git   # once (YAPPING default fork: petrademia/ygo-env)
+   git push -u myfork main    # or your branch name
+   ```
+
+3. **In YAPPING**, point people at that fork/branch in this doc or in chat, e.g.  
+   `git clone https://github.com/petrademia/ygo-env.git vendor/ygo-env` (or your own fork)
+
+**Optional — track `vendor/ygo-env` from the YAPPING repo:** use a **git submodule** (`git submodule add <url> vendor/ygo-env`) and remove or narrow the `vendor/*` ignore rule so the submodule pointer is committed. That records an exact commit of the engine in every YAPPING revision.
+
+If you prefer a sibling repo instead of `vendor/ygo-env`, clone to e.g. `~/Projects/ygo-env` and set `export YGO_ENV_ROOT=/path/to/ygo-env`.
 
 ### Setup
 
@@ -59,11 +74,19 @@ If you prefer a sibling repo instead, clone to e.g. `~/Projects/ygo-env` and set
    ```bash
    cd /path/to/yapping
    mkdir -p vendor
-   git clone https://github.com/izzak98/ygo-env.git vendor/ygo-env
+   git clone https://github.com/petrademia/ygo-env.git vendor/ygo-env
    cd vendor/ygo-env
    xmake f -m release -y
    xmake
    make
+   ```
+
+   After `git pull` in `vendor/ygo-env` when build recipes changed, force a clean configure and rebuild **only** the Python extension:
+
+   ```bash
+   cd vendor/ygo-env
+   xmake f -c -m release -y
+   xmake b ygopro_ygoenv   # or: make build_ext
    ```
 
    This will:
@@ -88,6 +111,28 @@ If you prefer a sibling repo instead, clone to e.g. `~/Projects/ygo-env` and set
 4. **Usage example**
 
    See `example/test_init.py` in the ygo-env repo.
+
+### Python dependencies (single venv)
+
+YAPPING uses Python dependencies from your **repo venv** (e.g. `./.venv` at the project root).
+You typically do **not** want a separate venv inside `vendor/`.
+
+From the `yapping/` repo root:
+
+```bash
+# 1) create/activate a venv (example shown; adjust as you prefer)
+python -m venv .venv
+source .venv/bin/activate
+
+# 2) repo deps
+pip install -r requirements.txt
+
+# 3) install ygo-env Python bindings (pulls gymnasium + other deps)
+pip install -e vendor/ygo-env/ygoenv
+
+# 4) verify imports
+python -c "import ygoenv; import gymnasium; print('ygoenv + gymnasium OK')"
+```
 
 ### Wiring ygo-env into YAPPING
 
@@ -143,7 +188,7 @@ If you don’t use either repo, you can build **[Fluorohydride/ygopro-core](http
 
 | Goal | Action |
 |------|--------|
-| **Use the engine YAPPING is designed for** | Set up **[izzak98/ygo-env](https://github.com/izzak98/ygo-env)** (Option 1); implement `vocal_chords` against its Gymnasium env. |
+| **Use the engine YAPPING is designed for** | Set up **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (Option 1); implement `vocal_chords` against its Gymnasium env. |
 | **No compile, Ubuntu 22.04** | Use **[sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent)** with pre-built binary (Option 2). |
 | **Custom/core-only** | Build ygopro-core and bindings yourself (Option 3). |
 

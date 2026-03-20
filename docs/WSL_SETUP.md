@@ -36,7 +36,7 @@ From your **yapping** project root (in WSL):
 ```bash
 cd /mnt/c/Users/petrus/Projects/yapping   # adjust if your path differs
 mkdir -p vendor
-git clone https://github.com/izzak98/ygo-env.git vendor/ygo-env
+git clone https://github.com/petrademia/ygo-env.git vendor/ygo-env
 cd vendor/ygo-env
 xmake f -m release -y
 xmake

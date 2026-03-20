@@ -36,7 +36,7 @@ YGO_ENV_ROOT="$YAPPING_ROOT/vendor/ygo-env"
 if [[ ! -d "$YGO_ENV_ROOT" ]]; then
   echo "Cloning ygo-env..."
   mkdir -p "$YAPPING_ROOT/vendor"
-  git clone https://github.com/izzak98/ygo-env.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/ygo-env.git "$YGO_ENV_ROOT"
 fi
 # Apply patches (system Lua + Spec<> ambiguity fixes for newer compilers + select_card cid fix)
 for p in "$YAPPING_ROOT/patches/ygo_env_system_lua.patch" "$YAPPING_ROOT/patches/ygo_env_spec_ambiguous.patch" "$YAPPING_ROOT/patches/ygo_env_ygopro_spec_ambiguous.patch" "$YAPPING_ROOT/patches/ygo_env_ygopro_select_card_cid.patch"; do

@@ -1,7 +1,7 @@
 """
 High-level ygo-env / OCGCore interface.
 
-Wraps the Gymnasium env from izzak98/ygo-env (or sbl1996/ygo-agent) so YAPPING sees:
+Wraps the Gymnasium env from ygo-env (petrademia fork or izzak98/sbl1996) so YAPPING sees:
 - reset() -> state, hand, legal_actions
 - get_legal_actions() -> list of action indices
 - step(action) -> next_state, done, info
@@ -65,7 +65,7 @@ class YgoEnvWrapper:
         import ygoenv.ygopro.registration  # noqa: F401  (registers YGOPro-v1)
         from ygoenv.registration import make  # type: ignore
 
-        # izzak98/ygo-env: must call init_module then make(task_id, env_type, deck1=, deck2=, ...)
+        # ygo-env (petrademia/izzak98): must call init_module then make(task_id, env_type, deck1=, deck2=, ...)
         db_path = root / "assets" / "locale" / "en" / "cards.cdb"
         code_list_file = root / "example" / "code_list.txt"
         if not db_path.is_file():

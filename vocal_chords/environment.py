@@ -27,7 +27,7 @@ def create_env(
     Create a Yu-Gi-Oh! env (ygoenv) ready for reset/step.
 
     - deck_path: path to a .ydk deck file (used when you call reset).
-    - ygo_env_root: root of izzak98/ygo-env (or sbl1996/ygo-agent) clone.
+    - ygo_env_root: root of ygo-env (e.g. petrademia/ygo-env) or sbl1996/ygo-agent clone.
       If not set, uses env var YGO_ENV_ROOT. Required so we can add it to
       sys.path and, if needed, run from a dir that has Lua scripts.
     - seed: optional RNG seed for reproducible hands.
@@ -38,7 +38,7 @@ def create_env(
     root = ygo_env_root or YGO_ENV_ROOT
     if not root:
         raise RuntimeError(
-            "ygo-env root not set. Clone izzak98/ygo-env, build it, then either:\n"
+            "ygo-env root not set. Clone petrademia/ygo-env (or see docs/ENGINE_SETUP.md), build it, then either:\n"
             "  export YGO_ENV_ROOT=/path/to/ygo-env\n"
             "  or pass ygo_env_root= to create_env(). See docs/ENGINE_SETUP.md"
         )
