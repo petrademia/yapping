@@ -429,6 +429,42 @@ def main() -> None:
     parse_yrp3d.add_argument("--replay", type=Path, required=True, help="Path to .yrp3d replay file")
     parse_yrp3d.add_argument("--out", type=Path, default=None, help="Optional output JSON path")
 
+    # ---- combo-run: execute a scripted combo recipe ----
+    combo_run = subparsers.add_parser(
+        "combo-run",
+        help="Execute a scripted combo recipe JSON against the engine.",
+    )
+    combo_run.add_argument(
+        "--recipe", type=Path, required=True,
+        help="Path to combo recipe JSON (see data/combos/ for examples).",
+    )
+    combo_run.add_argument(
+        "--deck", type=Path, default=None,
+        help="Override the deck path from the recipe.",
+    )
+    combo_run.add_argument(
+        "--seed", type=int, default=None,
+        help="Override the seed from the recipe.",
+    )
+    combo_run.add_argument(
+        "--ygo-env", type=Path, default=None,
+        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygo-env).",
+    )
+
+    # ---- combo-record: interactively record a combo recipe ----
+    combo_record = subparsers.add_parser(
+        "combo-record",
+        help="Interactively record a combo step-by-step and save as a recipe JSON.",
+    )
+    combo_record.add_argument("--deck", type=Path, required=True, help="Path to .ydk deck file")
+    combo_record.add_argument("--out", type=Path, required=True, help="Output recipe JSON path")
+    combo_record.add_argument("--name", type=str, default=None, help="Human-readable name for this combo")
+    combo_record.add_argument("--seed", type=int, default=None, help="RNG seed for reproducible hand")
+    combo_record.add_argument(
+        "--ygo-env", type=Path, default=None,
+        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygo-env).",
+    )
+
     args = parser.parse_args()
     yapping_root = Path(__file__).resolve().parent.parent
 
@@ -523,6 +559,25 @@ def main() -> None:
             goal_hit_bonus=args.goal_hit_bonus,
             meaningful_action_bonus=args.meaningful_action_bonus,
             action_goals_json=args.action_goals_json,
+        )
+        return
+
+    if args.command == "combo-run":
+        _run_combo_run(
+            recipe_path=args.recipe,
+            deck_override=args.deck,
+            seed_override=args.seed,
+            ygo_env_root=args.ygo_env,
+        )
+        return
+
+    if args.command == "combo-record":
+        _run_combo_record(
+            deck=args.deck,
+            out=args.out,
+            name=args.name,
+            seed=args.seed,
+            ygo_env_root=args.ygo_env,
         )
         return
 
@@ -749,6 +804,165 @@ def _run_add_deck_codes_to_list(deck_path: Path, ygo_env_root: Path | None) -> N
             has_script = 1 if (script_dir / f"c{code}.lua").is_file() else 0
             f.write(f"{code} {has_script}\n")
     print(f"Appended {len(missing)} card codes to {code_list_file}")
+
+
+def _run_combo_run(
+    recipe_path: Path,
+    deck_override: Path | None,
+    seed_override: int | None,
+    ygo_env_root: Path | None,
+) -> None:
+    """Execute a scripted combo recipe JSON against the engine."""
+    import os
+
+    yapping_root = Path(__file__).resolve().parent.parent
+
+    # Resolve ygo-env root
+    root = ygo_env_root
+    if root is None or not root.is_dir():
+        root = os.environ.get("YGO_ENV_ROOT")
+        root = Path(root).resolve() if root else None
+    if root is None or not root.is_dir():
+        root = yapping_root / "vendor" / "ygo-env"
+    if not root.is_dir():
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygo-env must exist.", file=sys.stderr)
+        sys.exit(1)
+
+    # Load recipe
+    from brain.combo import load_recipe, run_combo_from_recipe
+    from brain.search import _reset_to_main_phase_idle
+    from engine.environment import create_env
+
+    recipe = load_recipe(recipe_path)
+
+    # Resolve deck
+    deck_raw = deck_override or recipe.get("deck")
+    if not deck_raw:
+        print("Error: no deck specified in recipe or --deck.", file=sys.stderr)
+        sys.exit(1)
+    deck_path = _resolve_deck_path(Path(deck_raw), yapping_root, root)
+
+    # Override seed if provided
+    if seed_override is not None:
+        recipe["seed"] = seed_override
+
+    # Load cid/name maps
+    cid_map: dict = {}
+    code_list_file = root / "example" / "code_list.txt"
+    if code_list_file.is_file():
+        with open(code_list_file, encoding="utf-8", errors="replace") as f:
+            for i, line in enumerate(f, start=1):
+                parts = line.strip().split()
+                if parts and parts[0].isdigit():
+                    cid_map[i] = int(parts[0])
+    name_map: dict = {}
+    json_path = yapping_root / "data" / "card_code_to_name.json"
+    if json_path.is_file():
+        with open(json_path, encoding="utf-8") as f:
+            name_map = json.load(f)
+
+    print(f"Recipe  : {recipe.get('name', recipe_path.stem)}", flush=True)
+    print(f"Deck    : {deck_path.name}", flush=True)
+    print(f"Seed    : {recipe.get('seed', '(random)')}", flush=True)
+    print(f"Steps   : {len(recipe.get('steps', []))}", flush=True)
+    print(flush=True)
+
+    env = create_env(deck_path=deck_path, ygo_env_root=root, seed=recipe.get("seed"))
+    result = run_combo_from_recipe(recipe, env, cid_map, name_map)
+
+    print(result)
+    print(flush=True)
+
+    if result.success:
+        board = result.board
+        def _resolve(cid: int) -> str:
+            code = cid_map.get(cid)
+            return name_map.get(str(code), str(code) if code else str(cid))
+        hand = [_resolve(c) for c in board.get("hand", [])]
+        mzone = [_resolve(c) for c in board.get("field_mzone", [])]
+        szone = [_resolve(c) for c in board.get("field_szone", [])]
+        grave = [_resolve(c) for c in board.get("grave", [])]
+        print("Final board:")
+        print(f"  hand ={hand}")
+        print(f"  mzone={mzone}")
+        print(f"  szone={szone}")
+        print(f"  grave={grave}")
+    else:
+        sys.exit(1)
+
+
+def _run_combo_record(
+    deck: Path,
+    out: Path,
+    name: str | None,
+    seed: int | None,
+    ygo_env_root: Path | None,
+) -> None:
+    """Interactively record a combo and save it as a hybrid sig+label recipe JSON."""
+    import os
+
+    yapping_root = Path(__file__).resolve().parent.parent
+
+    root = ygo_env_root
+    if root is None or not root.is_dir():
+        root = os.environ.get("YGO_ENV_ROOT")
+        root = Path(root).resolve() if root else None
+    if root is None or not root.is_dir():
+        root = yapping_root / "vendor" / "ygo-env"
+    if not root.is_dir():
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygo-env must exist.", file=sys.stderr)
+        sys.exit(1)
+
+    deck_path = _resolve_deck_path(deck, yapping_root, root)
+
+    from brain.combo import record_combo
+    from brain.search import _reset_to_main_phase_idle
+    from engine.environment import create_env
+
+    cid_map: dict = {}
+    code_list_file = root / "example" / "code_list.txt"
+    if code_list_file.is_file():
+        with open(code_list_file, encoding="utf-8", errors="replace") as f:
+            for i, line in enumerate(f, start=1):
+                parts = line.strip().split()
+                if parts and parts[0].isdigit():
+                    cid_map[i] = int(parts[0])
+    name_map: dict = {}
+    json_path = yapping_root / "data" / "card_code_to_name.json"
+    if json_path.is_file():
+        with open(json_path, encoding="utf-8") as f:
+            name_map = json.load(f)
+
+    env = create_env(deck_path=deck_path, ygo_env_root=root, seed=seed)
+    actual_seed = env._seed
+
+    print(f"Deck : {deck_path.name}", flush=True)
+    print(f"Seed : {actual_seed}", flush=True)
+    print("Resetting to Main Phase idle...", flush=True)
+
+    if not _reset_to_main_phase_idle(env, cid_map, name_map):
+        print("Error: failed to reach Main Phase idle.", file=sys.stderr)
+        sys.exit(1)
+
+    print("Ready. Pick actions to record. Type 'done' or press Enter with no input to finish.")
+    steps = record_combo(env, cid_map, name_map)
+
+    if not steps:
+        print("No steps recorded — nothing saved.")
+        return
+
+    recipe = {
+        "name": name or out.stem,
+        "deck": str(deck_path.relative_to(yapping_root)) if deck_path.is_relative_to(yapping_root) else str(deck_path),
+        "seed": actual_seed,
+        "steps": steps,
+    }
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(recipe, f, indent=2, ensure_ascii=False)
+
+    print(f"\nSaved {len(steps)}-step recipe to {out}")
 
 
 if __name__ == "__main__":
