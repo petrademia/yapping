@@ -12,7 +12,7 @@
 YAPPING operates across three distinct layers:
 
 1.  **The Rules (Lua):** Utilizes existing `.lua` scripts from the OCGCore to ensure 100% accuracy with card effects, costs, and timing.
-2.  **The Bridge (C++/Python):** Powered by **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (fork of izzak98/ygo-env), providing a high-performance interface to the simulation engine.
+2.  **The Bridge (C++/Python):** Powered by **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)**, a minimal Gymnasium-style OCGCore bridge (see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)**).
 3.  **The Brain (Python):** A recursive Breadth-First Search (BFS) engine with **Heuristic Pruning** and **State Hashing** to prevent infinite loops.
 
 ---
@@ -31,13 +31,13 @@ YAPPING operates across three distinct layers:
 ```
 yapping/
 ├── brain/                  # Intelligence: BFS/MCTS, heuristics, state hashing
-├── vocal_chords/           # Bridge: ygo-env wrapper, actions, env setup
-├── mouth/                  # Interface: simulator, exporter, CLI
-├── scripture/              # Data: cards.cdb, scripts/, decks/
+├── engine/           # Bridge: ygo-env wrapper, actions, env setup
+├── cli/                  # Interface: simulator, exporter, CLI
+├── data/              # Data: cards.cdb, scripts/, decks/
 ├── logs/                   # Saved combo paths and error logs
 ├── requirements.txt
 ├── README.md
-└── main.py                 # Entry point (delegates to mouth.cli)
+└── main.py                 # Entry point (delegates to cli.cli)
 ```
 
 ---
@@ -46,7 +46,7 @@ yapping/
 
 ### Prerequisites
 * Python 3.10+
-* An engine that uses OCGCore: **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (recommended for YAPPING) or upstream [izzak98/ygo-env](https://github.com/izzak98/ygo-env) / [sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent) — see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)** for setup
+* An engine that uses OCGCore: **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (recommended for YAPPING) or another **ygo-env** / **[ygo-agent](https://github.com/sbl1996/ygo-agent)**-compatible build — see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)** for setup
 * A `cards.cdb` SQLite database (standard for EDOPro/YGOPRO)
 
 **On Windows:** The C++ engine builds only on Linux. Use **WSL** and follow **[docs/WSL_SETUP.md](docs/WSL_SETUP.md)**.

@@ -35,9 +35,9 @@ To add another deck’s codes manually, run once:
 
 ```bash
 # From yapping root; uses YGO_ENV_ROOT or --ygo-env
-python -m mouth.cli add-deck-codes-to-list --deck vendor/ygo-env/assets/deck/Branded.ydk
+python -m cli.cli add-deck-codes-to-list --deck vendor/ygo-env/assets/deck/Branded.ydk
 # or your deck
-python -m mouth.cli add-deck-codes-to-list --deck scripture/decks/MyDeck.ydk
+python -m cli.cli add-deck-codes-to-list --deck data/decks/MyDeck.ydk
 ```
 
 This appends any codes from the deck that are missing from `example/code_list.txt` (with `1` or `0` depending on whether `c{code}.lua` exists). After that, that deck’s cards are in the list for good until you re-clone ygo-env (then run the command again or re-apply your code list).
@@ -48,13 +48,13 @@ To get a **code → name** map so you can look up culprits (e.g. "Card not found
 
 ```bash
 # From yapping root; uses YGO_ENV_ROOT or --ygo-env for cards.cdb
-python -m mouth.cli export-card-names
+python -m cli.cli export-card-names
 
-# Writes scripture/card_code_to_name.json by default. To write CSV:
-python -m mouth.cli export-card-names --format csv --out scripture/card_code_to_name.csv
+# Writes data/card_code_to_name.json by default. To write CSV:
+python -m cli.cli export-card-names --format csv --out data/card_code_to_name.csv
 
 # Custom cdb path
-python -m mouth.cli export-card-names --cdb /path/to/cards.cdb --out names.json
+python -m cli.cli export-card-names --cdb /path/to/cards.cdb --out names.json
 ```
 
 JSON format: `{ "76666602": "Number 76: Harmonizer Gradielle", ... }` (string keys so codes are easy to look up).

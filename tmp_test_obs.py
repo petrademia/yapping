@@ -6,7 +6,7 @@ from pathlib import Path
 yapping_root = Path(__file__).resolve().parent
 sys.path.insert(0, str(yapping_root))
 
-from vocal_chords.environment import create_env
+from engine.environment import create_env
 
 deck_path = yapping_root / "vendor/ygo-env/assets/deck/Branded.ydk"
 ygo_root = yapping_root / "vendor/ygo-env"

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 def get_card_ids(card_names: list[str]) -> dict:
-    db_path = Path("scripture/card_code_to_name.json")
+    db_path = Path("data/card_code_to_name.json")
     if not db_path.exists(): return {}
     with open(db_path, "r", encoding="utf-8") as f:
         mapping = json.load(f)
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         {"action": "Fusion Summon", "card_name": "Mirrorjade the Iceblade Dragon", "card_code": ids["Mirrorjade the Iceblade Dragon"]["id"]}
     ]
     
-    out_path = Path("scripture/combos/example_branded.json")
+    out_path = Path("data/combos/example_branded.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(combo, f, indent=2)
     print("Wrote combo to", out_path)

@@ -71,9 +71,9 @@ echo "Installing ygoenv into venv (editable)..."
 pip install -q -e "$YGO_ENV_ROOT/ygoenv"
 echo ""
 
-# 4. Run hand simulator (venv has ygoenv; only yapping on PYTHONPATH for mouth.cli)
+# 4. Run hand simulator (venv has ygoenv; only yapping on PYTHONPATH for cli.cli)
 export YGO_ENV_ROOT
 export PYTHONPATH="$YAPPING_ROOT:$PYTHONPATH"
 cd "$YGO_ENV_ROOT"
 echo "=== Running Hand Simulator ==="
-python -m mouth.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
+python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"

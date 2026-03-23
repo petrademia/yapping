@@ -26,13 +26,13 @@ So the “combo map” is the full tree (or pruned DAG) of *all* reachable lines
 | **B** | “Show me **everywhere** this hand can go.” | Full **combo map**: enumerate all legal branches (BFS/MCTS), hash states to merge transpositions, export the tree as JSON + flowchart. |
 | **C** | “**Surprise me** with something I didn’t know was possible.” | Discovery mode: e.g. underused branches, rare end-boards, or paths that differ from the “obvious” line. Can be built on top of B (filter/rank the map) or with extra exploration. |
 
-All three use the same **Hand Simulator** and **vocal_chords** (engine wrapper): same deck, same hand, same legal-action enumeration. The difference is how we **search** (brain) and **present** (mouth: JSON, flowchart, “best only”, “all”, “surprise”).
+All three use the same **Hand Simulator** and **engine** (engine wrapper): same deck, same hand, same legal-action enumeration. The difference is how we **search** (brain) and **present** (cli: JSON, flowchart, “best only”, “all”, “surprise”).
 
 ---
 
 ## Implementation order
 
-1. **Hand Simulator (done)** — Deck → draw 5 → list first N legal actions. Raw data to confirm the engine works. (`mouth/hand_simulator.py`, `mouth/cli.py hand-sim`.)
+1. **Hand Simulator (done)** — Deck → draw 5 → list first N legal actions. Raw data to confirm the engine works. (`cli/hand_simulator.py`, `cli/cli.py hand-sim`.)
 2. **Path A (best path)** — Brain search + heuristics; return one best path and its score.
 3. **Path B (combo map)** — Same search, but keep full tree; state hashing to avoid duplicate nodes; export JSON + flowchart (e.g. Mermaid).
 4. **Path C (surprise)** — Query the map (or re-run search) with filters / diversity / “non-obvious” ranking.

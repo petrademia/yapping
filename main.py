@@ -5,15 +5,15 @@ YAPPING — Yet Another Path Processor & Inference Node Generator
 Entry point to start the combo analyzer.
 
   # Hand Simulator (draw 5, first 10 legal actions)
-  python -m mouth.cli hand-sim --deck scripture/decks/<your>.ydk
+  python -m cli.cli hand-sim --deck data/decks/<your>.ydk
 
   # Future: combo best / all / surprise
-  python -m mouth.cli combo --deck ... --mode best|all|surprise
+  python -m cli.cli combo --deck ... --mode best|all|surprise
 """
 
 
 def main() -> None:
-    from mouth import cli
+    from cli import cli
     cli.main()
 
 

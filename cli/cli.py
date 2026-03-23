@@ -3,11 +3,11 @@ Command-line tool to run simulations.
 
 Usage:
   # Hand Simulator (raw data: draw 5, first 10 legal actions)
-  YGO_ENV_ROOT=/path/to/ygo-env python -m mouth.cli hand-sim --deck scripture/decks/MyDeck.ydk
+  YGO_ENV_ROOT=/path/to/ygo-env python -m cli.cli hand-sim --deck data/decks/MyDeck.ydk
 
   # Combo executor (best-path DFS)
-  python -m mouth.cli combo --deck scripture/decks/MyDeck.ydk
-  python -m mouth.cli combo --deck scripture/decks/MyDeck.ydk --mode best --export json --out combo.json
+  python -m cli.cli combo --deck data/decks/MyDeck.ydk
+  python -m cli.cli combo --deck data/decks/MyDeck.ydk --mode best --export json --out combo.json
 """
 
 from __future__ import annotations
@@ -19,7 +19,79 @@ import sqlite3
 import sys
 from pathlib import Path
 
-DEFAULT_FIXED_HAND = "73819701,60242223,45883110,29948294,95515790"
+DEFAULT_FIXED_HAND = "68468459,60242223,45883110,29948294,95515789"
+# Default opening-hand used by `--fixed-hand` when the flag is omitted.
+#
+# Verified against `vendor/ygo-env/assets/deck/Branded.ydk`:
+# - 68468459 Fallen of Albaz: present
+# - 60242223 Bystial Saronir: present
+# - 45883110 Guiding Quem, the Virtuous: present
+# - 29948294 Branded in High Spirits: present
+# - 95515789 Blazing Cartesia, the Virtuous: present
+
+
+def _resolve_deck_path(deck: Path, yapping_root: Path, ygo_env_root: Path | None) -> Path:
+    """
+    Resolve `--deck` into an existing `.ydk` file path.
+
+    This keeps `--deck` path-specific (you must pass a path ending in `.ydk`);
+    if it doesn't exist, we try fallbacks using the same basename:
+    - `data/decks/<basename>` (preferred)
+    - bundled engine decks (from ygo-env assets / vendor/ygo-env)
+    """
+    deck_path = Path(deck)
+    if deck_path.suffix.lower() != ".ydk":
+        print(f"Error: --deck must point to a .ydk file (got: {deck_path})", file=sys.stderr)
+        sys.exit(2)
+
+    # Enforce "specific path" usage: reject bare `Branded.ydk` (parent == '.').
+    if not deck_path.is_absolute() and deck_path.parent == Path("."):
+        print(
+            "Error: --deck must be a specific path ending in .ydk (e.g. "
+            "'data/decks/Branded.ydk' or an absolute '/path/to/Branded.ydk').\n"
+            f"Got: {deck_path}",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
+    if deck_path.is_file():
+        return deck_path.resolve()
+
+    basename = deck_path.name  # includes .ydk
+
+    candidates: list[Path] = []
+    # If caller passed a relative path, also try it under project root.
+    if not deck_path.is_absolute():
+        candidates.append((yapping_root / deck_path).resolve())
+
+    # data first (preferred UX)
+    candidates.append(yapping_root / "data" / "decks" / basename)
+
+    # then bundled engine decks
+    if ygo_env_root is not None:
+        candidates.append(Path(ygo_env_root) / "assets" / "deck" / basename)
+
+    candidates.append(yapping_root / "vendor" / "ygo-env" / "assets" / "deck" / basename)
+
+    seen: set[str] = set()
+    uniq: list[Path] = []
+    for c in candidates:
+        key = str(c)
+        if key in seen:
+            continue
+        seen.add(key)
+        uniq.append(c)
+
+    for c in uniq:
+        if c.is_file():
+            return c.resolve()
+
+    print(
+        f"Error: deck not found: {deck_path}\n"
+        f"Tried:\n" + "\n".join(f"  - {c}" for c in uniq),
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 
 def main() -> None:
@@ -193,7 +265,10 @@ def main() -> None:
         type=str,
         default=DEFAULT_FIXED_HAND,
         metavar="CODES",
-        help="Comma-separated exact opening hand codes (default: Fallen+Saronir+Quem+HighSpirits+Cartesia). Use '' to disable.",
+        help=(
+            "Comma-separated exact opening hand codes (default: Branded 5-card combo). "
+            "Use --fixed-hand '' to disable and respect --seed for the opening draw."
+        ),
     )
 
     # ---- combo: best-path DFS executor ----
@@ -268,7 +343,7 @@ def main() -> None:
         "--out",
         type=Path,
         default=None,
-        help="Output path (default: scripture/card_code_to_name.json)",
+        help="Output path (default: data/card_code_to_name.json)",
     )
     export_names.add_argument(
         "--format",
@@ -355,9 +430,12 @@ def main() -> None:
     parse_yrp3d.add_argument("--out", type=Path, default=None, help="Optional output JSON path")
 
     args = parser.parse_args()
+    yapping_root = Path(__file__).resolve().parent.parent
 
     if args.command == "hand-sim":
-        from mouth.hand_simulator import run as hand_sim_run
+        from cli.hand_simulator import run as hand_sim_run
+
+        deck_path = _resolve_deck_path(args.deck, yapping_root, args.ygo_env)
 
         fixed_hand = None
         if args.fixed_hand is not None and str(args.fixed_hand).strip() != "":
@@ -368,7 +446,7 @@ def main() -> None:
                 sys.exit(1)
 
         hand_sim_run(
-            deck=args.deck,
+            deck=deck_path,
             num_draw=args.num_draw,
             max_actions=args.max_actions,
             ygo_env_root=args.ygo_env,
@@ -411,7 +489,9 @@ def main() -> None:
             print("Flowchart export is not implemented yet. Use '--export json' or omit --export.", file=sys.stderr)
             sys.exit(2)
 
-        from mouth.hand_simulator import run as hand_sim_run
+        from cli.hand_simulator import run as hand_sim_run
+
+        deck_path = _resolve_deck_path(args.deck, yapping_root, args.ygo_env)
 
         fixed_hand = None
         if args.fixed_hand is not None and str(args.fixed_hand).strip() != "":
@@ -422,7 +502,7 @@ def main() -> None:
                 sys.exit(1)
 
         hand_sim_run(
-            deck=args.deck,
+            deck=deck_path,
             num_draw=5,
             max_actions=0,
             ygo_env_root=args.ygo_env,
@@ -456,12 +536,13 @@ def main() -> None:
         return
 
     if args.command == "add-deck-codes-to-list":
-        _run_add_deck_codes_to_list(deck_path=args.deck, ygo_env_root=args.ygo_env)
+        deck_path = _resolve_deck_path(args.deck, yapping_root, args.ygo_env)
+        _run_add_deck_codes_to_list(deck_path=deck_path, ygo_env_root=args.ygo_env)
         return
 
     if args.command == "rollout":
         _run_rollout(
-            deck_path=args.deck,
+            deck_path=_resolve_deck_path(args.deck, yapping_root, args.ygo_env),
             ygo_env_root=args.ygo_env,
             num_episodes=args.episodes,
             max_depth=args.max_depth,
@@ -472,10 +553,10 @@ def main() -> None:
         return
 
     if args.command == "sample-hands":
-        from mouth.hand_simulator import run_sample_hands
+        from cli.hand_simulator import run_sample_hands
 
         run_sample_hands(
-            deck=args.deck,
+            deck=_resolve_deck_path(args.deck, yapping_root, args.ygo_env),
             num_hands=args.num_hands,
             num_draw=args.num_draw,
             ygo_env_root=args.ygo_env,
@@ -486,7 +567,7 @@ def main() -> None:
         return
 
     if args.command == "parse-yrp3d":
-        from mouth.replay_parser import parse_yrp3d as parse_replay_yrp3d
+        from cli.replay_parser import parse_yrp3d as parse_replay_yrp3d
 
         report = parse_replay_yrp3d(args.replay)
         s = json.dumps(report, ensure_ascii=False, indent=2)
@@ -535,7 +616,7 @@ def _run_rollout(
     if str(yapping_root) not in sys.path:
         sys.path.insert(0, str(yapping_root))
 
-    from vocal_chords.environment import create_env
+    from engine.environment import create_env
     from brain.rollout import run_rollouts
 
     # Load card_id -> code (code_list) and code -> name (scripture)
@@ -548,7 +629,7 @@ def _run_rollout(
                 if parts and parts[0].isdigit():
                     cid_map[i] = int(parts[0])
     name_map = {}
-    json_path = yapping_root / "scripture" / "card_code_to_name.json"
+    json_path = yapping_root / "data" / "card_code_to_name.json"
     if json_path.is_file():
         with open(json_path, encoding="utf-8") as f:
             name_map = json.load(f)
@@ -605,11 +686,11 @@ def _run_export_card_names(
     code_to_name = {str(row["id"]): row["name"] for row in rows}
 
     if out_path is None:
-        # default under project scripture/
+        # default under project data/
         script_dir = Path(__file__).resolve().parent.parent
-        out_path = script_dir / "scripture" / "card_code_to_name.json"
+        out_path = script_dir / "data" / "card_code_to_name.json"
         if fmt == "csv":
-            out_path = script_dir / "scripture" / "card_code_to_name.csv"
+            out_path = script_dir / "data" / "card_code_to_name.csv"
     out_path = out_path.resolve()
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -649,7 +730,7 @@ def _run_add_deck_codes_to_list(deck_path: Path, ygo_env_root: Path | None) -> N
         print(f"Error: deck not found: {deck_path}", file=sys.stderr)
         sys.exit(1)
 
-    from vocal_chords.wrapper import YgoEnvWrapper
+    from engine.wrapper import YgoEnvWrapper
 
     deck_codes = YgoEnvWrapper._deck_codes(deck_path)
     existing: set[int] = set()

@@ -1,5 +1,5 @@
 from pathlib import Path
-from vocal_chords.wrapper import YgoEnvWrapper
+from engine.wrapper import YgoEnvWrapper
 import platform
 
 if __name__ == "__main__":

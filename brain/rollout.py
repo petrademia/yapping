@@ -19,8 +19,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Literal
 
-from vocal_chords.actions import decode_action_features
-from vocal_chords.idle import complete_until_main_phase_idle, wait_until_main_phase_idle
+from engine.actions import decode_action_features
+from engine.idle import complete_until_main_phase_idle, wait_until_main_phase_idle
 
 from brain.heuristics import evaluate_board
 

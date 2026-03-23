@@ -82,7 +82,7 @@ source .venv/bin/activate   # if you use a venv
 With a specific deck:
 
 ```bash
-./scripts/run_hand_sim.sh scripture/decks/YourDeck.ydk
+./scripts/run_hand_sim.sh data/decks/YourDeck.ydk
 # Or use the deck that came with ygo-env:
 ./scripts/run_hand_sim.sh vendor/ygo-env/assets/deck/Branded.ydk
 ```
@@ -93,7 +93,7 @@ Manual run (same effect):
 export YGO_ENV_ROOT="$(pwd)/vendor/ygo-env"
 export PYTHONPATH="$YGO_ENV_ROOT:$(pwd):$PYTHONPATH"
 cd vendor/ygo-env
-python -m mouth.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
+python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
 ```
 
 ---

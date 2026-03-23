@@ -26,8 +26,8 @@ _DECK = _YGO_ROOT / "assets" / "deck" / "Branded.ydk"
 
 sys.path.insert(0, str(_HERE))
 
-from vocal_chords.wrapper import YgoEnvWrapper
-from vocal_chords.actions import decode_action_features
+from engine.wrapper import YgoEnvWrapper
+from engine.actions import decode_action_features
 
 # ActionAct (match ygopro.h) for reporting
 ACT_NAMES = [
@@ -48,7 +48,7 @@ def load_card_id_to_code(ygo_root: Path) -> dict:
 
 
 def load_code_to_name(root: Path) -> dict:
-    db = root / "scripture" / "card_code_to_name.json"
+    db = root / "data" / "card_code_to_name.json"
     if not db.exists():
         return {}
     with open(db, encoding="utf-8") as f:

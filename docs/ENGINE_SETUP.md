@@ -1,12 +1,12 @@
 # Setting up the engine that uses OCGCore
 
-YAPPING needs a **headless** Yu-Gi-Oh! engine that uses OCGCore for correct card logic. The recommended clone for this project is **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (fork of [izzak98/ygo-env](https://github.com/izzak98/ygo-env)), which carries **YAPPING-oriented build fixes** (Lua 5.3 pin, ygopro-core link, etc.). You can still use upstream **izzak98/ygo-env** if you apply the same patches yourself.
+YAPPING needs a **headless** Yu-Gi-Oh! engine that uses OCGCore for correct card logic. The recommended clone for this project is **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)**, which carries **YAPPING-oriented build fixes** (Lua 5.3 pin, ygopro-core link, etc.). Other minimal **ygo-env** clones may work if you apply the same patches.
 
 ---
 
 ## Option 1: **ygo-env** (recommended: **petrademia/ygo-env**)
 
-**[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** is the fork used with YAPPING. It traces to [izzak98/ygo-env](https://github.com/izzak98/ygo-env), itself a minimal fork of [sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent) focused on the **environment and engine interface**—no RL agents or training stack.
+**[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** is the engine repo used with YAPPING: a minimal fork of the **[ygo-agent](https://github.com/sbl1996/ygo-agent)** line focused on the **environment and engine interface**—no RL agents or full training stack.
 
 ### Why this fork
 
@@ -31,7 +31,7 @@ yapping/
 ├── vendor/
 │   └── ygo-env/          ← clone here (git clone ... vendor/ygo-env)
 ├── brain/
-├── mouth/
+├── cli/
 ...
 ```
 
@@ -136,11 +136,11 @@ python -c "import ygoenv; import gymnasium; print('ygoenv + gymnasium OK')"
 
 ### Wiring ygo-env into YAPPING
 
-- **`vocal_chords/environment.py`**: Create the env using ygoenv’s API (Gymnasium-style).
-- **`vocal_chords/wrapper.py`**: Wrap it so YAPPING sees `reset(deck_path, hand?)`, `get_legal_actions()`, `step(action)`.
-- **`vocal_chords/actions.py`**: Map between ygoenv’s action encoding and your high-level actions.
+- **`engine/environment.py`**: Create the env using ygoenv’s API (Gymnasium-style).
+- **`engine/wrapper.py`**: Wrap it so YAPPING sees `reset(deck_path, hand?)`, `get_legal_actions()`, `step(action)`.
+- **`engine/actions.py`**: Map between ygoenv’s action encoding and your high-level actions.
 
-Put your decks in `yapping/scripture/decks/` and pass the path to the wrapper when creating the env. For how cards are loaded (cdb vs code list vs Lua scripts), see **[docs/CARDS_CDB_AND_SCRIPTS.md](CARDS_CDB_AND_SCRIPTS.md)**. You can reuse or symlink `ygo-env`’s assets (e.g. `cards.cdb`) with `yapping/scripture/` if you want a single place for card data.
+Put your decks in `yapping/data/decks/` and pass the path to the wrapper when creating the env. For how cards are loaded (cdb vs code list vs Lua scripts), see **[docs/CARDS_CDB_AND_SCRIPTS.md](CARDS_CDB_AND_SCRIPTS.md)**. You can reuse or symlink `ygo-env`’s assets (e.g. `cards.cdb`) with `yapping/data/` if you want a single place for card data.
 
 ### Run the Hand Simulator (raw data)
 
@@ -148,7 +148,7 @@ After ygo-env is built, you can run YAPPING’s **Hand Simulator**: draw 5, list
 
 ```bash
 # From yapping root; run script uses vendor/ygo-env by default
-./scripts/run_hand_sim.sh scripture/decks/YourDeck.ydk
+./scripts/run_hand_sim.sh data/decks/YourDeck.ydk
 ```
 
 Or manually (e.g. from Linux after building the engine):
@@ -157,7 +157,7 @@ Or manually (e.g. from Linux after building the engine):
 cd /path/to/yapping
 export YGO_ENV_ROOT="$(pwd)/vendor/ygo-env"
 cd vendor/ygo-env
-python -m mouth.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
+python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
 ```
 
 You should see the current hand (indices) and the first 10 legal actions. Next step is Path A (best path) or Path B (full combo map); see **docs/COMBO_MAP_GOALS.md**.
@@ -188,7 +188,7 @@ If you don’t use either repo, you can build **[Fluorohydride/ygopro-core](http
 
 | Goal | Action |
 |------|--------|
-| **Use the engine YAPPING is designed for** | Set up **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (Option 1); implement `vocal_chords` against its Gymnasium env. |
+| **Use the engine YAPPING is designed for** | Set up **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (Option 1); implement `engine` against its Gymnasium env. |
 | **No compile, Ubuntu 22.04** | Use **[sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent)** with pre-built binary (Option 2). |
 | **Custom/core-only** | Build ygopro-core and bindings yourself (Option 3). |
 

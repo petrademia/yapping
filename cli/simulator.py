@@ -7,7 +7,7 @@ for "simulate this hand" used by CLI and possibly batch jobs.
 """
 
 # TODO: implement HandSimulator
-# - load deck from scripture/decks
+# - load deck from data/decks
 # - set hand (or sample)
 # - run brain.search, collect paths + scores
 # - return best N combos / all unique end-states

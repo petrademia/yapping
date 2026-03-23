@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from vocal_chords.actions import decode_action_features
+from engine.actions import decode_action_features
 
 # msg_to_id: 1 = select_idle (IDLECMD), 2 = select_chain, ...
 MSG_SELECT_IDLE = 1

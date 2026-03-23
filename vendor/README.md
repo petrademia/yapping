@@ -2,7 +2,7 @@
 
 Third-party code used by YAPPING.
 
-- **ygo-env** — Yu-Gi-Oh! engine. For YAPPING use **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (fork of izzak98/ygo-env). Clone and build here:
+- **ygo-env** — Yu-Gi-Oh! engine. For YAPPING use **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)**. Clone and build here:
 
   ```bash
   git clone https://github.com/petrademia/ygo-env.git ygo-env

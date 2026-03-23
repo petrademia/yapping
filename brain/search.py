@@ -20,8 +20,8 @@ from typing import Any, Optional
 
 import numpy as np
 
-from vocal_chords.actions import decode_action_features
-from vocal_chords.state_delta import summarize_state_delta
+from engine.actions import decode_action_features
+from engine.state_delta import summarize_state_delta
 
 from brain.heuristics import evaluate_line
 
@@ -29,17 +29,17 @@ from brain.heuristics import evaluate_line
 _MAIN_PREFIXES = frozenset({"Summon", "MSet", "Set", "Activate", "SpSummon", "Repo", "Attack", "DirectAttack"})
 _OPTIONAL_PROMPT_MSG_IDS = frozenset({2, 6, 7})  # select_chain, select_effectyn, select_yesno
 
-# Card display hints: loaded from scripture/card_display_hints.json (card name -> fusion_materials | cost_send_ed | etc.)
+# Card display hints: loaded from data/card_display_hints.json (card name -> fusion_materials | cost_send_ed | etc.)
 _display_hints_cache: Optional[dict[str, str]] = None
 
 
 def _load_display_hints() -> dict[str, str]:
-    """Load card name -> hint from scripture/card_display_hints.json. Keys starting with _ are ignored."""
+    """Load card name -> hint from data/card_display_hints.json. Keys starting with _ are ignored."""
     global _display_hints_cache
     if _display_hints_cache is not None:
         return _display_hints_cache
     root = Path(__file__).resolve().parent.parent
-    path = root / "scripture" / "card_display_hints.json"
+    path = root / "data" / "card_display_hints.json"
     out: dict[str, str] = {}
     if path.is_file():
         try:
@@ -431,7 +431,18 @@ def _reset_to_main_phase_idle(env: Any, cid_map: dict, name_map: dict, max_steps
     Reset env and auto-pass/cancel until Main Phase idle baseline is reached.
     Returns False if no pass/cancel action exists before reaching idle.
     """
-    _obs, _hand, _legal = env.reset()
+    # Important: this helper is used for trace logging/replay.
+    # If we call env.reset() without the original seed, the opening hand changes,
+    # and the replay-based prompt node extraction will fail (returning empty logs).
+    seed = getattr(env, "_seed", None)
+    try:
+        if seed is not None:
+            _obs, _hand, _legal = env.reset(seed=int(seed))
+        else:
+            _obs, _hand, _legal = env.reset()
+    except TypeError:
+        # Some wrappers expose reset(seed=...) differently; fall back to plain reset.
+        _obs, _hand, _legal = env.reset()
     for _ in range(max_steps):
         actions = env.get_legal_actions()
         if not actions:
@@ -619,19 +630,42 @@ def _expand_completion_variants(
             candidate_actions = _preferred_optional_actions(
                 env, actions, cid_map, name_map, enforce_optional_activation=enforce_optional_activation
             )
-            # Conservative completion: prefer pass/cancel when legal to avoid consuming
-            # unrelated optional branches; fall back to first non-pass for mandatory prompts.
-            idx = _pass_or_cancel_index(env, candidate_actions, cid_map, name_map)
-            if idx is None:
-                idx = _first_non_pass_index(env, candidate_actions, cid_map, name_map)
+            idx: Optional[int] = None
+            if first_turn:
+                # Avoid selecting pass/cancel when non-pass actions exist.
+                # pass/cancel is identified by action feature `act_id == 9`.
+                for cand in candidate_actions:
+                    feat = env.action_features(cand)
+                    if feat is not None and len(feat) >= 5 and int(feat[4]) != 9:
+                        idx = cand
+                        break
+                if idx is None:
+                    # Only pass/cancel options remain; fall back to the first candidate.
+                    idx = candidate_actions[0] if candidate_actions else None
+            else:
+                # Conservative completion: prefer pass/cancel when legal to avoid consuming
+                # unrelated optional branches; fall back to first non-pass for mandatory prompts.
+                idx = _pass_or_cancel_index(env, candidate_actions, cid_map, name_map)
+                if idx is None:
+                    idx = _first_non_pass_index(env, candidate_actions, cid_map, name_map)
             if idx is None:
                 break
             fp_before = _prompt_key(env, actions)
             feat = env.action_features(idx)
             label = decode_action_features(feat, cid_map, name_map) if feat else f"action_{idx}"
             sig = _action_sig(feat)
+            turn_before = env.get_turn_count() if first_turn and hasattr(env, "get_turn_count") and env.get_turn_count() is not None else None
             _obs, _term, _trunc, _ = env.step(idx)
             if _term or _trunc:
+                break
+            if (
+                first_turn
+                and turn_before is not None
+                and hasattr(env, "get_turn_count")
+                and env.get_turn_count() is not None
+                and int(env.get_turn_count()) != int(turn_before)
+            ):
+                # Turn advanced due to completion step; discard this variant.
                 break
             post_hash = _step_hash(env)
             seq.append((fp_before, sig, label, post_hash))
@@ -1019,7 +1053,7 @@ def _count_selection_steps(completion_labels: list[str]) -> int:
 
 
 def _enrich_main_labels_with_completion(labels: list[str]) -> list[str]:
-    """Enrich main labels using scripture/card_display_hints.json (fusion_materials, cost_send_ed, etc.)."""
+    """Enrich main labels using data/card_display_hints.json (fusion_materials, cost_send_ed, etc.)."""
     hints = _load_display_hints()
     out: list[str] = []
     i = 0
@@ -1250,13 +1284,16 @@ def run_combo_dfs(
     root_state: Optional[dict] = _snapshot_state(env)
     initial_to_play = env.get_to_play() if hasattr(env, "get_to_play") else None
     initial_turn_count = env.get_turn_count() if hasattr(env, "get_turn_count") else None
-    # Stack: (labels, state, trace). trace is strict transcript from root and should
-    # always end at a stable main-phase idle state.
-    stack: deque[tuple[list[str], Optional[dict], list[tuple[str, Optional[tuple[int, ...]], str, str]]]] = deque(
-        [([], None, [])]
-    )
+    # Stack: (labels, state, trace, parent_idx).
+    # trace is strict transcript from root and should always end at a stable main-phase idle state.
+    # parent_idx helps reconstruct the DFS tree shape in json_all debug output.
+    stack: deque[
+        tuple[list[str], Optional[dict], list[tuple[str, Optional[tuple[int, ...]], str, str]], Optional[int]]
+    ] = deque([([], None, [], None)])
     # Persist node state by full engine-facing node identity for debugging/recovery.
     node_states: dict[tuple[Any, ...], dict] = {}
+    # Transposition detection: canonical (hand, mzone, szone, grave, banish) multisets already scored.
+    visited_board_states: set[tuple[tuple[int, ...], ...]] = set()
     visited = 0
     t0 = time.time()
     visited_nodes: list[dict] = []
@@ -1553,11 +1590,35 @@ def run_combo_dfs(
         print(f"  (Ctrl+C to stop and print best combo so far)", flush=True)
 
     while stack and visited < max_nodes:
-        labels, state, trace = stack.pop()
+        labels, state, trace, parent_idx = stack.pop()
         main_labels = _main_phase_labels_only(labels)
 
         if len(main_labels) > max_depth:
+            skip_events.append(
+                {
+                    "type": "pruned_depth_limit",
+                    "reason": "main_depth_gt_max_depth",
+                    "max_depth": int(max_depth),
+                    "main_depth": int(len(main_labels)),
+                    "path_len": int(len(trace)),
+                    "labels_tail": labels[-10:],
+                }
+            )
             continue
+
+        # Transposition detection: skip replay entirely if this board state was already scored.
+        if state is not None:
+            board_key = _state_identity_key(state)
+            if board_key in visited_board_states:
+                skip_events.append(
+                    {
+                        "type": "transposition",
+                        "reason": "board_state_already_visited",
+                        "path_len": len(trace),
+                        "labels_tail": labels[-10:],
+                    }
+                )
+                continue
 
         # Replay exact sequence so env is at this node (we still need env for get_legal_actions/step)
         if verbose:
@@ -1667,6 +1728,9 @@ def run_combo_dfs(
             print(f"      {_format_state_for_log(state, cid_map, name_map)}", flush=True)
 
         visited += 1
+        # Mark this board state as scored so duplicate routes are skipped.
+        if state is not None:
+            visited_board_states.add(_state_identity_key(state))
         obs = env.get_obs()
         board_score = evaluate_line(obs, labels)
         goal_hits = _goal_hits_from_state(state)
@@ -1682,9 +1746,24 @@ def run_combo_dfs(
             + int(delta_tag_score)
         )
         score = int(base_score)
+        trace_meta: list[dict[str, Any]] = []
+        if json_all_out:
+            for fp_before, sig, tlabel, post_hash in (trace or []):
+                msg_id, act_id, finish = _sig_msg_act(sig)
+                trace_meta.append(
+                    {
+                        "fp": fp_before,
+                        "msg_id": msg_id,
+                        "act_id": act_id,
+                        "finish": finish,
+                        "label": tlabel,
+                        "post_hash": post_hash,
+                    }
+                )
         visited_nodes.append(
             {
                 "idx": visited,
+                "parent_idx": parent_idx,
                 "prompt_depth": len(labels),
                 "main_depth": len(main_labels),
                 "score": int(score),
@@ -1711,6 +1790,8 @@ def run_combo_dfs(
                 "to_play": int(env.get_to_play()) if hasattr(env, "get_to_play") and env.get_to_play() in (0, 1) else None,
                 "turn_count": int(env.get_turn_count()) if hasattr(env, "get_turn_count") and env.get_turn_count() is not None else None,
                 "phase": env.get_current_phase() if hasattr(env, "get_current_phase") else None,
+                "stop_reason": None,
+                "trace_meta": trace_meta,
             }
         )
         now = time.time()
@@ -1745,10 +1826,18 @@ def run_combo_dfs(
             env, actions, cid_map, name_map, enforce_optional_activation=enforce_optional_activation
         )
         at_leaf = terminated or len(main_labels) >= max_depth or not actions
-        if first_turn and main_labels and ("Pass" in main_labels[-1] or main_labels[-1].strip().startswith("Pass")):
-            at_leaf = True
 
         if at_leaf:
+            # Keep leaf stop reasons inside visited nodes so json_all can explain "why we stopped"
+            # without requiring replay-based inference.
+            if len(main_labels) >= max_depth:
+                visited_nodes[-1]["stop_reason"] = "depth_limit"
+            elif not actions:
+                visited_nodes[-1]["stop_reason"] = "no_legal_actions"
+            elif terminated:
+                visited_nodes[-1]["stop_reason"] = "terminated_or_truncated"
+            else:
+                visited_nodes[-1]["stop_reason"] = "leaf"
             continue
 
         # Expand by main-phase action, then auto-resolve engine prompts until the next
@@ -1763,10 +1852,32 @@ def run_combo_dfs(
             main_actions.append((a, label, _action_sig(feat), fp_before_main))
 
         if not main_actions:
+            visited_nodes[-1]["stop_reason"] = "no_main_actions"
             continue
 
         for a, label, main_sig, fp_before_main in reversed(main_actions):
+            turn_before = (
+                int(env.get_turn_count())
+                if first_turn
+                and hasattr(env, "get_turn_count")
+                and env.get_turn_count() is not None
+                else None
+            )
             obs, term, trunc, _ = env.step(a)
+            # In first-turn mode we want setup-only behavior:
+            # if a main action advances the engine to the next turn, do not
+            # record/expand that node. This prevents the post-`Pass` draw
+            # from showing up in the best path state snapshot.
+            if (
+                first_turn
+                and turn_before is not None
+                and hasattr(env, "get_turn_count")
+                and env.get_turn_count() is not None
+                and int(env.get_turn_count()) != int(turn_before)
+            ):
+                env.reset()
+                _replay_trace(env, expected_trace, cid_map, name_map)
+                continue
             if term or trunc:
                 env.reset()
                 _replay_trace(env, expected_trace, cid_map, name_map)
@@ -1798,7 +1909,7 @@ def run_combo_dfs(
                         child_actions = env.get_legal_actions()
                         child_node_key = _node_key(env, child_actions, state_child)
                         node_states[child_node_key] = state_child
-                stack.append((child_labels, state_child, child_trace))
+                stack.append((child_labels, state_child, child_trace, visited))
 
             # Restore state for next sibling
             obs, _, _ = env.reset()
@@ -1815,8 +1926,11 @@ def run_combo_dfs(
     if verbose:
         print(flush=True)
         print(f"  ── DFS result ─────────────────────────────────", flush=True)
+        transposition_skips = sum(1 for e in skip_events if e.get("type") == "transposition")
         print(f"  Explored : {visited} states in {elapsed:.2f}s", flush=True)
         print(f"  Tracked node states : {len(node_states)}", flush=True)
+        if transposition_skips:
+            print(f"  Transposition skips : {transposition_skips}", flush=True)
         print(f"  Best score : {best_score}", flush=True)
         if main_best:
             print(f"  Best path  ({len(main_best)} steps):", flush=True)

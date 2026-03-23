@@ -1,7 +1,7 @@
 import numpy as np
 from pathlib import Path
-from vocal_chords.wrapper import YgoEnvWrapper
-from vocal_chords.actions import _ACT_NAMES, _ID_TO_MSG
+from engine.wrapper import YgoEnvWrapper
+from engine.actions import _ACT_NAMES, _ID_TO_MSG
 import json
 
 def load_card_id_to_code(ygo_root: Path) -> dict:

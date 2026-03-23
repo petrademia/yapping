@@ -7,10 +7,10 @@ Use this to see the "raw" interface before building the full combo map.
 Usage:
   export YGO_ENV_ROOT=/path/to/ygo-env
   cd /path/to/ygo-env   # so Lua scripts are found
-  python -m mouth.hand_simulator --deck /path/to/yapping/scripture/decks/MyDeck.ydk
+  python -m cli.hand_simulator --deck /path/to/yapping/data/decks/MyDeck.ydk
 
   Or from yapping repo with deck path:
-  YGO_ENV_ROOT=/path/to/ygo-env python -m mouth.hand_simulator --deck scripture/decks/MyDeck.ydk
+  YGO_ENV_ROOT=/path/to/ygo-env python -m cli.hand_simulator --deck data/decks/MyDeck.ydk
   (Run from ygo-env dir if the engine looks for scripts in cwd.)
 """
 
@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Optional
 from collections import Counter
 
-from vocal_chords.state_delta import summarize_state_delta
+from engine.state_delta import summarize_state_delta
 
 _MSG_ID_TO_NAME = {
     0: "none",
@@ -69,8 +69,8 @@ def _done(t0: float, extra: str = "") -> None:
 
 
 def _load_code_to_name(yapping_root: Path, ygo_root: Optional[Path]) -> dict[str, str]:
-    """Load code -> name from scripture/card_code_to_name.json or cards.cdb."""
-    json_path = yapping_root / "scripture" / "card_code_to_name.json"
+    """Load code -> name from data/card_code_to_name.json or cards.cdb."""
+    json_path = yapping_root / "data" / "card_code_to_name.json"
     if json_path.is_file():
         try:
             with open(json_path, encoding="utf-8") as f:
@@ -220,7 +220,7 @@ def _load_code_to_effect_texts(ygo_root: Optional[Path]) -> dict[int, dict[int, 
 
 def _load_effect_label_overrides(yapping_root: Path) -> dict[int, dict[int, str]]:
     """Load curated card-code/effect-id -> human label overrides."""
-    path = yapping_root / "scripture" / "effect_labels.json"
+    path = yapping_root / "data" / "effect_labels.json"
     out: dict[int, dict[int, str]] = {}
     if not path.is_file():
         return out
@@ -318,7 +318,7 @@ def _parse_args() -> argparse.Namespace:
         "--deck",
         type=Path,
         required=True,
-        help="Path to .ydk deck file (e.g. scripture/decks/MyDeck.ydk)",
+        help="Path to .ydk deck file (e.g. data/decks/MyDeck.ydk)",
     )
     parser.add_argument(
         "--num-draw",
@@ -396,7 +396,7 @@ def run(
             "YGO_ENV_ROOT not set or not a directory. Clone and build ygo-env (see docs/ENGINE_SETUP.md), then:\n"
             "  export YGO_ENV_ROOT=/path/to/ygo-env\n"
             "  cd $YGO_ENV_ROOT   # so Lua scripts are found\n"
-            "  python -m mouth.hand_simulator --deck /path/to/scripture/decks/YourDeck.ydk\n"
+            "  python -m cli.hand_simulator --deck /path/to/data/decks/YourDeck.ydk\n"
             "See docs/ENGINE_SETUP.md",
             file=sys.stderr,
         )
@@ -410,10 +410,10 @@ def run(
     # --- Step 1: imports ---
     t = _step("Importing modules")
     try:
-        from vocal_chords.environment import create_env
-        from vocal_chords.actions import action_index_to_label, decode_action_features
-        from vocal_chords.idle import wait_until_main_phase_idle, complete_until_main_phase_idle
-        from vocal_chords.state_delta import summarize_state_delta
+        from engine.environment import create_env
+        from engine.actions import action_index_to_label, decode_action_features
+        from engine.idle import wait_until_main_phase_idle, complete_until_main_phase_idle
+        from engine.state_delta import summarize_state_delta
     except ImportError as e:
         print(f"\nImport error: {e}", file=sys.stderr)
         print("Run from the yapping repo or set PYTHONPATH to the yapping root.", file=sys.stderr)
@@ -558,7 +558,7 @@ def run(
     print(f"Deck: {deck_path}")
     print(f"Hand (first {num_draw}): {hand_display}")
     if not code_to_name and hand and any(h != 0 for h in hand):
-        print("(Run: python -m mouth.cli export-card-names  for card code -> name lookup)")
+        print("(Run: python -m cli.cli export-card-names  for card code -> name lookup)")
     print()
 
     n = min(max_actions, len(legal_actions))
@@ -1977,7 +1977,7 @@ def run_sample_hands(
         sys.path.insert(0, str(yapping_root))
 
     try:
-        from vocal_chords.environment import create_env
+        from engine.environment import create_env
     except ImportError as e:
         print(f"Import error: {e}", file=sys.stderr)
         sys.exit(1)

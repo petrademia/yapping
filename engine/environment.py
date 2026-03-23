@@ -60,7 +60,7 @@ def create_env(
             "to third_party/ygopro-scripts exists in your cwd). See docs/ENGINE_SETUP.md"
         ) from e
 
-    from vocal_chords.wrapper import YgoEnvWrapper
+    from engine.wrapper import YgoEnvWrapper
 
     wrapper = YgoEnvWrapper(
         deck_path=Path(deck_path),

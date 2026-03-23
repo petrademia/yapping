@@ -2,8 +2,8 @@ import json
 import random
 from pathlib import Path
 
-from vocal_chords.wrapper import YgoEnvWrapper
-from vocal_chords.idle import wait_until_main_phase_idle
+from engine.wrapper import YgoEnvWrapper
+from engine.idle import wait_until_main_phase_idle
 from brain.search import run_combo_dfs, load_code_to_type
 
 _HERE = Path(__file__).resolve().parent
@@ -28,8 +28,8 @@ def load_card_id_to_code(ygo_root: Path) -> dict:
 
 
 def load_code_to_name(yapping_root: Path) -> dict:
-    """str(card_code) → card name from scripture/card_code_to_name.json."""
-    db_path = yapping_root / "scripture" / "card_code_to_name.json"
+    """str(card_code) → card name from data/card_code_to_name.json."""
+    db_path = yapping_root / "data" / "card_code_to_name.json"
     if not db_path.exists():
         return {}
     with open(db_path, encoding="utf-8") as f:

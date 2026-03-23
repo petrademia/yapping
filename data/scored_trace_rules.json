@@ -98,6 +98,13 @@
       "reason": "quem_take_trigger"
     },
     {
+      "when_msg_id": 6,
+      "requires_hand_codes": [45883110],
+      "prefer_contains": ["Yes"],
+      "bonus": 90,
+      "reason": "quem_take_trigger_when_in_hand"
+    },
+    {
       "when_label_contains": "Branded in High Spirits",
       "when_msg_id": 3,
       "prefer_codes": [60242223],
@@ -190,6 +197,11 @@
       "max_count": 1
     },
     {
+      "contains": "Summon Guiding Quem, the Virtuous",
+      "bonus": 600,
+      "max_count": 1
+    },
+    {
       "contains": "Chain Branded in High Spirits (Activate) effect 2",
       "bonus": 80,
       "max_count": 1
@@ -221,6 +233,34 @@
     }
   ],
   "order_bonus": [
+    {
+      "sequence": [
+        "Summon Guiding Quem, the Virtuous",
+        "Summon Blazing Cartesia, the Virtuous"
+      ],
+      "bonus": 1200
+    },
+    {
+      "sequence": [
+        "Summon Guiding Quem, the Virtuous",
+        "Summon Bystial Saronir, the Virtuous"
+      ],
+      "bonus": 900
+    },
+    {
+      "sequence": [
+        "Summon Blazing Cartesia, the Virtuous",
+        "Summon Guiding Quem, the Virtuous"
+      ],
+      "bonus": -1500
+    },
+    {
+      "sequence": [
+        "Summon Bystial Saronir, the Virtuous",
+        "Summon Guiding Quem, the Virtuous"
+      ],
+      "bonus": -800
+    },
     {
       "sequence": [
         "Activate Fallen of the White Dragon (effect 2)",
