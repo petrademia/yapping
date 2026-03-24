@@ -38,7 +38,7 @@ def create_env(
     root = ygo_env_root or YGO_ENV_ROOT
     if not root:
         raise RuntimeError(
-            "Engine root not set. Clone petrademia/ygopro-adapter into vendor/yapcore (or see docs/ENGINE_SETUP.md), build it, then either:\n"
+            "Engine root not set. Clone petrademia/yapcore into vendor/yapcore (or see docs/ENGINE_SETUP.md), build it, then either:\n"
             "  export YGO_ENV_ROOT=/path/to/yapcore\n"
             "  or pass ygo_env_root= to create_env(). See docs/ENGINE_SETUP.md"
         )

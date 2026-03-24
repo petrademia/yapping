@@ -51,7 +51,7 @@ else
   echo "Cloning adapter into vendor/yapcore..."
   mkdir -p "$YAPPING_ROOT/vendor"
   rm -rf "$YGO_ENV_ROOT"
-  git clone https://github.com/petrademia/ygopro-adapter.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/yapcore.git "$YGO_ENV_ROOT"
 fi
 cd "$YGO_ENV_ROOT"
 

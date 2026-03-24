@@ -96,7 +96,7 @@ echo "==> 9) Build yapcore in vendor/"
 mkdir -p "$YAPPING_ROOT/vendor"
 if [[ ! -d "$YGO_ENV_ROOT/.git" ]]; then
   rm -rf "$YGO_ENV_ROOT"
-  git clone https://github.com/petrademia/ygopro-adapter.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/yapcore.git "$YGO_ENV_ROOT"
 fi
 
 cd "$YGO_ENV_ROOT"

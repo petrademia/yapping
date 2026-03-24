@@ -36,7 +36,7 @@ From your **yapping** project root (in WSL):
 ```bash
 cd /mnt/c/Users/petrus/Projects/yapping   # adjust if your path differs
 mkdir -p vendor
-git clone https://github.com/petrademia/ygopro-adapter.git vendor/yapcore
+git clone https://github.com/petrademia/yapcore.git vendor/yapcore
 cd vendor/yapcore
 xmake f -m release -y
 xmake

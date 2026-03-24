@@ -194,7 +194,7 @@ If you don’t use either repo, you can build **[Fluorohydride/ygopro-core](http
 
 | Goal | Action |
 |------|--------|
-| **Use the engine YAPPING is designed for** | Set up **[petrademia/ygopro-adapter](https://github.com/petrademia/ygopro-adapter)** in `vendor/yapcore` (Option 1); implement `engine` against its Gymnasium env. |
+| **Use the engine YAPPING is designed for** | Set up **[petrademia/yapcore](https://github.com/petrademia/yapcore)** in `vendor/yapcore` (Option 1); implement `engine` against its Gymnasium env. |
 | **No compile, Ubuntu 22.04** | Use **[sbl1996/ygo-agent](https://github.com/sbl1996/ygo-agent)** with pre-built binary (Option 2). |
 | **Custom/core-only** | Build ygopro-core and bindings yourself (Option 3). |
 
