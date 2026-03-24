@@ -51,6 +51,13 @@ _MSG_ID_TO_NAME = {
 }
 
 
+def _default_adapter_root(yapping_root: Path) -> Path:
+    primary = yapping_root / "vendor" / "ygopro-adapter"
+    if primary.is_dir():
+        return primary
+    return yapping_root / "vendor" / "ygo-env"
+
+
 # ---------------------------------------------------------------------------
 # Progress helpers
 # ---------------------------------------------------------------------------
@@ -1966,10 +1973,10 @@ def run_sample_hands(
         ygo_root = os.environ.get("YGO_ENV_ROOT")
         ygo_root = Path(ygo_root).resolve() if ygo_root else None
     if not ygo_root or not ygo_root.is_dir():
-        ygo_root = yapping_root / "vendor" / "ygo-env"
+        ygo_root = _default_adapter_root(yapping_root)
     if not ygo_root.is_dir():
         print(
-            "ygo-env not found. Set YGO_ENV_ROOT or use --ygo-env, or ensure vendor/ygo-env exists. See docs/ENGINE_SETUP.md.",
+            "ygo-env not found. Set YGO_ENV_ROOT or use --ygo-env, or ensure vendor/ygopro-adapter exists. See docs/ENGINE_SETUP.md.",
             file=sys.stderr,
         )
         sys.exit(1)

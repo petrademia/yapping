@@ -32,7 +32,7 @@ echo "xmake: $(xmake --version | head -1)"
 echo ""
 
 # 2. Build ygo-env
-YGO_ENV_ROOT="$YAPPING_ROOT/vendor/ygo-env"
+YGO_ENV_ROOT="$YAPPING_ROOT/vendor/ygopro-adapter"
 if [[ ! -d "$YGO_ENV_ROOT" ]]; then
   echo "Cloning ygo-env..."
   mkdir -p "$YAPPING_ROOT/vendor"

@@ -2,22 +2,22 @@
 
 Third-party code used by YAPPING.
 
-- **ygo-env** — Yu-Gi-Oh! engine. For YAPPING use **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)**. Clone and build here:
+- **ygopro-adapter** — Yu-Gi-Oh! adapter/runtime around OCGCore. Clone or maintain it here:
 
   ```bash
-  git clone https://github.com/petrademia/ygo-env.git ygo-env
-  cd ygo-env
+  git clone <your-adapter-repo> ygopro-adapter
+  cd ygopro-adapter
   xmake f -m release -y && xmake && make
   ```
 
-  See **docs/ENGINE_SETUP.md** for details. The run script uses `yapping/vendor/ygo-env` by default.
+  See **docs/ENGINE_SETUP.md** for details. The run script uses `yapping/vendor/ygopro-adapter` by default.
 
 ### After pulling engine changes (rebuild native module)
 
-YAPPING’s vendored **ygo-env** may carry local patches (Lua 5.3 pin, link flags, `ygopro.h` shims). After `git pull` in `vendor/ygo-env`, rebuild the extension so `import ygoenv.ygopro` keeps working:
+YAPPING’s vendored **ygopro-adapter** may carry local patches (Lua 5.3 pin, link flags, `ygopro.h` shims). After `git pull` in `vendor/ygopro-adapter`, rebuild the extension so `import ygoenv.ygopro` keeps working:
 
 ```bash
-cd vendor/ygo-env
+cd vendor/ygopro-adapter
 xmake f -c -m release -y
 xmake b ygopro_ygoenv
 # or: make build_ext

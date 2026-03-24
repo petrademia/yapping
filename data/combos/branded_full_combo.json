@@ -1,0 +1,83 @@
+{
+  "_comment": "Branded combo line as executed by ygo-env engine (seed 18, Branded.ydk). Engine deviations from TCG noted below.",
+  "_engine_notes": [
+    "Cartesia has no Lua script — acts as dumb fusion material only, no effects",
+    "Fallen of the White Dragon and Fallen of Albaz do NOT appear in Branded Fusion material list (engine quirk)",
+    "Gold Sarcophagus appears as second fusion material instead (engine quirk — all deck cards pooled)",
+    "Granguignol (Level 8) is filtered out of Albion's re-fusion targets by IsLevelBelow(8) in Albion Lua",
+    "Mirrorjade used instead of Granguignol as closest available Fusion target",
+    "Alba-Lenatus sent to GY as cost for Mirrorjade's quick effect (no valid opponent targets in solitaire)"
+  ],
+  "_status": "complete (engine-actual path). Does NOT match TCG intended combo due to engine Lua limitations.",
+  "_tcg_intended": "Branded Fusion → send FotWD+Cartesia → Albion → banish FotWD+Cartesia → Granguignol → ...",
+  "name": "Branded Fusion Line (Engine-Actual)",
+  "deck": "data/decks/Branded.ydk",
+  "seed": 18,
+  "steps": [
+    {
+      "label": "Activate Branded Fusion (effect 1)",
+      "sig": [57, 23, 232, 1, 8, 0, 1, 0, 0, 0, 0, 0],
+      "_note": "Activate Branded Fusion from hand"
+    },
+    {
+      "label": "Place → s1",
+      "sig": [0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 8, 0],
+      "_note": "Place Branded Fusion in spell zone s1"
+    },
+    {
+      "label": "Select Albion the Branded Dragon",
+      "sig": [65, 46, 109, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+      "_note": "Choose Albion the Branded Dragon as fusion summon target"
+    },
+    {
+      "label": "Select Blazing Cartesia, the Virtuous",
+      "sig": [11, 53, 75, 9, 0, 0, 0, 0, 0, 0, 0, 0],
+      "_note": "Select Cartesia from deck as first fusion material"
+    },
+    {
+      "label": "Select Gold Sarcophagus",
+      "sig": [2, 40, 66, 9, 0, 0, 0, 0, 0, 0, 0, 0],
+      "_note": "Engine quirk: Gold Sarcophagus appears as second material (TCG intended: Fallen of the White Dragon)"
+    },
+    {
+      "label": "Place → m1",
+      "sig": [0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 1, 0],
+      "_note": "Place Albion the Branded Dragon in monster zone m1"
+    },
+    {
+      "label": "Set position: face-up ATK",
+      "sig": [0, 46, 109, 5, 0, 0, 0, 0, 1, 0, 0, 0],
+      "_note": "Set Albion to face-up ATK"
+    },
+    {
+      "label": "Yes (Albion the Branded Dragon)",
+      "sig": [58, 46, 109, 6, 8, 0, 36, 0, 0, 0, 0, 0],
+      "_note": "Activate Albion's trigger effect: re-fusion summon using banished materials"
+    },
+    {
+      "label": "Select Mirrorjade the Iceblade Dragon",
+      "sig": [74, 23, 202, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+      "_note": "Target for re-fusion. TCG intended: Granguignol (Level 8 filtered out by Albion Lua)"
+    },
+    {
+      "label": "Select Albion the Branded Dragon",
+      "sig": [58, 46, 109, 9, 0, 0, 0, 0, 0, 0, 0, 0],
+      "_note": "Use Albion (on field) as sole material for Mirrorjade re-fusion"
+    },
+    {
+      "label": "Place → m1",
+      "sig": [0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 1, 0],
+      "_note": "Place Mirrorjade in monster zone m1"
+    },
+    {
+      "label": "Set position: face-up ATK",
+      "sig": [0, 23, 202, 5, 0, 0, 0, 0, 1, 0, 0, 0],
+      "_note": "Set Mirrorjade to face-up ATK"
+    },
+    {
+      "label": "Select Alba-Lenatus the Abyss Dragon",
+      "sig": [72, 1, 228, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+      "_note": "Mirrorjade quick effect cost: send Alba-Lenatus from extra deck to GY"
+    }
+  ]
+}

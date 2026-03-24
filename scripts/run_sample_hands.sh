@@ -20,7 +20,7 @@ echo "  YAPPING  —  Sample hands"
 echo "════════════════════════════════════════"
 
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygo-env}"
+YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygopro-adapter}"
 
 _info "Yapping root : $YAPPING_ROOT"
 _info "ygo-env root : $YGO_ENV_ROOT"

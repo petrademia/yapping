@@ -1,12 +1,12 @@
 # Setting up the engine that uses OCGCore
 
-YAPPING needs a **headless** Yu-Gi-Oh! engine that uses OCGCore for correct card logic. The recommended clone for this project is **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)**, which carries **YAPPING-oriented build fixes** (Lua 5.3 pin, ygopro-core link, etc.). Other minimal **ygo-env** clones may work if you apply the same patches.
+YAPPING needs a **headless** Yu-Gi-Oh! adapter that uses OCGCore for correct card logic. The recommended setup for this project is the vendored **`ygopro-adapter`** in `vendor/ygopro-adapter`, which carries YAPPING-oriented build fixes and local decoder patches on top of upstream `ygopro-core` and `ygopro-scripts`.
 
 ---
 
-## Option 1: **ygo-env** (recommended: **petrademia/ygo-env**)
+## Option 1: **ygopro-adapter** (recommended)
 
-**[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** is the engine repo used with YAPPING: a minimal fork of the **[ygo-agent](https://github.com/sbl1996/ygo-agent)** line focused on the **environment and engine interface**—no RL agents or full training stack.
+`ygopro-adapter` is the engine repo used with YAPPING: a maintained adapter/runtime focused on the environment and engine interface, with upstream `mycard/ygopro-core` and `mycard/ygopro-scripts` kept as dependencies.
 
 ### Why this fork
 
@@ -24,28 +24,28 @@ YAPPING needs a **headless** Yu-Gi-Oh! engine that uses OCGCore for correct card
 
 ### Where to clone
 
-**Recommended:** put **ygo-env inside yapping** so you can edit it easily:
+**Recommended:** put **ygopro-adapter inside yapping** so you can edit it easily:
 
 ```
 yapping/
 ├── vendor/
-│   └── ygo-env/          ← clone here (git clone ... vendor/ygo-env)
+│   └── ygopro-adapter/   ← clone here (git clone ... vendor/ygopro-adapter)
 ├── brain/
 ├── cli/
 ...
 ```
 
-- Scripts and docs assume `YGO_ENV_ROOT` = `yapping/vendor/ygo-env` by default (no env var needed when using the run script).
+- Scripts and docs assume `YGO_ENV_ROOT` = `yapping/vendor/ygopro-adapter` by default (no env var needed when using the run script).
 - `vendor/` is in `.gitignore`; see **Locking ygo-env changes** below if you want those patches in Git.
 
 ### Locking ygo-env changes (fork + commit)
 
-`vendor/ygo-env` is usually a **separate Git clone** (it has its own `.git`). YAPPING’s root repo ignores `vendor/*`, so **xmake / recipe / `ygopro.h` edits are committed inside that clone**, not in `yapping` unless you use a submodule.
+`vendor/ygopro-adapter` is usually a **separate Git clone** (it has its own `.git`). YAPPING’s root repo ignores `vendor/*`, so **xmake / recipe / `ygopro.h` edits are committed inside that clone**, not in `yapping` unless you use a submodule.
 
 1. **Commit in the engine repo** (paths are examples — adjust to what you changed):
 
    ```bash
-   cd vendor/ygo-env
+   cd vendor/ygopro-adapter
    git status
    git add xmake.lua \
      repo/packages/y/ygopro-core/xmake.lua \
@@ -61,7 +61,7 @@ yapping/
    ```
 
 3. **In YAPPING**, point people at that fork/branch in this doc or in chat, e.g.  
-   `git clone https://github.com/petrademia/ygo-env.git vendor/ygo-env` (or your own fork)
+   `git clone <your-adapter-repo> vendor/ygopro-adapter`
 
 **Optional — track `vendor/ygo-env` from the YAPPING repo:** use a **git submodule** (`git submodule add <url> vendor/ygo-env`) and remove or narrow the `vendor/*` ignore rule so the submodule pointer is committed. That records an exact commit of the engine in every YAPPING revision.
 
@@ -69,25 +69,31 @@ If you prefer a sibling repo instead of `vendor/ygo-env`, clone to e.g. `~/Proje
 
 ### Setup
 
-1. **Clone and build** (from yapping root, into `vendor/ygo-env`)
+1. **Clone and build** (from yapping root, into `vendor/ygopro-adapter`)
 
    ```bash
    cd /path/to/yapping
    mkdir -p vendor
-   git clone https://github.com/petrademia/ygo-env.git vendor/ygo-env
-   cd vendor/ygo-env
-   xmake f -m release -y
-   xmake
+   git clone <your-adapter-repo> vendor/ygopro-adapter
+   cd vendor/ygopro-adapter
+   PATH=/path/to/yapping/.venv/bin:$PATH xmake f -m release -y
+   PATH=/path/to/yapping/.venv/bin:$PATH xmake
    make
    ```
 
-   After `git pull` in `vendor/ygo-env` when build recipes changed, force a clean configure and rebuild **only** the Python extension:
+   After `git pull` in `vendor/ygopro-adapter` when build recipes changed, force a clean configure and rebuild **only** the Python extension:
 
    ```bash
-   cd vendor/ygo-env
-   xmake f -c -m release -y
-   xmake b ygopro_ygoenv   # or: make build_ext
+   cd vendor/ygopro-adapter
+   PATH=/path/to/yapping/.venv/bin:$PATH xmake f -c -m release -y
+   PATH=/path/to/yapping/.venv/bin:$PATH xmake b -r ygopro_ygoenv   # or: make build_ext
    ```
+
+   For this workspace, the project venv is Python `3.14`, so the extension that must be produced and loaded is:
+
+   - `vendor/ygopro-adapter/ygoenv/ygoenv/ygopro/ygopro_ygoenv.cpython-314-x86_64-linux-gnu.so`
+
+   Do not mix interpreter versions. If both `cp313` and `cp314` `.so` files are present and you rebuild only the wrong one, Python will keep importing the stale interpreter-matching binary and native debugging/fixes will appear to have no effect.
 
    This will:
 
@@ -128,7 +134,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # 3) install ygo-env Python bindings (pulls gymnasium + other deps)
-pip install -e vendor/ygo-env/ygoenv
+pip install -e vendor/ygopro-adapter/ygoenv
 
 # 4) verify imports
 python -c "import ygoenv; import gymnasium; print('ygoenv + gymnasium OK')"
@@ -147,7 +153,7 @@ Put your decks in `yapping/data/decks/` and pass the path to the wrapper when cr
 After ygo-env is built, you can run YAPPING’s **Hand Simulator**: draw 5, list the first 10 legal actions. This confirms the bridge works before you build the full combo map.
 
 ```bash
-# From yapping root; run script uses vendor/ygo-env by default
+# From yapping root; run script uses vendor/ygopro-adapter by default
 ./scripts/run_hand_sim.sh data/decks/YourDeck.ydk
 ```
 
@@ -155,8 +161,8 @@ Or manually (e.g. from Linux after building the engine):
 
 ```bash
 cd /path/to/yapping
-export YGO_ENV_ROOT="$(pwd)/vendor/ygo-env"
-cd vendor/ygo-env
+export YGO_ENV_ROOT="$(pwd)/vendor/ygopro-adapter"
+cd vendor/ygopro-adapter
 python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
 ```
 

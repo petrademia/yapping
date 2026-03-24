@@ -5,7 +5,7 @@
 
 set -euo pipefail
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygo-env}"
+YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygopro-adapter}"
 PYTHON_VERSION="$(tr -d '[:space:]' < "$YAPPING_ROOT/.python-version" 2>/dev/null || true)"
 if [[ -z "${PYTHON_VERSION:-}" ]]; then
   PYTHON_VERSION="3.13"
@@ -46,9 +46,9 @@ if ! require_cmd python3; then
 fi
 
 if [[ -d "$YGO_ENV_ROOT/.git" ]]; then
-  echo "vendor/ygo-env already exists. Building/updating..."
+  echo "vendor/ygopro-adapter already exists. Building/updating..."
 else
-  echo "Cloning petrademia/ygo-env into vendor/ygo-env..."
+  echo "Cloning adapter into vendor/ygopro-adapter..."
   mkdir -p "$YAPPING_ROOT/vendor"
   rm -rf "$YGO_ENV_ROOT"
   git clone https://github.com/petrademia/ygo-env.git "$YGO_ENV_ROOT"

@@ -133,7 +133,10 @@ def _sync_from_engine_header() -> None:
     global _ID_TO_MSG, _ACT_NAMES, _PHASE_NAMES
     try:
         root = Path(__file__).resolve().parent.parent
-        hdr_path = root / "vendor" / "ygo-env" / "ygoenv" / "ygoenv" / "ygopro" / "ygopro.h"
+        adapter_root = root / "vendor" / "ygopro-adapter"
+        if not adapter_root.is_dir():
+            adapter_root = root / "vendor" / "ygo-env"
+        hdr_path = adapter_root / "ygoenv" / "ygoenv" / "ygopro" / "ygopro.h"
         if not hdr_path.is_file():
             return
         hdr = hdr_path.read_text(encoding="utf-8", errors="ignore")

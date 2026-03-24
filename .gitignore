@@ -13,12 +13,16 @@ build/
 *.so
 
 # Generated / temporary (tmp_* output, merged code list, etc.)
+tmp_*.py
+tmp_*.json
+tmp_*.txt
 tmp_*_out.txt
 tmp_*_out.json
 tmp_*_out.*
 tmp_*_hand.txt
 tmp_*_obs*.txt
 code_list_merged.txt
+cards.cdb
 
 # Logs
 logs/

@@ -5,7 +5,7 @@
 set -euo pipefail
 
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygo-env}"
+YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygopro-adapter}"
 BASHRC="${HOME}/.bashrc"
 PYTHON_VERSION="$(tr -d '[:space:]' < "$YAPPING_ROOT/.python-version" 2>/dev/null || true)"
 if [[ -z "${PYTHON_VERSION:-}" ]]; then

@@ -1,61 +1,62 @@
 # YAPPING
-### **Y**et **A**nother **P**ath **P**rocessor & **I**nference **N**ode **G**enerator
 
----
+YAPPING is a Yu-Gi-Oh combo search project built on top of a maintained OCGCore adapter. The current focus is deterministic duel execution, exact legal-action decoding, and search over real game states, not RL training.
 
-**YAPPING** is an exhaustive state-space combo analyzer for Yu-Gi-Oh!. It is designed to bridge high-level Python search algorithms with the low-level Lua logic of the **OCGCore**. Unlike traditional simulators, YAPPING doesn't just play the game—it explores every possible legal permutation of a given hand to identify the mathematically optimal end-board.
+## Architecture
 
----
+1. **Rules:** upstream `ygopro-core` plus Lua scripts from `ygopro-scripts`
+2. **Adapter:** local `ygopro-adapter` in `vendor/ygopro-adapter`
+3. **Search:** Python combo tracing, replay, and DFS-style exploration
 
-## ### Core Architecture
+## Current direction
 
-YAPPING operates across three distinct layers:
+- make the adapter trustworthy for search-critical prompts
+- replay exact combo lines deterministically
+- add regression traces for known lines before expanding DFS
+- keep RL compatibility incidental, not a project goal
 
-1.  **The Rules (Lua):** Utilizes existing `.lua` scripts from the OCGCore to ensure 100% accuracy with card effects, costs, and timing.
-2.  **The Bridge (C++/Python):** Powered by **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)**, a minimal Gymnasium-style OCGCore bridge (see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)**).
-3.  **The Brain (Python):** A recursive Breadth-First Search (BFS) engine with **Heuristic Pruning** and **State Hashing** to prevent infinite loops.
+## Project structure
 
----
-
-## ### Key Features
-
-* **Exhaustive Branching:** Explores every "if-then" scenario based on your starting hand.
-* **Heuristic Scoring:** Ranks end-boards based on interrupts (negates), resource count (follow-up), and floodgate presence.
-* **Transposition Detection:** Identifies when different move sequences lead to the same board state and prunes redundant paths to save memory.
-* **Headless Simulation:** Runs thousands of simulations per second without the overhead of a GUI.
-
----
-
-## ### Project structure
-
-```
+```text
 yapping/
-├── brain/                  # Intelligence: BFS/MCTS, heuristics, state hashing
-├── engine/           # Bridge: ygo-env wrapper, actions, env setup
-├── cli/                  # Interface: simulator, exporter, CLI
-├── data/              # Data: cards.cdb, scripts/, decks/
-├── logs/                   # Saved combo paths and error logs
-├── requirements.txt
-├── README.md
-└── main.py                 # Entry point (delegates to cli.cli)
+├── brain/          # Search, replay, heuristics
+├── engine/         # Adapter wrapper and action decoding
+├── cli/            # CLI entry points
+├── data/           # Decks, combo recipes, names
+├── docs/           # Engine and debugging notes
+├── scripts/        # Setup, regression, helper scripts
+├── vendor/         # ygopro-adapter and related notes
+└── main.py
 ```
 
----
+## Setup
 
-## ### Getting Started
+Use Linux/WSL. Build the adapter against the same Python minor version you run YAPPING with.
 
-### Prerequisites
-* Python 3.10+
-* An engine that uses OCGCore: **[petrademia/ygo-env](https://github.com/petrademia/ygo-env)** (recommended for YAPPING) or another **ygo-env** / **[ygo-agent](https://github.com/sbl1996/ygo-agent)**-compatible build — see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)** for setup
-* A `cards.cdb` SQLite database (standard for EDOPro/YGOPRO)
-
-**On Windows:** The C++ engine builds only on Linux. Use **WSL** and follow **[docs/WSL_SETUP.md](docs/WSL_SETUP.md)**.
-
-### Installation
 ```bash
-git clone [https://github.com/yourusername/yapping.git](https://github.com/yourusername/yapping.git)
-cd yapping
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+
+cd vendor/ygopro-adapter
+PATH=/home/petru/code/yapping/.venv/bin:$PATH xmake f -c -m release -y
+PATH=/home/petru/code/yapping/.venv/bin:$PATH xmake b -r ygopro_ygoenv
+make assets scripts
+pip install -e ygoenv
 ```
 
-Build **ygo-env** (OCGCore bridge) on Linux/WSL; see **[docs/ENGINE_SETUP.md](docs/ENGINE_SETUP.md)**. After pulling engine changes, rebuild the native module: `cd vendor/ygo-env && xmake f -c -m release -y && xmake b ygopro_ygoenv` (or `make build_ext`). Short version: **[vendor/README.md](vendor/README.md)**.
+For the current workspace, `.venv/bin/python` is now Python `3.14`, so the loaded native module must be the `cp314` build. The important rule is still ABI matching: rebuild `ygopro-adapter` with the same interpreter you use to run the repo, or Python will keep importing a stale interpreter-matching extension. See [vendor/README.md](/home/petru/code/yapping/vendor/README.md) and [docs/ENGINE_SETUP.md](/home/petru/code/yapping/docs/ENGINE_SETUP.md).
+
+## Useful commands
+
+```bash
+./scripts/run_hand_sim.sh data/decks/Branded.ydk
+python scripts/regression_branded_end_phase.py
+python vendor/ygopro-adapter/scripts/check_upstreams.py
+```
+
+## Notes
+
+- `vendor/ygo-env` is now a compatibility symlink to `vendor/ygopro-adapter`
+- the adapter repo is maintained separately from the main repo
+- temporary one-off debug scripts still exist in the root; they should not be treated as stable interfaces

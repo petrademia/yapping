@@ -22,12 +22,19 @@ from pathlib import Path
 DEFAULT_FIXED_HAND = "68468459,60242223,45883110,29948294,95515789"
 # Default opening-hand used by `--fixed-hand` when the flag is omitted.
 #
-# Verified against `vendor/ygo-env/assets/deck/Branded.ydk`:
+# Verified against `vendor/ygopro-adapter/assets/deck/Branded.ydk`:
 # - 68468459 Fallen of Albaz: present
 # - 60242223 Bystial Saronir: present
 # - 45883110 Guiding Quem, the Virtuous: present
 # - 29948294 Branded in High Spirits: present
 # - 95515789 Blazing Cartesia, the Virtuous: present
+
+
+def _default_adapter_root(yapping_root: Path) -> Path:
+    primary = yapping_root / "vendor" / "ygopro-adapter"
+    if primary.is_dir():
+        return primary
+    return yapping_root / "vendor" / "ygo-env"
 
 
 def _resolve_deck_path(deck: Path, yapping_root: Path, ygo_env_root: Path | None) -> Path:
@@ -37,7 +44,7 @@ def _resolve_deck_path(deck: Path, yapping_root: Path, ygo_env_root: Path | None
     This keeps `--deck` path-specific (you must pass a path ending in `.ydk`);
     if it doesn't exist, we try fallbacks using the same basename:
     - `data/decks/<basename>` (preferred)
-    - bundled engine decks (from ygo-env assets / vendor/ygo-env)
+    - bundled engine decks (from ygo-env assets / vendor/ygopro-adapter)
     """
     deck_path = Path(deck)
     if deck_path.suffix.lower() != ".ydk":
@@ -71,7 +78,7 @@ def _resolve_deck_path(deck: Path, yapping_root: Path, ygo_env_root: Path | None
     if ygo_env_root is not None:
         candidates.append(Path(ygo_env_root) / "assets" / "deck" / basename)
 
-    candidates.append(yapping_root / "vendor" / "ygo-env" / "assets" / "deck" / basename)
+    candidates.append(_default_adapter_root(yapping_root) / "assets" / "deck" / basename)
 
     seen: set[str] = set()
     uniq: list[Path] = []
@@ -448,7 +455,7 @@ def main() -> None:
     )
     combo_run.add_argument(
         "--ygo-env", type=Path, default=None,
-        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygo-env).",
+        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygopro-adapter).",
     )
 
     # ---- combo-record: interactively record a combo recipe ----
@@ -462,7 +469,7 @@ def main() -> None:
     combo_record.add_argument("--seed", type=int, default=None, help="RNG seed for reproducible hand")
     combo_record.add_argument(
         "--ygo-env", type=Path, default=None,
-        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygo-env).",
+        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygopro-adapter).",
     )
 
     args = parser.parse_args()
@@ -662,9 +669,9 @@ def _run_rollout(
         root = Path(root).resolve() if root else None
     if root is None or not root.is_dir():
         yapping_root = Path(__file__).resolve().parent.parent
-        root = yapping_root / "vendor" / "ygo-env"
+        root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygo-env must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
         sys.exit(1)
 
     yapping_root = Path(__file__).resolve().parent.parent
@@ -719,11 +726,11 @@ def _run_export_card_names(
             env_root = os.environ.get("YGO_ENV_ROOT")
             root = Path(env_root).resolve() if env_root else None
         if root is None or not root.is_dir():
-            # Default: vendor/ygo-env relative to this repo
+            # Default: vendor/ygopro-adapter relative to this repo
             yapping_root = Path(__file__).resolve().parent.parent
-            root = yapping_root / "vendor" / "ygo-env"
+            root = _default_adapter_root(yapping_root)
         if not root.is_dir():
-            print("Error: need --cdb path or --ygo-env or YGO_ENV_ROOT; or vendor/ygo-env must exist.", file=sys.stderr)
+            print("Error: need --cdb path or --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
             sys.exit(1)
         cdb_path = root / "assets" / "locale" / "en" / "cards.cdb"
     if not cdb_path.is_file():
@@ -772,9 +779,9 @@ def _run_add_deck_codes_to_list(deck_path: Path, ygo_env_root: Path | None) -> N
         root = Path(env_root).resolve() if env_root else None
     if root is None or not root.is_dir():
         yapping_root = Path(__file__).resolve().parent.parent
-        root = yapping_root / "vendor" / "ygo-env"
+        root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygo-env must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
         sys.exit(1)
     code_list_file = root / "example" / "code_list.txt"
     script_dir = root / "scripts" / "script"
@@ -823,9 +830,9 @@ def _run_combo_run(
         root = os.environ.get("YGO_ENV_ROOT")
         root = Path(root).resolve() if root else None
     if root is None or not root.is_dir():
-        root = yapping_root / "vendor" / "ygo-env"
+        root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygo-env must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
         sys.exit(1)
 
     # Load recipe
@@ -908,9 +915,9 @@ def _run_combo_record(
         root = os.environ.get("YGO_ENV_ROOT")
         root = Path(root).resolve() if root else None
     if root is None or not root.is_dir():
-        root = yapping_root / "vendor" / "ygo-env"
+        root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygo-env must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
         sys.exit(1)
 
     deck_path = _resolve_deck_path(deck, yapping_root, root)
