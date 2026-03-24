@@ -4,7 +4,7 @@
 #   chmod +x scripts/run_in_wsl.sh
 #   ./scripts/run_in_wsl.sh
 #
-# It will: install xmake if needed, build ygo-env, install Python deps, run the hand simulator.
+# It will: install xmake if needed, build yapcore, install Python deps, run the hand simulator.
 
 set -e
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -31,12 +31,12 @@ fi
 echo "xmake: $(xmake --version | head -1)"
 echo ""
 
-# 2. Build ygo-env
-YGO_ENV_ROOT="$YAPPING_ROOT/vendor/ygopro-adapter"
+# 2. Build yapcore
+YGO_ENV_ROOT="$YAPPING_ROOT/vendor/yapcore"
 if [[ ! -d "$YGO_ENV_ROOT" ]]; then
-  echo "Cloning ygo-env..."
+  echo "Cloning yapcore..."
   mkdir -p "$YAPPING_ROOT/vendor"
-  git clone https://github.com/petrademia/ygo-env.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/ygopro-adapter.git "$YGO_ENV_ROOT"
 fi
 # Apply patches (system Lua + Spec<> ambiguity fixes for newer compilers + select_card cid fix)
 for p in "$YAPPING_ROOT/patches/ygo_env_system_lua.patch" "$YAPPING_ROOT/patches/ygo_env_spec_ambiguous.patch" "$YAPPING_ROOT/patches/ygo_env_ygopro_spec_ambiguous.patch" "$YAPPING_ROOT/patches/ygo_env_ygopro_select_card_cid.patch"; do

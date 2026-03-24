@@ -5,13 +5,13 @@ Takes a deck, shuffles and draws 5, then lists the first N legal actions.
 Use this to see the "raw" interface before building the full combo map.
 
 Usage:
-  export YGO_ENV_ROOT=/path/to/ygo-env
-  cd /path/to/ygo-env   # so Lua scripts are found
+  export YGO_ENV_ROOT=/path/to/yapcore
+  cd /path/to/yapcore   # so Lua scripts are found
   python -m cli.hand_simulator --deck /path/to/yapping/data/decks/MyDeck.ydk
 
   Or from yapping repo with deck path:
-  YGO_ENV_ROOT=/path/to/ygo-env python -m cli.hand_simulator --deck data/decks/MyDeck.ydk
-  (Run from ygo-env dir if the engine looks for scripts in cwd.)
+  YGO_ENV_ROOT=/path/to/yapcore python -m cli.hand_simulator --deck data/decks/MyDeck.ydk
+  (Run from yapcore dir if the engine looks for scripts in cwd.)
 """
 
 from __future__ import annotations
@@ -52,9 +52,12 @@ _MSG_ID_TO_NAME = {
 
 
 def _default_adapter_root(yapping_root: Path) -> Path:
-    primary = yapping_root / "vendor" / "ygopro-adapter"
+    primary = yapping_root / "vendor" / "yapcore"
     if primary.is_dir():
         return primary
+    compat = yapping_root / "vendor" / "ygopro-adapter"
+    if compat.is_dir():
+        return compat
     return yapping_root / "vendor" / "ygo-env"
 
 
@@ -343,7 +346,7 @@ def _parse_args() -> argparse.Namespace:
         "--ygo-env",
         type=Path,
         default=os.environ.get("YGO_ENV_ROOT"),
-        help="Root of ygo-env clone, e.g. petrademia/ygo-env (default: env YGO_ENV_ROOT).",
+        help="Root of the engine repo, e.g. vendor/yapcore (default: env YGO_ENV_ROOT).",
     )
     parser.add_argument(
         "--seed",
@@ -400,8 +403,8 @@ def run(
         ygo_root = Path(ygo_root).resolve() if ygo_root else None
     if not ygo_root or not ygo_root.is_dir():
         print(
-            "YGO_ENV_ROOT not set or not a directory. Clone and build ygo-env (see docs/ENGINE_SETUP.md), then:\n"
-            "  export YGO_ENV_ROOT=/path/to/ygo-env\n"
+            "YGO_ENV_ROOT not set or not a directory. Clone and build yapcore (see docs/ENGINE_SETUP.md), then:\n"
+            "  export YGO_ENV_ROOT=/path/to/yapcore\n"
             "  cd $YGO_ENV_ROOT   # so Lua scripts are found\n"
             "  python -m cli.hand_simulator --deck /path/to/data/decks/YourDeck.ydk\n"
             "See docs/ENGINE_SETUP.md",
@@ -438,7 +441,7 @@ def run(
     _done(t, f"{len(card_id_to_code):,} entries")
 
     # --- Step 4: create engine ---
-    t = _step("Initialising ygo-env engine")
+    t = _step("Initialising yapcore engine")
     try:
         # UX: when fixed_hand is enabled, we intentionally brute-force a seed
         # that matches the exact desired opening hand. In that mode, the
@@ -1976,7 +1979,7 @@ def run_sample_hands(
         ygo_root = _default_adapter_root(yapping_root)
     if not ygo_root.is_dir():
         print(
-            "ygo-env not found. Set YGO_ENV_ROOT or use --ygo-env, or ensure vendor/ygopro-adapter exists. See docs/ENGINE_SETUP.md.",
+            "Engine repo not found. Set YGO_ENV_ROOT or use --ygo-env, or ensure vendor/yapcore exists. See docs/ENGINE_SETUP.md.",
             file=sys.stderr,
         )
         sys.exit(1)

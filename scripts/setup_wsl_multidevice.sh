@@ -5,7 +5,7 @@
 set -euo pipefail
 
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygopro-adapter}"
+YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/yapcore}"
 BASHRC="${HOME}/.bashrc"
 PYTHON_VERSION="$(tr -d '[:space:]' < "$YAPPING_ROOT/.python-version" 2>/dev/null || true)"
 if [[ -z "${PYTHON_VERSION:-}" ]]; then
@@ -92,11 +92,11 @@ EOF
 echo "==> 8) Git SSH command via Windows OpenSSH"
 git config --global core.sshCommand "ssh.exe"
 
-echo "==> 9) Build ygo-env in vendor/"
+echo "==> 9) Build yapcore in vendor/"
 mkdir -p "$YAPPING_ROOT/vendor"
 if [[ ! -d "$YGO_ENV_ROOT/.git" ]]; then
   rm -rf "$YGO_ENV_ROOT"
-  git clone https://github.com/petrademia/ygo-env.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/ygopro-adapter.git "$YGO_ENV_ROOT"
 fi
 
 cd "$YGO_ENV_ROOT"

@@ -1,7 +1,7 @@
 {
   "_comment": "Branded Fusion line from seed 42. Recorded with combo-record; sig is the primary match key.",
   "name": "Branded Fusion Line",
-  "deck": "vendor/ygo-env/assets/deck/Branded.ydk",
+  "deck": "vendor/yapcore/assets/deck/Branded.ydk",
   "seed": 42,
   "steps": [
     {"label": "Summon Fallen of Albaz",  "sig": [44, 36, 131, 1, 4, 0, 0, 0, 0, 0, 0, 0]},

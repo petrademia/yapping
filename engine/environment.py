@@ -1,7 +1,7 @@
 """
 Env setup and cloning logic.
 
-Creates and configures the ygo-env environment (deck path, script path).
+Creates and configures the duel environment (deck path, script path).
 Use create_env() to get an env (or wrapper) you can reset/step.
 """
 
@@ -27,19 +27,19 @@ def create_env(
     Create a Yu-Gi-Oh! env (ygoenv) ready for reset/step.
 
     - deck_path: path to a .ydk deck file (used when you call reset).
-    - ygo_env_root: root of ygo-env (e.g. petrademia/ygo-env) or sbl1996/ygo-agent clone.
+    - ygo_env_root: root of the engine repo (e.g. vendor/yapcore) or sbl1996/ygo-agent clone.
       If not set, uses env var YGO_ENV_ROOT. Required so we can add it to
       sys.path and, if needed, run from a dir that has Lua scripts.
     - seed: optional RNG seed for reproducible hands.
 
     Returns a YgoEnvWrapper if ygoenv is available; otherwise raises
-    with instructions to set up ygo-env.
+    with instructions to set up the engine repo.
     """
     root = ygo_env_root or YGO_ENV_ROOT
     if not root:
         raise RuntimeError(
-            "ygo-env root not set. Clone petrademia/ygo-env (or see docs/ENGINE_SETUP.md), build it, then either:\n"
-            "  export YGO_ENV_ROOT=/path/to/ygo-env\n"
+            "Engine root not set. Clone petrademia/ygopro-adapter into vendor/yapcore (or see docs/ENGINE_SETUP.md), build it, then either:\n"
+            "  export YGO_ENV_ROOT=/path/to/yapcore\n"
             "  or pass ygo_env_root= to create_env(). See docs/ENGINE_SETUP.md"
         )
     root = Path(root).resolve()
@@ -54,9 +54,9 @@ def create_env(
         import ygoenv  # type: ignore
     except ImportError as e:
         raise RuntimeError(
-            "Could not import ygoenv. From the ygo-env repo run:\n"
+            "Could not import ygoenv. From the engine repo run:\n"
             "  xmake f -m release -y && xmake && make\n"
-            "Then run your script from the ygo-env directory (or ensure a symlink\n"
+            "Then run your script from the engine directory (or ensure a symlink\n"
             "to third_party/ygopro-scripts exists in your cwd). See docs/ENGINE_SETUP.md"
         ) from e
 

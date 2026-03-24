@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Append card codes from a .ydk deck to ygo-env example/code_list.txt.
+Append card codes from a .ydk deck to the engine example/code_list.txt.
 Used by setup/run scripts so that after a fresh clone the default deck's
 codes are in the list (no "Card not found"). Stdlib only.
 """

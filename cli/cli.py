@@ -3,7 +3,7 @@ Command-line tool to run simulations.
 
 Usage:
   # Hand Simulator (raw data: draw 5, first 10 legal actions)
-  YGO_ENV_ROOT=/path/to/ygo-env python -m cli.cli hand-sim --deck data/decks/MyDeck.ydk
+  YGO_ENV_ROOT=/path/to/yapcore python -m cli.cli hand-sim --deck data/decks/MyDeck.ydk
 
   # Combo executor (best-path DFS)
   python -m cli.cli combo --deck data/decks/MyDeck.ydk
@@ -22,7 +22,7 @@ from pathlib import Path
 DEFAULT_FIXED_HAND = "68468459,60242223,45883110,29948294,95515789"
 # Default opening-hand used by `--fixed-hand` when the flag is omitted.
 #
-# Verified against `vendor/ygopro-adapter/assets/deck/Branded.ydk`:
+# Verified against `vendor/yapcore/assets/deck/Branded.ydk`:
 # - 68468459 Fallen of Albaz: present
 # - 60242223 Bystial Saronir: present
 # - 45883110 Guiding Quem, the Virtuous: present
@@ -31,9 +31,12 @@ DEFAULT_FIXED_HAND = "68468459,60242223,45883110,29948294,95515789"
 
 
 def _default_adapter_root(yapping_root: Path) -> Path:
-    primary = yapping_root / "vendor" / "ygopro-adapter"
+    primary = yapping_root / "vendor" / "yapcore"
     if primary.is_dir():
         return primary
+    compat = yapping_root / "vendor" / "ygopro-adapter"
+    if compat.is_dir():
+        return compat
     return yapping_root / "vendor" / "ygo-env"
 
 
@@ -44,7 +47,7 @@ def _resolve_deck_path(deck: Path, yapping_root: Path, ygo_env_root: Path | None
     This keeps `--deck` path-specific (you must pass a path ending in `.ydk`);
     if it doesn't exist, we try fallbacks using the same basename:
     - `data/decks/<basename>` (preferred)
-    - bundled engine decks (from ygo-env assets / vendor/ygopro-adapter)
+    - bundled engine decks (from the engine assets / vendor/yapcore)
     """
     deck_path = Path(deck)
     if deck_path.suffix.lower() != ".ydk":
@@ -101,6 +104,17 @@ def _resolve_deck_path(deck: Path, yapping_root: Path, ygo_env_root: Path | None
     sys.exit(1)
 
 
+def _add_engine_root_arg(parser: argparse.ArgumentParser, *, help_text: str, default: Path | None = None) -> None:
+    parser.add_argument(
+        "--engine-root",
+        "--ygo-env",
+        dest="engine_root",
+        type=Path,
+        default=default,
+        help=help_text,
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="YAPPING — combo path analyzer (Hand Simulator + Combo Map).",
@@ -112,12 +126,7 @@ def main() -> None:
     hand_sim.add_argument("--deck", type=Path, required=True, help="Path to .ydk deck file")
     hand_sim.add_argument("--num-draw", type=int, default=5, help="Hand size (default: 5)")
     hand_sim.add_argument("--max-actions", type=int, default=10, help="Max legal actions to print (default: 10)")
-    hand_sim.add_argument(
-        "--ygo-env",
-        type=Path,
-        default=None,
-        help="Root of ygo-env clone (default: env YGO_ENV_ROOT)",
-    )
+    _add_engine_root_arg(hand_sim, help_text="Root of the engine repo (default: env YGO_ENV_ROOT; legacy alias: --ygo-env)")
     hand_sim.add_argument("--seed", type=int, default=None, help="RNG seed for reproducible hand")
     hand_sim.add_argument(
         "--take-action",
@@ -166,7 +175,7 @@ def main() -> None:
     hand_sim.add_argument(
         "--engine-verbose",
         action="store_true",
-        help="Enable native ygo-env engine verbose logs (C++ notify output).",
+        help="Enable native engine verbose logs (C++ notify output).",
     )
     hand_sim.add_argument(
         "--trace-max-steps",
@@ -289,12 +298,7 @@ def main() -> None:
     )
     combo.add_argument("--export", choices=("json", "flowchart"), help="Export format. Only json is implemented.")
     combo.add_argument("--out", type=Path, help="Output file path")
-    combo.add_argument(
-        "--ygo-env",
-        type=Path,
-        default=None,
-        help="Root of ygo-env clone (default: env YGO_ENV_ROOT)",
-    )
+    _add_engine_root_arg(combo, help_text="Root of the engine repo (default: env YGO_ENV_ROOT; legacy alias: --ygo-env)")
     combo.add_argument("--seed", type=int, default=None, help="RNG seed for reproducible hand")
     combo.add_argument("--depth", type=int, default=6, help="Max DFS depth (default: 6)")
     combo.add_argument("--max-branches", type=int, default=500, help="Max DFS nodes to explore (default: 500)")
@@ -340,12 +344,7 @@ def main() -> None:
         default=None,
         help="Path to cards.cdb (default: $YGO_ENV_ROOT/assets/locale/en/cards.cdb)",
     )
-    export_names.add_argument(
-        "--ygo-env",
-        type=Path,
-        default=None,
-        help="ygo-env root (default: env YGO_ENV_ROOT); used if --cdb not set",
-    )
+    _add_engine_root_arg(export_names, help_text="Engine root (default: env YGO_ENV_ROOT; used if --cdb not set; legacy alias: --ygo-env)")
     export_names.add_argument(
         "--out",
         type=Path,
@@ -362,15 +361,10 @@ def main() -> None:
     # ---- add-deck-codes-to-list: append missing deck codes to example/code_list.txt ----
     add_codes = subparsers.add_parser(
         "add-deck-codes-to-list",
-        help="Append card codes from a deck to ygo-env example/code_list.txt (so they are loaded without runtime merge).",
+        help="Append card codes from a deck to the engine example/code_list.txt (so they are loaded without runtime merge).",
     )
     add_codes.add_argument("--deck", type=Path, required=True, help="Path to .ydk deck file")
-    add_codes.add_argument(
-        "--ygo-env",
-        type=Path,
-        default=None,
-        help="ygo-env root (default: env YGO_ENV_ROOT)",
-    )
+    _add_engine_root_arg(add_codes, help_text="Engine root (default: env YGO_ENV_ROOT; legacy alias: --ygo-env)")
 
     # ---- rollout: generate trajectories (state, action, reward) for MDP / RL ----
     rollout = subparsers.add_parser(
@@ -393,7 +387,7 @@ def main() -> None:
         help="Reward: board score each step or only at end (default: step)",
     )
     rollout.add_argument("--log", type=Path, default=None, help="Write trajectories to this JSON file")
-    rollout.add_argument("--ygo-env", type=Path, default=None, help="ygo-env root (default: env YGO_ENV_ROOT)")
+    _add_engine_root_arg(rollout, help_text="Engine root (default: env YGO_ENV_ROOT; legacy alias: --ygo-env)")
 
     # ---- sample-hands: generate multiple hands from deck, output card names ----
     sample = subparsers.add_parser(
@@ -413,12 +407,7 @@ def main() -> None:
         default=5,
         help="Cards per hand (default: 5)",
     )
-    sample.add_argument(
-        "--ygo-env",
-        type=Path,
-        default=None,
-        help="ygo-env root (default: env YGO_ENV_ROOT)",
-    )
+    _add_engine_root_arg(sample, help_text="Engine root (default: env YGO_ENV_ROOT; legacy alias: --ygo-env)")
     sample.add_argument("--seed", type=int, default=None, help="Base RNG seed for reproducible samples (seed, seed+1, ...)")
     sample.add_argument("--out", type=Path, default=None, help="Output file (default: stdout)")
     sample.add_argument(
@@ -453,10 +442,7 @@ def main() -> None:
         "--seed", type=int, default=None,
         help="Override the seed from the recipe.",
     )
-    combo_run.add_argument(
-        "--ygo-env", type=Path, default=None,
-        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygopro-adapter).",
-    )
+    _add_engine_root_arg(combo_run, help_text="Root of the engine repo (default: env YGO_ENV_ROOT or vendor/yapcore; legacy alias: --ygo-env)")
 
     # ---- combo-record: interactively record a combo recipe ----
     combo_record = subparsers.add_parser(
@@ -467,10 +453,7 @@ def main() -> None:
     combo_record.add_argument("--out", type=Path, required=True, help="Output recipe JSON path")
     combo_record.add_argument("--name", type=str, default=None, help="Human-readable name for this combo")
     combo_record.add_argument("--seed", type=int, default=None, help="RNG seed for reproducible hand")
-    combo_record.add_argument(
-        "--ygo-env", type=Path, default=None,
-        help="Root of ygo-env clone (default: env YGO_ENV_ROOT or vendor/ygopro-adapter).",
-    )
+    _add_engine_root_arg(combo_record, help_text="Root of the engine repo (default: env YGO_ENV_ROOT or vendor/yapcore; legacy alias: --ygo-env)")
 
     args = parser.parse_args()
     yapping_root = Path(__file__).resolve().parent.parent
@@ -478,7 +461,7 @@ def main() -> None:
     if args.command == "hand-sim":
         from cli.hand_simulator import run as hand_sim_run
 
-        deck_path = _resolve_deck_path(args.deck, yapping_root, args.ygo_env)
+        deck_path = _resolve_deck_path(args.deck, yapping_root, args.engine_root)
 
         fixed_hand = None
         if args.fixed_hand is not None and str(args.fixed_hand).strip() != "":
@@ -492,7 +475,7 @@ def main() -> None:
             deck=deck_path,
             num_draw=args.num_draw,
             max_actions=args.max_actions,
-            ygo_env_root=args.ygo_env,
+            ygo_env_root=args.engine_root,
             seed=args.seed,
             take_action=args.take_action,
             interactive=args.interactive,
@@ -534,7 +517,7 @@ def main() -> None:
 
         from cli.hand_simulator import run as hand_sim_run
 
-        deck_path = _resolve_deck_path(args.deck, yapping_root, args.ygo_env)
+        deck_path = _resolve_deck_path(args.deck, yapping_root, args.engine_root)
 
         fixed_hand = None
         if args.fixed_hand is not None and str(args.fixed_hand).strip() != "":
@@ -548,7 +531,7 @@ def main() -> None:
             deck=deck_path,
             num_draw=5,
             max_actions=0,
-            ygo_env_root=args.ygo_env,
+            ygo_env_root=args.engine_root,
             seed=args.seed,
             dfs=True,
             max_depth=args.depth,
@@ -574,7 +557,7 @@ def main() -> None:
             recipe_path=args.recipe,
             deck_override=args.deck,
             seed_override=args.seed,
-            ygo_env_root=args.ygo_env,
+            ygo_env_root=args.engine_root,
         )
         return
 
@@ -584,28 +567,28 @@ def main() -> None:
             out=args.out,
             name=args.name,
             seed=args.seed,
-            ygo_env_root=args.ygo_env,
+            ygo_env_root=args.engine_root,
         )
         return
 
     if args.command == "export-card-names":
         _run_export_card_names(
             cdb_path=args.cdb,
-            ygo_env_root=args.ygo_env,
+            ygo_env_root=args.engine_root,
             out_path=args.out,
             fmt=args.format,
         )
         return
 
     if args.command == "add-deck-codes-to-list":
-        deck_path = _resolve_deck_path(args.deck, yapping_root, args.ygo_env)
-        _run_add_deck_codes_to_list(deck_path=deck_path, ygo_env_root=args.ygo_env)
+        deck_path = _resolve_deck_path(args.deck, yapping_root, args.engine_root)
+        _run_add_deck_codes_to_list(deck_path=deck_path, ygo_env_root=args.engine_root)
         return
 
     if args.command == "rollout":
         _run_rollout(
-            deck_path=_resolve_deck_path(args.deck, yapping_root, args.ygo_env),
-            ygo_env_root=args.ygo_env,
+            deck_path=_resolve_deck_path(args.deck, yapping_root, args.engine_root),
+            ygo_env_root=args.engine_root,
             num_episodes=args.episodes,
             max_depth=args.max_depth,
             policy=args.policy,
@@ -618,10 +601,10 @@ def main() -> None:
         from cli.hand_simulator import run_sample_hands
 
         run_sample_hands(
-            deck=_resolve_deck_path(args.deck, yapping_root, args.ygo_env),
+            deck=_resolve_deck_path(args.deck, yapping_root, args.engine_root),
             num_hands=args.num_hands,
             num_draw=args.num_draw,
-            ygo_env_root=args.ygo_env,
+            ygo_env_root=args.engine_root,
             seed=args.seed,
             out_path=args.out,
             format=args.format,
@@ -671,7 +654,7 @@ def _run_rollout(
         yapping_root = Path(__file__).resolve().parent.parent
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
         sys.exit(1)
 
     yapping_root = Path(__file__).resolve().parent.parent
@@ -726,11 +709,11 @@ def _run_export_card_names(
             env_root = os.environ.get("YGO_ENV_ROOT")
             root = Path(env_root).resolve() if env_root else None
         if root is None or not root.is_dir():
-            # Default: vendor/ygopro-adapter relative to this repo
+            # Default: vendor/yapcore relative to this repo
             yapping_root = Path(__file__).resolve().parent.parent
             root = _default_adapter_root(yapping_root)
         if not root.is_dir():
-            print("Error: need --cdb path or --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
+            print("Error: need --cdb path or --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
             sys.exit(1)
         cdb_path = root / "assets" / "locale" / "en" / "cards.cdb"
     if not cdb_path.is_file():
@@ -770,7 +753,7 @@ def _run_export_card_names(
 
 
 def _run_add_deck_codes_to_list(deck_path: Path, ygo_env_root: Path | None) -> None:
-    """Append missing deck card codes to ygo-env example/code_list.txt."""
+    """Append missing deck card codes to the engine example/code_list.txt."""
     import os
 
     root = ygo_env_root
@@ -781,7 +764,7 @@ def _run_add_deck_codes_to_list(deck_path: Path, ygo_env_root: Path | None) -> N
         yapping_root = Path(__file__).resolve().parent.parent
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
         sys.exit(1)
     code_list_file = root / "example" / "code_list.txt"
     script_dir = root / "scripts" / "script"
@@ -824,7 +807,7 @@ def _run_combo_run(
 
     yapping_root = Path(__file__).resolve().parent.parent
 
-    # Resolve ygo-env root
+    # Resolve engine root
     root = ygo_env_root
     if root is None or not root.is_dir():
         root = os.environ.get("YGO_ENV_ROOT")
@@ -832,7 +815,7 @@ def _run_combo_run(
     if root is None or not root.is_dir():
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
         sys.exit(1)
 
     # Load recipe
@@ -917,7 +900,7 @@ def _run_combo_record(
     if root is None or not root.is_dir():
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/ygopro-adapter must exist.", file=sys.stderr)
+        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
         sys.exit(1)
 
     deck_path = _resolve_deck_path(deck, yapping_root, root)

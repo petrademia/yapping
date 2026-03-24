@@ -1,5 +1,5 @@
 {
-  "_comment": "Branded combo line as executed by ygo-env engine (seed 18, Branded.ydk). Engine deviations from TCG noted below.",
+  "_comment": "Branded combo line as executed by the yapcore engine (seed 18, Branded.ydk). Engine deviations from TCG noted below.",
   "_engine_notes": [
     "Cartesia has no Lua script — acts as dumb fusion material only, no effects",
     "Fallen of the White Dragon and Fallen of Albaz do NOT appear in Branded Fusion material list (engine quirk)",

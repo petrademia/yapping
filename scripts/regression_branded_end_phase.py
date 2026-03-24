@@ -31,7 +31,7 @@ def pick(env, cid_map, name_map, needle, nth=0):
 
 
 def main() -> int:
-    ygo_root = ROOT / "vendor" / "ygopro-adapter"
+    ygo_root = ROOT / "vendor" / "yapcore"
     if not ygo_root.exists():
         legacy = ROOT / "vendor" / "ygo-env"
         ygo_root = legacy

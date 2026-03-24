@@ -2,7 +2,7 @@
 Mappings for Selection / Activation logic.
 
 Translates between high-level "do this with these cards" and the
-low-level action codes expected by ygo-env (e.g. select card index,
+low-level action codes expected by the engine adapter (e.g. select card index,
 activate, set, summon). Used by wrapper and search to enumerate
 and apply legal moves.
 """
@@ -133,7 +133,9 @@ def _sync_from_engine_header() -> None:
     global _ID_TO_MSG, _ACT_NAMES, _PHASE_NAMES
     try:
         root = Path(__file__).resolve().parent.parent
-        adapter_root = root / "vendor" / "ygopro-adapter"
+        adapter_root = root / "vendor" / "yapcore"
+        if not adapter_root.is_dir():
+            adapter_root = root / "vendor" / "ygopro-adapter"
         if not adapter_root.is_dir():
             adapter_root = root / "vendor" / "ygo-env"
         hdr_path = adapter_root / "ygoenv" / "ygoenv" / "ygopro" / "ygopro.h"
@@ -273,7 +275,7 @@ def decode_action_features(
 
     # --- SELECT_EFFECTYN / SELECT_YESNO ---
     if msg in ("select_effectyn", "select_yesno"):
-        # In ygo-env optional prompts, act_id=9 is the cancel/no branch.
+        # In the adapter optional prompts, act_id=9 is the cancel/no branch.
         # Other act_ids represent the effect-bearing affirmative choice.
         yn = "No" if act_id == 9 else "Yes"
         label = yn

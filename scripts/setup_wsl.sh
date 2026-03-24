@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# One-time setup for YAPPING on Linux/WSL: clone and build ygo-env, then verify.
+# One-time setup for YAPPING on Linux/WSL: clone and build yapcore, then verify.
 # Run from yapping root: ./scripts/setup_wsl.sh
 # Prerequisites: git, xmake, cmake, build-essential, libsqlite3-dev, python3 (see docs/WSL_SETUP.md)
 
 set -euo pipefail
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygopro-adapter}"
+YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/yapcore}"
 PYTHON_VERSION="$(tr -d '[:space:]' < "$YAPPING_ROOT/.python-version" 2>/dev/null || true)"
 if [[ -z "${PYTHON_VERSION:-}" ]]; then
   PYTHON_VERSION="3.13"
 fi
 
 echo "YAPPING root: $YAPPING_ROOT"
-echo "ygo-env will be at: $YGO_ENV_ROOT"
+echo "yapcore will be at: $YGO_ENV_ROOT"
 echo ""
 
 require_cmd() {
@@ -46,12 +46,12 @@ if ! require_cmd python3; then
 fi
 
 if [[ -d "$YGO_ENV_ROOT/.git" ]]; then
-  echo "vendor/ygopro-adapter already exists. Building/updating..."
+  echo "vendor/yapcore already exists. Building/updating..."
 else
-  echo "Cloning adapter into vendor/ygopro-adapter..."
+  echo "Cloning adapter into vendor/yapcore..."
   mkdir -p "$YAPPING_ROOT/vendor"
   rm -rf "$YGO_ENV_ROOT"
-  git clone https://github.com/petrademia/ygo-env.git "$YGO_ENV_ROOT"
+  git clone https://github.com/petrademia/ygopro-adapter.git "$YGO_ENV_ROOT"
 fi
 cd "$YGO_ENV_ROOT"
 

@@ -14,7 +14,7 @@
 ## What Was Done
 
 ### Infrastructure (all committed)
-- `script/` symlink at yapping root → `vendor/ygo-env/script/` ← **CRITICAL: must exist or engine can't find Lua scripts**
+- `script/` symlink at yapping root → `vendor/yapcore/script/` ← **CRITICAL: must exist or engine can't find Lua scripts**
 - `data/decks/Branded.ydk` — Granguignol (24915933) added, CRLF stripped
 - Modules renamed: `vocal_chords→engine`, `mouth→cli`, `scripture→data`
 - `brain/combo.py` — combo runner (sig+label hybrid)
@@ -57,9 +57,9 @@
 cd /home/petru/code/yapping
 
 # 1. Ensure script/ symlink exists
-ls -la script/     # should be: script -> vendor/ygo-env/script
+ls -la script/     # should be: script -> vendor/yapcore/script
 # If missing:
-ln -sfn vendor/ygo-env/script script
+ln -sfn vendor/yapcore/script script
 
 # 2. Run the combo (label-only, will fuzzy match)
 .venv/bin/python -m cli.cli combo-run \
@@ -94,7 +94,7 @@ ln -sfn vendor/ygo-env/script script
 - Recipe: `data/combos/branded_full_combo.json`
 - Deck: `data/decks/Branded.ydk`
 - Debug traces: `/tmp/trace_combo.py`, `/tmp/trace_combo2.py`, `/tmp/trace_combo3.py`
-- Engine scripts: `vendor/ygo-env/scripts/script/` (checked out), `vendor/ygo-env/third_party/ygopro-scripts/`
+- Engine scripts: `vendor/yapcore/scripts/script/` (checked out), `vendor/yapcore/third_party/ygopro-scripts/`
 - Key Lua scripts: `script/c87746184.lua` (Albion), `script/c44362883.lua` (Branded Fusion), `script/c24915933.lua` (Granguignol)
 
 ---
@@ -106,8 +106,8 @@ This section supersedes several assumptions above.
 ### Confirmed Fixes / Corrections
 
 - `data/decks/Branded.ydk` now uses `95515789` for Blazing Cartesia instead of `95515790`.
-- The earlier "Branded Fusion is offering random spells/traps as materials" issue was a `ygo-env` decode bug, not a core material-selection bug.
-- Root cause was `MSG_SELECT_UNSELECT_CARD` in `vendor/ygo-env/ygoenv/ygoenv/ygopro/ygopro.h` not preserving the raw card code on `LegalAction`.
+- The earlier "Branded Fusion is offering random spells/traps as materials" issue was an adapter decode bug, not a core material-selection bug.
+- Root cause was `MSG_SELECT_UNSELECT_CARD` in `vendor/yapcore/ygoenv/ygoenv/ygopro/ygopro.h` not preserving the raw card code on `LegalAction`.
 - Fix applied: set `la.cid_ = c_get_card_id(code)` in that adapter path.
 - After that fix, the Branded line improved immediately:
   - Branded Fusion offers `Fallen of the White Dragon`
@@ -117,18 +117,18 @@ This section supersedes several assumptions above.
 
 ### Confirmed Runtime Behavior
 
-- The exact post-addback idle state still does **not** offer `Activate Fallen of the White Dragon`.
-- Raw idle payload confirmed:
-  - FotWD appears in `summonable`
-  - FotWD appears in `mset`
-  - FotWD does **not** appear in `activate`
-- So the missing FotWD hand ignition is below the Python/YAPPING layer.
+- On the corrected interpreter-matching runtime, the exact post-addback idle state **does** offer `Activate Fallen of the White Dragon (effect 2)`.
+- Core-side logging confirmed:
+  - `c73819701.lua` loads for FotWD
+  - FotWD's hand ignition `e1` registers with `range=LOCATION_HAND`
+  - idle activation scan marks that effect activatable in the target branch
+- After that fix path, FotWD can send `The Dragon that Devours the Dogma`, the Dogma end-phase chain appears, and the Branded regression reaches the `Tri-Brigade Mercourier` / `The Fallen & The Virtuous` selection window.
 
 ### Core / Upstream Experiments
 
-- `vendor/ygo-env` was switched to `mycard/ygopro-core` `0.0.4`.
+- `vendor/yapcore` was switched to `mycard/ygopro-core` `0.0.4`.
 - Scripts were already effectively on `mycard/ygopro-scripts`.
-- The intended early combo branch still works on that core, but FotWD hand ignition is still missing.
+- The intended early combo branch still works on that core.
 
 ### Important Debugging Pitfall Found
 
@@ -139,20 +139,20 @@ This section supersedes several assumptions above.
 - Earlier rebuilds were producing:
   - `ygopro_ygoenv.cpython-314-x86_64-linux-gnu.so`
 - That is why early core instrumentation appeared to "do nothing".
-- `vendor/ygo-env` was later reconfigured with `.venv/bin` on `PATH`, and the correct `cp313` module was rebuilt.
+- The lesson still holds after the rename to `vendor/yapcore`: rebuild against the same Python minor version that runs YAPPING.
 
 ### Python 3.14 Migration Status
 
 - The workspace has now been migrated to Python `3.14`.
 - `.python-version` is `3.14`.
 - `.venv/bin/python` is Python `3.14.3`.
-- `vendor/ygopro-adapter` now rebuilds and loads:
-  - `vendor/ygopro-adapter/ygoenv/ygoenv/ygopro/ygopro_ygoenv.cpython-314-x86_64-linux-gnu.so`
+- `vendor/yapcore` now rebuilds and loads:
+  - `vendor/yapcore/ygoenv/ygoenv/ygopro/ygopro_ygoenv.cpython-314-x86_64-linux-gnu.so`
 - The Branded end-phase regression passes on the real `cp314` build, so the migration is viable.
 
 ### Current Best Understanding
 
-- `ygo-env` is handing correct `card_data` to the core for the cards checked:
+- `yapcore` is handing correct `card_data` to the core for the cards checked:
   - `35269905` (`Triple Tactics Thrust`) -> `type=2`
   - `73819701` (`Fallen of the White Dragon`) -> `type=33`
   - `68468459` (`Fallen of Albaz`) -> `type=33`
@@ -163,25 +163,28 @@ This section supersedes several assumptions above.
   - `Script not found: ./script/c35269905.lua`
   does **not** by itself prove `type` corruption. The core attempts a script load before the later gating check.
 
-### Open Investigation
+### Current Investigation Boundary
 
-- The remaining real bug is still:
-  - why FotWD's hand ignition effect never reaches idle `activate` after being returned to hand by `Branded Sword`
-- The best next target is the core-side effect registration / activation pipeline for FotWD on the correct `cp313` runtime, now that:
-  - the `MSG_SELECT_UNSELECT_CARD` decode bug is fixed
-  - the right Python extension binary is being rebuilt and loaded
-  - `card_data` handoff from `ygo-env` looks sane
+- The major adapter-side issues are fixed enough to support deterministic replay:
+  - `MSG_SELECT_UNSELECT_CARD` raw-card decode is fixed
+  - bad `select_chain` desc-derived codes no longer crash end phase
+  - the Branded end-phase regression passes on Python `3.14`
+- The remaining cleanup is mostly technical debt:
+  - temporary debug logging still exists in adapter/core debug paths
+  - the cached `~/.xmake` `ygopro-core` source still contains investigation-only instrumentation
+  - those cache-side edits are not the same thing as the persisted in-repo adapter patches
 
 ### Files Touched During This Investigation
 
 - `data/decks/Branded.ydk`
-- `vendor/ygo-env/example/code_list.txt`
-- `vendor/ygo-env/xmake.lua`
-- `vendor/ygo-env/repo/packages/y/ygopro-core/xmake.lua`
-- `vendor/ygo-env/ygoenv/ygoenv/ygopro/ygopro.h`
+- `vendor/yapcore/Makefile`
+- `vendor/yapcore/scripts/check_upstreams.py`
+- `vendor/yapcore/repo/packages/y/ygopro-core/xmake.lua`
+- `vendor/yapcore/ygoenv/ygoenv/ygopro/ygopro.h`
 
 ### Temporary Debug State
 
-- `vendor/ygo-env/ygoenv/ygoenv/ygopro/ygopro.h` currently contains temporary debug logging for `card_data` reads.
-- Cached `~/.xmake/.../ygopro-core` source also contains temporary debug instrumentation from this investigation.
-- Before final cleanup or commit, those debug-only changes should be reviewed and either kept intentionally or reverted.
+- Persisted adapter patches are already present in `vendor/yapcore` and do **not** need to be reapplied in the current workspace.
+- `git -C vendor/yapcore status` is clean, which means the moved adapter repo already contains the intended committed changes.
+- Cached `~/.xmake/.../ygopro-core` source still contains temporary debug instrumentation from the FotWD investigation.
+- If the xmake package cache is rebuilt from scratch, only the committed adapter patches survive automatically; the cached core instrumentation would need to be intentionally reapplied or dropped.

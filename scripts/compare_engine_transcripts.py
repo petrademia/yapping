@@ -3,7 +3,7 @@
 Compare multiple engine transcript JSON files for reproducibility.
 
 Usage:
-  python scripts/compare_engine_transcripts.py vendor/ygo-env/rep_engine_transcript_*.json
+  python scripts/compare_engine_transcripts.py vendor/yapcore/rep_engine_transcript_*.json
 """
 
 from __future__ import annotations
@@ -126,4 +126,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

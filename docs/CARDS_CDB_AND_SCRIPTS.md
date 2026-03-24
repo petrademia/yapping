@@ -1,6 +1,6 @@
 # How the engine loads cards (cdb, code list, scripts)
 
-The ygo-env engine needs three things for each card it uses:
+The engine adapter needs three things for each card it uses:
 
 | What | Role |
 |------|------|
@@ -35,12 +35,12 @@ To add another deck’s codes manually, run once:
 
 ```bash
 # From yapping root; uses YGO_ENV_ROOT or --ygo-env
-python -m cli.cli add-deck-codes-to-list --deck vendor/ygo-env/assets/deck/Branded.ydk
+python -m cli.cli add-deck-codes-to-list --deck vendor/yapcore/assets/deck/Branded.ydk
 # or your deck
 python -m cli.cli add-deck-codes-to-list --deck data/decks/MyDeck.ydk
 ```
 
-This appends any codes from the deck that are missing from `example/code_list.txt` (with `1` or `0` depending on whether `c{code}.lua` exists). After that, that deck’s cards are in the list for good until you re-clone ygo-env (then run the command again or re-apply your code list).
+This appends any codes from the deck that are missing from `example/code_list.txt` (with `1` or `0` depending on whether `c{code}.lua` exists). After that, that deck’s cards are in the list for good until you re-clone the engine repo (then run the command again or re-apply your code list).
 
 ## Mapping codes to names (for deck builder UI)
 

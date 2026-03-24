@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Run YAPPING Hand Simulator with ygo-env.
+# Run YAPPING Hand Simulator with yapcore.
 # Usage: ./scripts/run_hand_sim.sh [deck.ydk]
-#   If no deck given, uses ygo-env's assets/deck/Branded.ydk.
+#   If no deck given, uses yapcore's assets/deck/Branded.ydk.
 #
 # Note: The engine (ygopro_ygoenv) builds only on Linux. On macOS, run this
 # on Linux, in WSL, or in a Linux container.
 #
-# ygo-env lives at yapping/vendor/ygo-env so you can modify it if needed.
+# yapcore lives at yapping/vendor/yapcore so you can modify it if needed.
 
 set -e
 
@@ -19,15 +19,15 @@ echo "  YAPPING  —  Hand Simulator"
 echo "════════════════════════════════════════"
 
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygopro-adapter}"
+YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/yapcore}"
 
 _info "Yapping root : $YAPPING_ROOT"
-_info "ygo-env root : $YGO_ENV_ROOT"
+_info "yapcore root : $YGO_ENV_ROOT"
 
 if [[ ! -d "$YGO_ENV_ROOT" ]]; then
   echo ""
   echo "  ERROR: YGO_ENV_ROOT not a directory: $YGO_ENV_ROOT"
-  echo "         Set it: export YGO_ENV_ROOT=/path/to/ygo-env"
+  echo "         Set it: export YGO_ENV_ROOT=/path/to/yapcore"
   exit 1
 fi
 

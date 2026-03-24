@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Run YAPPING sample-hands with ygo-env (generate multiple hands, output card names).
+# Run YAPPING sample-hands with yapcore (generate multiple hands, output card names).
 # Usage: ./scripts/run_sample_hands.sh [deck.ydk] [options...]
-#   If no deck given, uses ygo-env's assets/deck/Branded.ydk.
+#   If no deck given, uses yapcore's assets/deck/Branded.ydk.
 #   Options are passed to sample-hands, e.g.:
 #     ./scripts/run_sample_hands.sh --num-hands 20 --format json --out hands.json
 #     ./scripts/run_sample_hands.sh my.ydk --num-hands 5
@@ -20,15 +20,15 @@ echo "  YAPPING  —  Sample hands"
 echo "════════════════════════════════════════"
 
 YAPPING_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/ygopro-adapter}"
+YGO_ENV_ROOT="${YGO_ENV_ROOT:-$YAPPING_ROOT/vendor/yapcore}"
 
 _info "Yapping root : $YAPPING_ROOT"
-_info "ygo-env root : $YGO_ENV_ROOT"
+_info "yapcore root : $YGO_ENV_ROOT"
 
 if [[ ! -d "$YGO_ENV_ROOT" ]]; then
   echo ""
   echo "  ERROR: YGO_ENV_ROOT not a directory: $YGO_ENV_ROOT"
-  echo "         Set it: export YGO_ENV_ROOT=/path/to/ygo-env"
+  echo "         Set it: export YGO_ENV_ROOT=/path/to/yapcore"
   exit 1
 fi
 

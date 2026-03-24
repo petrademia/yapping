@@ -3,7 +3,7 @@
 
 numpy>=1.20
 
-# Bridge: use petrademia/ygo-env (clone, build with xmake, set YGO_ENV_ROOT); see docs/ENGINE_SETUP.md
+# Bridge: use the owned adapter repo in vendor/yapcore (clone, build with xmake, set YGO_ENV_ROOT); see docs/ENGINE_SETUP.md
 # See docs/ENGINE_SETUP.md
 
 # CLI and utilities (add as needed: click, rich, etc.)

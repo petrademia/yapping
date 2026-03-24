@@ -1,6 +1,6 @@
 # When do "Activate" actions appear?
 
-The engine (ygo-env/OCGCore) emits **legal actions** that we decode into labels like "Summon X", "Set Y", "Activate Z". Two things are easy to get wrong:
+The engine (yapcore/OCGCore) emits **legal actions** that we decode into labels like "Summon X", "Set Y", "Activate Z". Two things are easy to get wrong:
 
 1. **Activate from hand**  
    - The engine **does** offer "Activate" (act_id=8) for some cards in hand in the idle command—e.g. "Activate The Bystial Lubellion", "Activate Gold Sarcophagus" (see `tmp_audit_actions.py` output). So the core *does* fill `idle_activate_` for some effects.  
@@ -15,7 +15,7 @@ The engine (ygo-env/OCGCore) emits **legal actions** that we decode into labels 
 
 ## Investigate: what actions does the engine offer? (tmp_audit_actions.py)
 
-To see **exactly which actions the agent can choose from** (by type and when), run from the **repo root** (so the script is found). The script will `chdir` to `vendor/ygo-env` so the engine finds `./script/`:
+To see **exactly which actions the agent can choose from** (by type and when), run from the **repo root** (so the script is found). The script will `chdir` to `vendor/yapcore` so the engine finds `./script/`:
 
 ```bash
 cd /mnt/c/Users/petrus/Projects/yapping
@@ -43,7 +43,7 @@ At the end it summarizes whether Activate was seen in any state and which action
 To force a hand containing a specific card (e.g. Fallen of the White Dragon) and inspect when Activate appears:
 
 ```bash
-cd vendor/ygo-env
+cd vendor/yapcore
 python ../tmp_diagnose_effects.py
 ```
 
@@ -68,7 +68,7 @@ There is **no separate message** for “activate effect”. In the engine (ygopr
 5. `idle_set_` → Set  
 6. **`idle_activate_`** → **Activate** (act_id=8)
 
-So “Activate” options (ignition from hand, ignition on field, etc.) are **part of the same idle command** as Normal Summon and Set. The ygo-env C++ already iterates `idle_activate_` and appends `LegalAction::activate_spec(...)` to `legal_actions_` (around lines 6024–6053). So the **binding is correct**: if the core sends activatable effects in the idle packet, they show up as legal actions.
+So “Activate” options (ignition from hand, ignition on field, etc.) are **part of the same idle command** as Normal Summon and Set. The adapter C++ already iterates `idle_activate_` and appends `LegalAction::activate_spec(...)` to `legal_actions_` (around lines 6024–6053). So the **binding is correct**: if the core sends activatable effects in the idle packet, they show up as legal actions.
 
 The reason we don’t see “Activate Fallen of the White Dragon” is that **the core** (ygopro-core / OCGCore, the C library that runs the duel and builds the message buffer) is sending an **empty** `idle_activate_` list. So either:
 
@@ -76,7 +76,7 @@ The reason we don’t see “Activate Fallen of the White Dragon” is that **th
 - The effect is filtered out by the core’s cost/condition check (e.g. no valid Extra Deck target for the cost), or  
 - There is a bug or limitation in the core when building that list.
 
-So the missing step is in the **core** that fills the idle-command buffer, not in ygo-env (which already exposes whatever the core puts in `idle_activate_`). The Lua script is correct; the core is what decides which effects appear in that list.
+So the missing step is in the **core** that fills the idle-command buffer, not in the adapter (which already exposes whatever the core puts in `idle_activate_`). The Lua script is correct; the core is what decides which effects appear in that list.
 
 Other message types (e.g. **MSG_SELECT_CHAIN**, **MSG_SELECT_PLACE**, **MSG_SELECT_CARD**) are different **states**: e.g. after you pick “Summon” the core sends SELECT_PLACE to choose the zone, then later might send SELECT_CHAIN if a chain is built. So “normal/set” vs “activate” are not different message types for the main-phase choice—they are different **categories inside the same IDLECMD**. Right now the core is only filling the summon/set categories and leaving the activate category empty.
 
@@ -101,7 +101,7 @@ So “Activate [monster name]” never means “Special Summon this monster”. 
 
 **Real rule (exact card text):** “You cannot Special Summon from the Extra Deck, except Fusion Monsters, **the turn you activate this card**.” So the restriction applies for that entire turn (no Synchro, Xyz, or Link from the Extra Deck that turn).
 
-**In our stack:** We do **not** enforce this in Python. The DFS only takes whatever **legal actions** the engine (ygo-env / OCGCore) returns. So:
+**In our stack:** We do **not** enforce this in Python. The DFS only takes whatever **legal actions** the engine (yapcore / OCGCore) returns. So:
 
 - If the engine **does** enforce the lock, Synchro/SpSummon from ED after Branded Fusion would not appear in `get_legal_actions()`, and the path would be legal.
 - If the engine **does not** enforce it, you can see a “best path” that includes e.g. “Summon The Golden Swordsoul” (Synchro) or “SpSummon …” after “Activate Branded Fusion”. That would be **illegal in real play**; the bug is in the **engine** (core or Lua scripts that build the legal action list), not in our labeling or DFS.

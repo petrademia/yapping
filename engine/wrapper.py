@@ -1,7 +1,7 @@
 """
-High-level ygo-env / OCGCore interface.
+High-level yapcore / OCGCore interface.
 
-Wraps the Gymnasium env from ygo-env (petrademia fork or other ygo-env / ygo-agent builds) so YAPPING sees:
+Wraps the Gymnasium env from the engine adapter (petrademia fork or other ygo-agent-compatible builds) so YAPPING sees:
 - reset() -> state, hand, legal_actions
 - get_legal_actions() -> list of action indices
 - step(action) -> next_state, done, info
@@ -51,8 +51,8 @@ class YgoEnvWrapper:
         self._create_env()
 
     def _create_env(self) -> None:
-        # Ensure we load the real ygoenv package (editable install); when cwd is ygo-env root,
-        # the dir ygo-env/ygoenv can shadow it and break ygoenv.make.
+        # Ensure we load the real ygoenv package (editable install); when cwd is the engine root,
+        # the local ygoenv dir can shadow it and break ygoenv.make.
         import sys
         root = self._ygo_env_root
         _ygoenv_pkg = root / "ygoenv"
@@ -65,11 +65,11 @@ class YgoEnvWrapper:
         import ygoenv.ygopro.registration  # noqa: F401  (registers YGOPro-v1)
         from ygoenv.registration import make  # type: ignore
 
-        # ygo-env: must call init_module then make(task_id, env_type, deck1=, deck2=, ...)
+        # Engine adapter: must call init_module then make(task_id, env_type, deck1=, deck2=, ...)
         db_path = root / "assets" / "locale" / "en" / "cards.cdb"
         code_list_file = root / "example" / "code_list.txt"
         if not db_path.is_file():
-            raise FileNotFoundError(f"cards.cdb not found: {db_path}. Run 'make assets scripts' in ygo-env to fetch assets.")
+            raise FileNotFoundError(f"cards.cdb not found: {db_path}. Run 'make assets scripts' in yapcore to fetch assets.")
         if not code_list_file.is_file():
             raise FileNotFoundError(f"code_list.txt not found: {code_list_file}")
 
@@ -145,7 +145,7 @@ class YgoEnvWrapper:
         missing = deck_codes - existing_codes
         if not missing:
             return code_list_file
-        # Write under ygo-env so the path is on the same filesystem (avoids /tmp path issues in WSL)
+        # Write under the engine repo so the path is on the same filesystem (avoids /tmp path issues in WSL)
         merged_path = ygo_root / "example" / "code_list_merged.txt"
         with open(merged_path, "w", encoding="utf-8") as f:
             f.writelines(original_lines)
@@ -373,7 +373,7 @@ class YgoEnvWrapper:
     def get_current_phase(self) -> Optional[str]:
         """
         Return current game phase if the engine exposes it in obs or info (e.g. 'draw', 'main1', 'main2', 'battle', 'end').
-        Returns None if not available; ygo-env may not expose phase, in which case use action-based heuristics
+        Returns None if not available; the adapter may not expose phase, in which case use action-based heuristics
         (e.g. msg_to_id=1 + Summon/MSet/Set/Activate in legal actions for Main Phase idle).
         """
         for source, key_list in [
