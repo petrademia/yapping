@@ -104,7 +104,7 @@ fi
 # Ensure deck's codes are in code_list.txt so "Card not found" is avoided
 CODE_LIST="$YGO_ENV_ROOT/example/code_list.txt"
 CODES_BEFORE="$(wc -l < "$CODE_LIST" 2>/dev/null || echo '?')"
-CODE_MSG="$(python -m cli.cli add-deck-codes-to-list --deck "$DECK" --ygo-env "$YGO_ENV_ROOT" 2>&1)" || true
+CODE_MSG="$(python -m cli.cli add-deck-codes-to-list --deck "$DECK" --engine-root "$YGO_ENV_ROOT" 2>&1)" || true
 CODES_AFTER="$(wc -l < "$CODE_LIST" 2>/dev/null || echo '?')"
 if echo "$CODE_MSG" | grep -q "Nothing to add"; then
   _ok "Code list    : all deck codes present  ($CODES_AFTER entries)"
@@ -118,4 +118,4 @@ echo ""
 
 # Engine looks for Lua scripts in cwd
 cd "$YGO_ENV_ROOT"
-python -m cli.cli hand-sim --deck "$DECK" --ygo-env "$YGO_ENV_ROOT" "${HAND_SIM_ARGS[@]}"
+python -m cli.cli hand-sim --deck "$DECK" --engine-root "$YGO_ENV_ROOT" "${HAND_SIM_ARGS[@]}"

@@ -31,13 +31,7 @@ DEFAULT_FIXED_HAND = "68468459,60242223,45883110,29948294,95515789"
 
 
 def _default_adapter_root(yapping_root: Path) -> Path:
-    primary = yapping_root / "vendor" / "yapcore"
-    if primary.is_dir():
-        return primary
-    compat = yapping_root / "vendor" / "ygopro-adapter"
-    if compat.is_dir():
-        return compat
-    return yapping_root / "vendor" / "ygo-env"
+    return yapping_root / "vendor" / "yapcore"
 
 
 def _resolve_deck_path(deck: Path, yapping_root: Path, ygo_env_root: Path | None) -> Path:
@@ -654,7 +648,7 @@ def _run_rollout(
         yapping_root = Path(__file__).resolve().parent.parent
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
+        print("Error: need --engine-root or YGO_ENV_ROOT; or vendor/yapcore must exist. Legacy alias: --ygo-env.", file=sys.stderr)
         sys.exit(1)
 
     yapping_root = Path(__file__).resolve().parent.parent
@@ -713,7 +707,7 @@ def _run_export_card_names(
             yapping_root = Path(__file__).resolve().parent.parent
             root = _default_adapter_root(yapping_root)
         if not root.is_dir():
-            print("Error: need --cdb path or --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
+            print("Error: need --cdb path or --engine-root or YGO_ENV_ROOT; or vendor/yapcore must exist. Legacy alias: --ygo-env.", file=sys.stderr)
             sys.exit(1)
         cdb_path = root / "assets" / "locale" / "en" / "cards.cdb"
     if not cdb_path.is_file():
@@ -764,7 +758,7 @@ def _run_add_deck_codes_to_list(deck_path: Path, ygo_env_root: Path | None) -> N
         yapping_root = Path(__file__).resolve().parent.parent
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
+        print("Error: need --engine-root or YGO_ENV_ROOT; or vendor/yapcore must exist. Legacy alias: --ygo-env.", file=sys.stderr)
         sys.exit(1)
     code_list_file = root / "example" / "code_list.txt"
     script_dir = root / "scripts" / "script"
@@ -815,7 +809,7 @@ def _run_combo_run(
     if root is None or not root.is_dir():
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
+        print("Error: need --engine-root or YGO_ENV_ROOT; or vendor/yapcore must exist. Legacy alias: --ygo-env.", file=sys.stderr)
         sys.exit(1)
 
     # Load recipe
@@ -900,7 +894,7 @@ def _run_combo_record(
     if root is None or not root.is_dir():
         root = _default_adapter_root(yapping_root)
     if not root.is_dir():
-        print("Error: need --ygo-env or YGO_ENV_ROOT; or vendor/yapcore must exist.", file=sys.stderr)
+        print("Error: need --engine-root or YGO_ENV_ROOT; or vendor/yapcore must exist. Legacy alias: --ygo-env.", file=sys.stderr)
         sys.exit(1)
 
     deck_path = _resolve_deck_path(deck, yapping_root, root)

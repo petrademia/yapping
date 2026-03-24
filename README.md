@@ -59,6 +59,6 @@ python vendor/yapcore/scripts/check_upstreams.py
 
 ## Notes
 
-- `vendor/ygopro-adapter` and `vendor/ygo-env` are compatibility symlinks to `vendor/yapcore`
+- `vendor/yapcore` is the canonical local engine path
 - the adapter repo is maintained separately from the main repo
 - temporary one-off debug scripts still exist in the root; they should not be treated as stable interfaces

@@ -93,7 +93,7 @@ Manual run (same effect):
 export YGO_ENV_ROOT="$(pwd)/vendor/yapcore"
 export PYTHONPATH="$YGO_ENV_ROOT:$(pwd):$PYTHONPATH"
 cd vendor/yapcore
-python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
+python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --engine-root "$YGO_ENV_ROOT"
 ```
 
 ---

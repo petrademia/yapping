@@ -34,7 +34,7 @@ Scripts live under `scripts/script/` (e.g. `c76666602.lua`) and are usually from
 To add another deck’s codes manually, run once:
 
 ```bash
-# From yapping root; uses YGO_ENV_ROOT or --ygo-env
+# From yapping root; uses YGO_ENV_ROOT or --engine-root
 python -m cli.cli add-deck-codes-to-list --deck vendor/yapcore/assets/deck/Branded.ydk
 # or your deck
 python -m cli.cli add-deck-codes-to-list --deck data/decks/MyDeck.ydk
@@ -47,7 +47,7 @@ This appends any codes from the deck that are missing from `example/code_list.tx
 To get a **code → name** map so you can look up culprits (e.g. "Card not found: 76666602") in your deck builder:
 
 ```bash
-# From yapping root; uses YGO_ENV_ROOT or --ygo-env for cards.cdb
+# From yapping root; uses YGO_ENV_ROOT or --engine-root for cards.cdb
 python -m cli.cli export-card-names
 
 # Writes data/card_code_to_name.json by default. To write CSV:

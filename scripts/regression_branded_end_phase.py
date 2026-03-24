@@ -32,9 +32,6 @@ def pick(env, cid_map, name_map, needle, nth=0):
 
 def main() -> int:
     ygo_root = ROOT / "vendor" / "yapcore"
-    if not ygo_root.exists():
-        legacy = ROOT / "vendor" / "ygo-env"
-        ygo_root = legacy
     deck_path = ROOT / "data/decks/Branded.ydk"
     cid_map = _load_card_id_to_code(ygo_root)
     name_map = _load_code_to_name(ROOT, ygo_root)

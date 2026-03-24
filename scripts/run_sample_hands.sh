@@ -75,10 +75,10 @@ else
   _ok "Python env   : system PYTHONPATH"
 fi
 
-python -m cli.cli add-deck-codes-to-list --deck "$DECK" --ygo-env "$YGO_ENV_ROOT" 2>/dev/null || true
+python -m cli.cli add-deck-codes-to-list --deck "$DECK" --engine-root "$YGO_ENV_ROOT" 2>/dev/null || true
 
 echo "════════════════════════════════════════"
 echo ""
 
 cd "$YGO_ENV_ROOT"
-python -m cli.cli sample-hands --deck "$DECK" --ygo-env "$YGO_ENV_ROOT" "$@"
+python -m cli.cli sample-hands --deck "$DECK" --engine-root "$YGO_ENV_ROOT" "$@"

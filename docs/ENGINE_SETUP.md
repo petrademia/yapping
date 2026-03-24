@@ -56,7 +56,7 @@ yapping/
 2. **Push to your fork** (recommended) so teammates can clone your fork instead of upstream:
 
    ```bash
-   git remote add myfork https://github.com/<you>/ygopro-adapter.git   # once
+   git remote add myfork https://github.com/<you>/yapcore.git   # once
    git push -u myfork main    # or your branch name
    ```
 
@@ -163,7 +163,7 @@ Or manually (e.g. from Linux after building the engine):
 cd /path/to/yapping
 export YGO_ENV_ROOT="$(pwd)/vendor/yapcore"
 cd vendor/yapcore
-python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --ygo-env "$YGO_ENV_ROOT"
+python -m cli.cli hand-sim --deck "$YGO_ENV_ROOT/assets/deck/Branded.ydk" --engine-root "$YGO_ENV_ROOT"
 ```
 
 You should see the current hand (indices) and the first 10 legal actions. Next step is Path A (best path) or Path B (full combo map); see **docs/COMBO_MAP_GOALS.md**.

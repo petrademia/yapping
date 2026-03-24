@@ -52,13 +52,7 @@ _MSG_ID_TO_NAME = {
 
 
 def _default_adapter_root(yapping_root: Path) -> Path:
-    primary = yapping_root / "vendor" / "yapcore"
-    if primary.is_dir():
-        return primary
-    compat = yapping_root / "vendor" / "ygopro-adapter"
-    if compat.is_dir():
-        return compat
-    return yapping_root / "vendor" / "ygo-env"
+    return yapping_root / "vendor" / "yapcore"
 
 
 # ---------------------------------------------------------------------------
@@ -343,10 +337,12 @@ def _parse_args() -> argparse.Namespace:
         help="Show at most this many legal actions (default: 10).",
     )
     parser.add_argument(
+        "--engine-root",
         "--ygo-env",
+        dest="ygo_env",
         type=Path,
         default=os.environ.get("YGO_ENV_ROOT"),
-        help="Root of the engine repo, e.g. vendor/yapcore (default: env YGO_ENV_ROOT).",
+        help="Root of the engine repo, e.g. vendor/yapcore (default: env YGO_ENV_ROOT; legacy alias: --ygo-env).",
     )
     parser.add_argument(
         "--seed",
@@ -1979,7 +1975,7 @@ def run_sample_hands(
         ygo_root = _default_adapter_root(yapping_root)
     if not ygo_root.is_dir():
         print(
-            "Engine repo not found. Set YGO_ENV_ROOT or use --ygo-env, or ensure vendor/yapcore exists. See docs/ENGINE_SETUP.md.",
+            "Engine repo not found. Set YGO_ENV_ROOT or use --engine-root, or ensure vendor/yapcore exists. Legacy alias: --ygo-env. See docs/ENGINE_SETUP.md.",
             file=sys.stderr,
         )
         sys.exit(1)
