@@ -36,4 +36,5 @@ logs/
 
 # OS
 .DS_Store
+.codex/
 Thumbs.db
