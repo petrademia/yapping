@@ -449,6 +449,24 @@ def main() -> None:
     combo_record.add_argument("--seed", type=int, default=None, help="RNG seed for reproducible hand")
     _add_engine_root_arg(combo_record, help_text="Root of the engine repo (default: env YGO_ENV_ROOT or vendor/yapcore; legacy alias: --ygo-env)")
 
+    combo_validate = subparsers.add_parser(
+        "combo-validate",
+        help="Execute a recipe, capture a strict transcript, and replay-validate it.",
+    )
+    combo_validate.add_argument(
+        "--recipe", type=Path, required=True,
+        help="Path to combo recipe JSON.",
+    )
+    combo_validate.add_argument(
+        "--deck", type=Path, default=None,
+        help="Override the deck path from the recipe.",
+    )
+    combo_validate.add_argument(
+        "--seed", type=int, default=None,
+        help="Override the seed from the recipe.",
+    )
+    _add_engine_root_arg(combo_validate, help_text="Root of the engine repo (default: env YGO_ENV_ROOT or vendor/yapcore; legacy alias: --ygo-env)")
+
     args = parser.parse_args()
     yapping_root = Path(__file__).resolve().parent.parent
 
@@ -561,6 +579,15 @@ def main() -> None:
             out=args.out,
             name=args.name,
             seed=args.seed,
+            ygo_env_root=args.engine_root,
+        )
+        return
+
+    if args.command == "combo-validate":
+        _run_combo_validate(
+            recipe_path=args.recipe,
+            deck_override=args.deck,
+            seed_override=args.seed,
             ygo_env_root=args.engine_root,
         )
         return
@@ -947,6 +974,67 @@ def _run_combo_record(
         json.dump(recipe, f, indent=2, ensure_ascii=False)
 
     print(f"\nSaved {len(steps)}-step recipe to {out}")
+
+
+def _run_combo_validate(
+    recipe_path: Path,
+    deck_override: Path | None,
+    seed_override: int | None,
+    ygo_env_root: Path | None,
+) -> None:
+    import os
+
+    yapping_root = Path(__file__).resolve().parent.parent
+    root = ygo_env_root
+    if root is None or not root.is_dir():
+        root = os.environ.get("YGO_ENV_ROOT")
+        root = Path(root).resolve() if root else None
+    if root is None or not root.is_dir():
+        root = _default_adapter_root(yapping_root)
+    if not root.is_dir():
+        print("Error: need --engine-root or YGO_ENV_ROOT; or vendor/yapcore must exist. Legacy alias: --ygo-env.", file=sys.stderr)
+        sys.exit(1)
+
+    from brain.combo import load_recipe, validate_recipe_replay
+    from engine.environment import create_env
+
+    recipe = load_recipe(recipe_path)
+    deck_raw = deck_override or recipe.get("deck")
+    if not deck_raw:
+        print("Error: no deck specified in recipe or --deck.", file=sys.stderr)
+        sys.exit(1)
+    deck_path = _resolve_deck_path(Path(deck_raw), yapping_root, root)
+    if seed_override is not None:
+        recipe["seed"] = seed_override
+
+    cid_map: dict = {}
+    code_list_file = root / "example" / "code_list.txt"
+    if code_list_file.is_file():
+        with open(code_list_file, encoding="utf-8", errors="replace") as f:
+            for i, line in enumerate(f, start=1):
+                parts = line.strip().split()
+                if parts and parts[0].isdigit():
+                    cid_map[i] = int(parts[0])
+    name_map: dict = {}
+    json_path = yapping_root / "data" / "card_code_to_name.json"
+    if json_path.is_file():
+        with open(json_path, encoding="utf-8") as f:
+            name_map = json.load(f)
+
+    env = create_env(deck_path=deck_path, ygo_env_root=root, seed=recipe.get("seed"))
+    validation = validate_recipe_replay(recipe, env, cid_map, name_map)
+
+    print(f"Recipe  : {recipe.get('name', recipe_path.stem)}")
+    print(f"Deck    : {deck_path.name}")
+    print(f"Seed    : {recipe.get('seed', '(random)')}")
+    print(f"Steps   : {len(recipe.get('steps', []))}")
+    print(f"Trace   : {len(validation.trace)}")
+    print(f"Combo   : {'OK' if validation.result.success else 'FAILED'}")
+    print(f"Replay  : {'OK' if validation.replay_ok else f'FAILED ({validation.replay_reason} at step {validation.replay_step})'}")
+    if not validation.success:
+        if validation.result.error:
+            print(f"Error   : {validation.result.error}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

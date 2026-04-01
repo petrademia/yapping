@@ -1,0 +1,20 @@
+{
+  "name": "Branded Opening to Granguignol",
+  "deck": "data/decks/Branded.ydk",
+  "seed": 18,
+  "steps": [
+    "Activate Branded Fusion",
+    "s1",
+    "Select Albion the Branded Dragon",
+    "Fallen of the White Dragon",
+    "Blazing Cartesia",
+    "m1",
+    "face-up ATK",
+    "Yes",
+    "Granguignol",
+    "Blazing Cartesia",
+    "Fallen of the White Dragon",
+    "m3",
+    "face-up ATK"
+  ]
+}

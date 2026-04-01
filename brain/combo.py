@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Any, Optional, Union
 
 from engine.actions import decode_action_features
-from brain.search import _reset_to_main_phase_idle, _snapshot_state, _action_sig
+from brain.search import _reset_to_main_phase_idle, _snapshot_state, _action_sig, _prompt_key, _step_hash, _replay_trace_reasoned
 
 
 # ---------------------------------------------------------------------------
@@ -92,6 +92,16 @@ class ComboResult:
                 for lbl in self.legal_at_failure:
                     lines.append(f"    - {lbl}")
         return "\n".join(lines)
+
+
+@dataclass
+class ComboReplayValidation:
+    success: bool
+    result: ComboResult
+    trace: list[tuple[str, Optional[tuple[int, ...]], str, str]] = field(default_factory=list)
+    replay_ok: bool = False
+    replay_reason: str = ""
+    replay_step: int = 0
 
 
 # ---------------------------------------------------------------------------
@@ -219,6 +229,62 @@ def run_combo(
     return ComboResult(success=True, steps=result_steps, board=board)
 
 
+def run_combo_with_trace(
+    env: Any,
+    steps: list[RecipeStep],
+    cid_map: dict,
+    name_map: dict,
+) -> tuple[ComboResult, list[tuple[str, Optional[tuple[int, ...]], str, str]]]:
+    """
+    Execute a scripted combo sequence and also capture a strict replay transcript:
+    (prompt_key_before, action_sig, matched_label, post_step_hash).
+    """
+    result_steps: list[StepResult] = []
+    trace: list[tuple[str, Optional[tuple[int, ...]], str, str]] = []
+    board: dict = _snapshot_state(env) or {}
+
+    for i, raw_step in enumerate(steps):
+        expected_sig, expected_label = _parse_step(raw_step)
+        actions = env.get_legal_actions()
+
+        if not actions:
+            return ComboResult(
+                success=False, steps=result_steps, board=board,
+                failed_at=i, error="no_legal_actions",
+            ), trace
+
+        match = _pick_action(env, actions, expected_sig, expected_label, cid_map, name_map)
+        if match is None:
+            return ComboResult(
+                success=False, steps=result_steps, board=board,
+                failed_at=i, error=f"no_match: {expected_label!r}",
+                legal_at_failure=_legal_labels(env, actions, cid_map, name_map),
+            ), trace
+
+        prompt_before = _prompt_key(env, actions)
+        action_idx, matched_label, matched_sig = match
+        _obs, terminated, truncated, _ = env.step(action_idx)
+        post_hash = _step_hash(env)
+        board = _snapshot_state(env) or {}
+
+        trace.append((prompt_before, matched_sig, matched_label, post_hash))
+        result_steps.append(StepResult(
+            input_label=expected_label,
+            matched_label=matched_label,
+            action_idx=action_idx,
+            sig=matched_sig,
+            board=dict(board),
+        ))
+
+        if (terminated or truncated) and i < len(steps) - 1:
+            return ComboResult(
+                success=False, steps=result_steps, board=board,
+                failed_at=i, error="game_ended_early",
+            ), trace
+
+    return ComboResult(success=True, steps=result_steps, board=board), trace
+
+
 # ---------------------------------------------------------------------------
 # Recipe helpers
 # ---------------------------------------------------------------------------
@@ -241,6 +307,45 @@ def run_combo_from_recipe(
     if not _reset_to_main_phase_idle(env, cid_map, name_map):
         return ComboResult(success=False, error="failed_to_reach_main_phase_idle")
     return run_combo(env, recipe.get("steps", []), cid_map, name_map)
+
+
+def validate_recipe_replay(
+    recipe: dict,
+    env: Any,
+    cid_map: dict,
+    name_map: dict,
+) -> ComboReplayValidation:
+    """
+    Execute the recipe, capture a strict trace, then replay it from root with
+    prompt/action/hash validation.
+    """
+    seed = recipe.get("seed")
+    if seed is not None:
+        env._seed = int(seed)
+    if not _reset_to_main_phase_idle(env, cid_map, name_map):
+        result = ComboResult(success=False, error="failed_to_reach_main_phase_idle")
+        return ComboReplayValidation(success=False, result=result, replay_ok=False, replay_reason=result.error or "")
+
+    result, trace = run_combo_with_trace(env, recipe.get("steps", []), cid_map, name_map)
+    if not result.success:
+        return ComboReplayValidation(
+            success=False,
+            result=result,
+            trace=trace,
+            replay_ok=False,
+            replay_reason=result.error or "combo_failed",
+            replay_step=(result.failed_at + 1) if result.failed_at is not None else 0,
+        )
+
+    replay_ok, replay_reason, replay_step = _replay_trace_reasoned(env, trace, cid_map, name_map)
+    return ComboReplayValidation(
+        success=result.success and replay_ok,
+        result=result,
+        trace=trace,
+        replay_ok=replay_ok,
+        replay_reason=replay_reason,
+        replay_step=replay_step,
+    )
 
 
 def record_combo(
