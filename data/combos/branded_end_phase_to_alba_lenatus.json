@@ -1,0 +1,96 @@
+{
+  "name": "Branded Dogma End-Phase to Alba-Lenatus",
+  "deck": "data/decks/Branded.ydk",
+  "seed": 18,
+  "steps": [
+    "Activate Branded Fusion",
+    "s1",
+    "Select Albion the Branded Dragon",
+    "Fallen of the White Dragon",
+    "Blazing Cartesia",
+    "m1",
+    "face-up ATK",
+    "Yes",
+    "Granguignol",
+    "Blazing Cartesia",
+    "Fallen of the White Dragon",
+    "m3",
+    "face-up ATK",
+    {
+      "label": "Yes (Granguignol the Dusk Dragon)",
+      "sig": [59, 13, 106, 6, 8, 0, 36, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Select Albion the Shrouded Dragon",
+      "sig": [4, 13, 172, 3, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Activate Albion the Shrouded Dragon (effect 2)",
+      "sig": [60, 13, 172, 1, 8, 0, 2, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Select Branded Sword",
+      "sig": [53, 43, 93, 3, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Chain Branded Sword (Activate) effect 1",
+      "sig": [60, 43, 93, 2, 8, 0, 1, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Select Fallen of the White Dragon",
+      "sig": [60, 53, 71, 3, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Place → m2",
+      "sig": [0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 2, 0]
+    },
+    {
+      "label": "Set position: face-up ATK",
+      "sig": [0, 13, 172, 5, 0, 0, 0, 0, 1, 0, 0, 0]
+    },
+    {
+      "label": "Activate Fallen of the White Dragon (effect 2)",
+      "sig": [54, 53, 71, 1, 8, 0, 2, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Select The Dragon that Devours the Dogma",
+      "sig": [74, 53, 73, 3, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Place → m4",
+      "sig": [0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 4, 0]
+    },
+    {
+      "label": "Set position: face-up ATK",
+      "sig": [0, 53, 71, 5, 0, 0, 0, 0, 1, 0, 0, 0]
+    },
+    {
+      "label": "Yes (Fallen of the White Dragon)",
+      "sig": [59, 53, 71, 6, 8, 0, 36, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Select Incredible Ecclesia, the Virtuous",
+      "sig": [2, 53, 68, 3, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Set position: face-up ATK",
+      "sig": [0, 53, 68, 5, 0, 0, 0, 0, 1, 0, 0, 0]
+    },
+    {
+      "label": "Chain Incredible Ecclesia, the Virtuous (Activate) effect 2",
+      "sig": [59, 29, 172, 2, 8, 0, 2, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Select Fallen of the White Dragon",
+      "sig": [2, 53, 71, 3, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "label": "Set position: face-up ATK",
+      "sig": [0, 53, 71, 5, 0, 0, 0, 0, 1, 0, 0, 0]
+    },
+    {
+      "label": "SpSummon Alba-Lenatus the Abyss Dragon",
+      "sig": [73, 1, 228, 1, 3, 0, 0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

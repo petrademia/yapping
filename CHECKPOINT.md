@@ -188,3 +188,103 @@ This section supersedes several assumptions above.
 - `git -C vendor/yapcore status` is clean, which means the moved adapter repo already contains the intended committed changes.
 - Cached `~/.xmake/.../ygopro-core` source still contains temporary debug instrumentation from the FotWD investigation.
 - If the xmake package cache is rebuilt from scratch, only the committed adapter patches survive automatically; the cached core instrumentation would need to be intentionally reapplied or dropped.
+
+---
+
+## Addendum: 2026-04-05 Aluber / Cross-Core Findings
+
+### Aluber Search Prompt Boundary
+
+- The remaining deeper DFS `Retry` is not caused by the new DFS result object or transcript code.
+- It reproduces directly outside DFS on this exact branch:
+  - `Summon Aluber the Jester of Despia`
+  - `Place → m1`
+  - `Yes (Aluber the Jester of Despia)`
+  - then any `Select ...` choice from the next prompt throws native `MSG_RETRY`
+- That prompt is a real `MSG_SELECT_CARD` prompt, not a misdecoded `select_option`.
+- Adapter-side debug logging showed:
+  - `player=0 cancelable=false min=1 max=1 size=11`
+  - the exposed choices are the expected Branded Spell/Trap deck cards
+  - the adapter sends normal multi-select response bytes such as `resp=[1, 0]`
+- The same `MSG_SELECT_CARD` / `_callback_multi_select(...)` machinery works for:
+  - `Summon Guiding Quem, the Virtuous`
+  - `Place → m1`
+  - `Yes (Guiding Quem, the Virtuous)`
+  - `Select Branded Retribution`
+- So the current bug boundary is:
+  - prompt-specific engine/core behavior around Aluber's deck-search effect
+  - not the DFS refactor itself
+
+### Core Lineage Comparison
+
+- `mycard/ygopro-core` pinned local version: still reproduces the Aluber `Retry`
+- `mycard/ygopro-core` upstream `HEAD` (`cf3431e20304061aab0b1ea4a63d82df47d5f948`): still reproduces the same Aluber `Retry`
+- Therefore this issue is **not** explained by "our mycard pin is outdated"
+
+### EDOPro-Lineage Comparison Attempt
+
+- Tried comparing against `edo9300/ygopro-core` (`ed3cbd2` at clone time)
+- That core is **not** a drop-in swap under the current `yapcore` adapter assumptions:
+  - first attempt failed because the static archive was not PIC
+  - PIC rebuild succeeded
+  - resulting `ygopro_ygoenv` extension still failed to import with:
+    - `undefined symbol: luaopen_math`
+- So a meaningful EDOPro comparison will require:
+  - either a proper standalone harness around `edo9300/ygopro-core`
+  - or adapter/build changes beyond "swap the archive under vendor/yapcore"
+
+### Cleanup Status
+
+- Temporary `YAPCORE_DEBUG_SELECT_CARD` logging in `vendor/yapcore/ygoenv/ygoenv/ygopro/ygopro.h` has been removed again.
+- Runtime was restored to the known-good mycard-based baseline after the comparison attempts.
+
+---
+
+## Addendum: 2026-04-06 Parser Fixes / DFS Follow-up
+
+### Confirmed Adapter Parser Bugs Fixed
+
+- `MSG_CONFIRM_CARDS` parsing in `vendor/yapcore/ygoenv/ygoenv/ygopro/ygopro.h` was missing the `skip_panel` byte.
+- That bug caused the `Tri-Brigade Mercourier` add after `The Dragon that Devours the Dogma` to leave a stray `0x01` in the stream, which the adapter then misread as `MSG_RETRY`.
+- Fix committed in `yapcore`:
+  - `0728010` `Fix confirm cards message parsing`
+
+- `MSG_SELECT_CHAIN` parsing in `vendor/yapcore/ygoenv/ygoenv/ygopro/ygopro.h` also had two layout mismatches:
+  - it treated part of `hint_timing` as a top-level `forced` flag
+  - it only read one byte before each entry's code, even though the core writes both `flag` and `forced`
+- That shifted code/spec/desc parsing and produced bogus chain labels / unknown desc-derived codes.
+- Fix committed in `yapcore`:
+  - `1ae6210` `Fix select chain message parsing`
+
+### Current Verified Behavior
+
+- The old fake `Retry` after selecting `Tri-Brigade Mercourier` is gone.
+- The corrected end-phase branch now reaches:
+  - `Chain Incredible Ecclesia, the Virtuous (Activate) effect 2`
+  - `Select Fallen of the White Dragon`
+  - `SpSummon Alba-Lenatus the Abyss Dragon`
+
+### New Recipe / Regression Coverage
+
+- New full-from-reset recipe:
+  - `data/combos/branded_end_phase_to_alba_lenatus.json`
+- New replay regression:
+  - `scripts/regression_branded_end_phase_recipe.py`
+- That regression currently passes:
+  - `Trace length: 32`
+  - `Steps: 32`
+
+### DFS Status After Parser Fixes
+
+- The old root-only DFS smoke check has been replaced by a real depth-1 branch regression.
+- Current DFS regression:
+  - `scripts/regression_branded_dfs.py`
+- Current expected best prompt prefix on the corrected engine path:
+  - `Summon Aluber the Jester of Despia`
+  - `Place → m1`
+  - `Yes (Aluber the Jester of Despia)`
+  - `Select Branded Retribution`
+- Current regression result:
+  - `Visited: 5`
+  - `Best score: 41`
+  - `Best trace length: 4`

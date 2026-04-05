@@ -17,6 +17,7 @@ import hashlib
 from pathlib import Path
 from collections import Counter, deque
 from typing import Any, Optional
+from dataclasses import dataclass, field
 
 import numpy as np
 
@@ -31,6 +32,59 @@ _OPTIONAL_PROMPT_MSG_IDS = frozenset({2, 6, 7})  # select_chain, select_effectyn
 
 # Card display hints: loaded from data/card_display_hints.json (card name -> fusion_materials | cost_send_ed | etc.)
 _display_hints_cache: Optional[dict[str, str]] = None
+
+
+@dataclass
+class DfsTraceStep:
+    prompt_key: str
+    action_sig: Optional[tuple[int, ...]]
+    label: str
+    post_hash: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "prompt_key": self.prompt_key,
+            "action_sig": list(self.action_sig) if self.action_sig is not None else None,
+            "label": self.label,
+            "post_hash": self.post_hash,
+        }
+
+
+@dataclass
+class DfsSearchResult:
+    best_score: int
+    best_labels: list[str]
+    best_prompt_labels: list[str]
+    best_trace: list[DfsTraceStep]
+    visited: int
+    initial_state: Optional[dict]
+    best_state: Optional[dict]
+    prompt_nodes: list[tuple[str, Optional[dict]]] = field(default_factory=list)
+    main_steps: list[dict] = field(default_factory=list)
+    elapsed_seconds: float = 0.0
+    transposition_skips: int = 0
+
+    def as_report_dict(self, cid_map: dict, name_map: dict) -> dict[str, Any]:
+        return {
+            "best_score": int(self.best_score),
+            "visited": int(self.visited),
+            "best_path_labels": list(self.best_labels),
+            "best_path_labels_full": list(self.best_prompt_labels),
+            "best_trace": [step.to_dict() for step in self.best_trace],
+            "initial_state": _state_to_named_dict(self.initial_state, cid_map, name_map),
+            "best_state": _state_to_named_dict(self.best_state, cid_map, name_map),
+            "main_steps": list(self.main_steps),
+            "prompt_nodes": [
+                {
+                    "step": i + 1,
+                    "label": lbl,
+                    "state": _state_to_named_dict(st, cid_map, name_map),
+                }
+                for i, (lbl, st) in enumerate(self.prompt_nodes)
+            ],
+            "elapsed_seconds": float(self.elapsed_seconds),
+            "transposition_skips": int(self.transposition_skips),
+        }
 
 
 def _load_display_hints() -> dict[str, str]:
@@ -613,11 +667,19 @@ def _expand_completion_variants(
                         env, actions, cid_map, name_map, enforce_optional_activation=enforce_optional_activation
                     )
                 # Branch candidate options in optional trigger windows (policy may remove don't-chain/No).
-                for idx in reversed(candidate_actions):
-                    fp_before = _prompt_key(env, actions)
+                candidate_specs: list[tuple[Optional[tuple[int, ...]], str]] = []
+                for idx in candidate_actions:
                     feat = env.action_features(idx)
                     label = decode_action_features(feat, cid_map, name_map) if feat else f"action_{idx}"
-                    sig = _action_sig(feat)
+                    candidate_specs.append((_action_sig(feat), label))
+
+                for sig, label in reversed(candidate_specs):
+                    actions_now = env.get_legal_actions()
+                    idx = _find_action_index_by_sig_or_label(env, actions_now, sig, label, cid_map, name_map)
+                    if idx is None:
+                        _replay_trace(env, trace_prefix + seq, cid_map, name_map)
+                        continue
+                    fp_before = _prompt_key(env, actions_now)
                     _obs, _term, _trunc, _ = env.step(idx)
                     if _term or _trunc:
                         continue
@@ -630,30 +692,42 @@ def _expand_completion_variants(
             candidate_actions = _preferred_optional_actions(
                 env, actions, cid_map, name_map, enforce_optional_activation=enforce_optional_activation
             )
-            idx: Optional[int] = None
+            chosen_sig: Optional[tuple[int, ...]] = None
+            chosen_label: Optional[str] = None
             if first_turn:
                 # Avoid selecting pass/cancel when non-pass actions exist.
                 # pass/cancel is identified by action feature `act_id == 9`.
                 for cand in candidate_actions:
                     feat = env.action_features(cand)
                     if feat is not None and len(feat) >= 5 and int(feat[4]) != 9:
-                        idx = cand
+                        chosen_sig = _action_sig(feat)
+                        chosen_label = decode_action_features(feat, cid_map, name_map) if feat is not None else f"action_{cand}"
                         break
-                if idx is None:
+                if chosen_label is None:
                     # Only pass/cancel options remain; fall back to the first candidate.
-                    idx = candidate_actions[0] if candidate_actions else None
+                    if candidate_actions:
+                        feat = env.action_features(candidate_actions[0])
+                        chosen_sig = _action_sig(feat)
+                        chosen_label = decode_action_features(feat, cid_map, name_map) if feat is not None else f"action_{candidate_actions[0]}"
             else:
                 # Conservative completion: prefer pass/cancel when legal to avoid consuming
                 # unrelated optional branches; fall back to first non-pass for mandatory prompts.
                 idx = _pass_or_cancel_index(env, candidate_actions, cid_map, name_map)
                 if idx is None:
                     idx = _first_non_pass_index(env, candidate_actions, cid_map, name_map)
+                if idx is not None:
+                    feat = env.action_features(idx)
+                    chosen_sig = _action_sig(feat)
+                    chosen_label = decode_action_features(feat, cid_map, name_map) if feat is not None else f"action_{idx}"
+            if chosen_label is None:
+                break
+            actions_now = env.get_legal_actions()
+            idx = _find_action_index_by_sig_or_label(env, actions_now, chosen_sig, chosen_label, cid_map, name_map)
             if idx is None:
                 break
-            fp_before = _prompt_key(env, actions)
-            feat = env.action_features(idx)
-            label = decode_action_features(feat, cid_map, name_map) if feat else f"action_{idx}"
-            sig = _action_sig(feat)
+            fp_before = _prompt_key(env, actions_now)
+            label = chosen_label
+            sig = chosen_sig
             turn_before = env.get_turn_count() if first_turn and hasattr(env, "get_turn_count") and env.get_turn_count() is not None else None
             _obs, _term, _trunc, _ = env.step(idx)
             if _term or _trunc:
@@ -792,6 +866,7 @@ def _write_dfs_json_report(
     best_score: int,
     best_labels: list[str],
     best_prompt_labels: Optional[list[str]],
+    best_trace: Optional[list[tuple[str, Optional[tuple[int, ...]], str, str]]],
     visited: int,
     initial_state: Optional[dict],
     best_state: Optional[dict],
@@ -805,23 +880,21 @@ def _write_dfs_json_report(
         return
     out = Path(out_path).resolve()
     out.parent.mkdir(parents=True, exist_ok=True)
-    report = {
-        "best_score": int(best_score),
-        "visited": int(visited),
-        "best_path_labels": list(best_labels),
-        "best_path_labels_full": list(best_prompt_labels or []),
-        "initial_state": _state_to_named_dict(initial_state, cid_map, name_map),
-        "best_state": _state_to_named_dict(best_state, cid_map, name_map),
-        "main_steps": list(main_steps or []),
-        "prompt_nodes": [
-            {
-                "step": i + 1,
-                "label": lbl,
-                "state": _state_to_named_dict(st, cid_map, name_map),
-            }
-            for i, (lbl, st) in enumerate(prompt_nodes)
+    result = DfsSearchResult(
+        best_score=int(best_score),
+        best_labels=list(best_labels),
+        best_prompt_labels=list(best_prompt_labels or []),
+        best_trace=[
+            DfsTraceStep(prompt_key=fp, action_sig=sig, label=label, post_hash=post_hash)
+            for fp, sig, label, post_hash in (best_trace or [])
         ],
-    }
+        visited=int(visited),
+        initial_state=initial_state,
+        best_state=best_state,
+        prompt_nodes=list(prompt_nodes or []),
+        main_steps=list(main_steps or []),
+    )
+    report = result.as_report_dict(cid_map, name_map)
     out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -1238,7 +1311,7 @@ def load_code_to_type(cdb_path: Path) -> dict[str, int]:
     return out
 
 
-def run_combo_dfs(
+def search_combo_dfs(
     env: Any,
     cid_map: dict,
     name_map: dict,
@@ -1271,9 +1344,8 @@ def run_combo_dfs(
     If enforce_optional_activation=True, optional trigger windows are engine-driven but
     activation-preferring: Chain over don't-chain, Yes over No (when available).
 
-    Returns (best_score, best_labels, visited_count, state_at_best). best_labels are enriched.
-    state_at_best is a dict with keys hand, field_mzone, field_szone, grave, banish (lists of card_ids)
-    at the end of the best path, or None if no path or replay failed.
+    Returns a structured DFS result containing the best transcript, best state,
+    and JSON-friendly prompt/main-step details.
     """
     best_score = -1
     best_labels: list[str] = []
@@ -1477,6 +1549,7 @@ def run_combo_dfs(
             best_score=best_so_far["score"],
             best_labels=_main_phase_labels_only(list(best_so_far.get("labels", []))),
             best_prompt_labels=best_so_far.get("labels", []),
+            best_trace=best_trace,
             visited=visited,
             initial_state=root_state,
             best_state=best_state,
@@ -1539,6 +1612,7 @@ def run_combo_dfs(
                 best_score=best_so_far["score"],
                 best_labels=best_so_far["labels"],
                 best_prompt_labels=best_so_far.get("labels", []),
+                best_trace=best_trace,
                 visited=visited,
                 initial_state=root_state,
                 best_state=best_state,
@@ -1655,6 +1729,7 @@ def run_combo_dfs(
                     best_score=best_so_far["score"],
                     best_labels=best_so_far["labels"],
                     best_prompt_labels=best_so_far.get("labels", []),
+                    best_trace=best_trace,
                     visited=visited,
                     initial_state=root_state,
                     best_state=best_state,
@@ -1855,7 +1930,13 @@ def run_combo_dfs(
             visited_nodes[-1]["stop_reason"] = "no_main_actions"
             continue
 
-        for a, label, main_sig, fp_before_main in reversed(main_actions):
+        main_action_specs = [(label, main_sig) for _a, label, main_sig, _fp_before_main in main_actions]
+        for label, main_sig in reversed(main_action_specs):
+            actions_now = env.get_legal_actions()
+            a = _find_action_index_by_sig_or_label(env, actions_now, main_sig, label, cid_map, name_map)
+            if a is None:
+                continue
+            fp_before_main = _prompt_key(env, actions_now)
             turn_before = (
                 int(env.get_turn_count())
                 if first_turn
@@ -1923,10 +2004,35 @@ def run_combo_dfs(
     _, main_best = _truncate_at_turn_end(_dummy_path, main_best)
     # State at best node was stored when we updated best (no replay needed)
     state_at_best = best_state
+    chain_details = _collect_logged_step_details_from_trace(
+        env, best_trace, cid_map, name_map, include_chain_nodes=True, include_all=True
+    )
+    main_step_details = _build_structured_main_steps(
+        _collect_best_main_step_details_from_trace(env, best_trace, cid_map, name_map),
+        cid_map,
+        name_map,
+    )
+    transposition_skips = sum(1 for e in skip_events if e.get("type") == "transposition")
+    result = DfsSearchResult(
+        best_score=best_score,
+        best_labels=main_best,
+        best_prompt_labels=best_prompt,
+        best_trace=[
+            DfsTraceStep(prompt_key=fp, action_sig=sig, label=label, post_hash=post_hash)
+            for fp, sig, label, post_hash in best_trace
+        ],
+        visited=visited,
+        initial_state=root_state,
+        best_state=state_at_best,
+        prompt_nodes=chain_details or [],
+        main_steps=main_step_details,
+        elapsed_seconds=elapsed,
+        transposition_skips=transposition_skips,
+    )
+
     if verbose:
         print(flush=True)
         print(f"  ── DFS result ─────────────────────────────────", flush=True)
-        transposition_skips = sum(1 for e in skip_events if e.get("type") == "transposition")
         print(f"  Explored : {visited} states in {elapsed:.2f}s", flush=True)
         print(f"  Tracked node states : {len(node_states)}", flush=True)
         if transposition_skips:
@@ -1941,9 +2047,6 @@ def run_combo_dfs(
         if root_state:
             print("  Initial state:", flush=True)
             print(f"    {_format_state_for_log(root_state, cid_map, name_map)}", flush=True)
-        chain_details = _collect_logged_step_details_from_trace(
-            env, best_trace, cid_map, name_map, include_chain_nodes=True, include_all=True
-        )
         if chain_details:
             print("  Prompt nodes (all):", flush=True)
             for i, (lbl, st) in enumerate(chain_details, 1):
@@ -1954,15 +2057,12 @@ def run_combo_dfs(
             best_score=best_score,
             best_labels=main_best,
             best_prompt_labels=best_prompt,
+            best_trace=best_trace,
             visited=visited,
             initial_state=root_state,
             best_state=state_at_best,
             prompt_nodes=chain_details or [],
-            main_steps=_build_structured_main_steps(
-                _collect_best_main_step_details_from_trace(env, best_trace, cid_map, name_map),
-                cid_map,
-                name_map,
-            ),
+            main_steps=main_step_details,
             cid_map=cid_map,
             name_map=name_map,
         )
@@ -2011,5 +2111,54 @@ def run_combo_dfs(
                 flush=True,
             )
 
-    return best_score, main_best, visited, state_at_best
+    return result
 
+
+def run_combo_dfs(
+    env: Any,
+    cid_map: dict,
+    name_map: dict,
+    max_depth: int = 6,
+    max_nodes: int = 500,
+    verbose: bool = True,
+    first_turn: bool = False,
+    enforce_optional_activation: bool = True,
+    lock_initial_player: bool = False,
+    json_out: Any = None,
+    json_all_out: Any = None,
+    fail_fast_drift: bool = False,
+    goal_mzone_codes: Optional[list[int]] = None,
+    goal_szone_codes: Optional[list[int]] = None,
+    goal_grave_codes: Optional[list[int]] = None,
+    goal_banish_codes: Optional[list[int]] = None,
+    goal_hand_codes: Optional[list[int]] = None,
+    goal_hit_bonus: int = 40,
+    meaningful_action_bonus: int = 5,
+    action_goal_config: Optional[dict] = None,
+) -> tuple[int, list[str], int, Optional[dict]]:
+    """
+    Backward-compatible tuple wrapper around the structured DFS result.
+    """
+    result = search_combo_dfs(
+        env=env,
+        cid_map=cid_map,
+        name_map=name_map,
+        max_depth=max_depth,
+        max_nodes=max_nodes,
+        verbose=verbose,
+        first_turn=first_turn,
+        enforce_optional_activation=enforce_optional_activation,
+        lock_initial_player=lock_initial_player,
+        json_out=json_out,
+        json_all_out=json_all_out,
+        fail_fast_drift=fail_fast_drift,
+        goal_mzone_codes=goal_mzone_codes,
+        goal_szone_codes=goal_szone_codes,
+        goal_grave_codes=goal_grave_codes,
+        goal_banish_codes=goal_banish_codes,
+        goal_hand_codes=goal_hand_codes,
+        goal_hit_bonus=goal_hit_bonus,
+        meaningful_action_bonus=meaningful_action_bonus,
+        action_goal_config=action_goal_config,
+    )
+    return result.best_score, result.best_labels, result.visited, result.best_state
