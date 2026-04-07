@@ -126,19 +126,27 @@ You typically do **not** want a separate venv inside `vendor/`.
 From the `yapping/` repo root:
 
 ```bash
-# 1) create/activate a venv (example shown; adjust as you prefer)
-python -m venv .venv
+# 1) create/activate a venv
+python3.14 -m venv .venv
 source .venv/bin/activate
 
-# 2) repo deps
+# 2) install repo + ygoenv runtime deps
 pip install -r requirements.txt
 
-# 3) install ygoenv Python bindings (pulls gymnasium + other deps)
-pip install -e vendor/yapcore/ygoenv
+# 3) make the vendored ygoenv package visible
+export PYTHONPATH="$(pwd)/vendor/yapcore/ygoenv"
 
 # 4) verify imports
 python -c "import ygoenv; import gymnasium; print('ygoenv + gymnasium OK')"
 ```
+
+Important:
+
+- Do **not** use `pip install -e vendor/yapcore` right now. That top-level package metadata is stale old `ygoai` packaging and still references a missing `ygoai/_version.py`.
+- `pip install -e vendor/yapcore/ygoenv` may work in some environments, but the simplest supported setup for this repo is:
+  - `pip install -r requirements.txt`
+  - `export PYTHONPATH="$(pwd)/vendor/yapcore/ygoenv"`
+- If you want this persistent, add the `PYTHONPATH` export to your shell config or your project activation script.
 
 ### Wiring yapcore into YAPPING
 

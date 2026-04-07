@@ -1,9 +1,15 @@
-# YAPPING — Python dependencies
-# Python 3.10+
+# YAPPING runtime dependencies
+# Python 3.14 is the tested target in this repo.
 
 numpy>=1.20
 
-# Bridge: use the owned adapter repo in vendor/yapcore (clone, build with xmake, set YGO_ENV_ROOT); see docs/ENGINE_SETUP.md
-# See docs/ENGINE_SETUP.md
+# yapcore/ygoenv Python-side runtime dependencies.
+# Keep these mirrored with vendor/yapcore/ygoenv/setup.py so a fresh machine
+# can run YAPPING without manual per-package installs.
+dm-env
+gym>=0.26
+gymnasium>=0.26,!=0.27.0
+optree>=0.6.0
+packaging
 
-# CLI and utilities (add as needed: click, rich, etc.)
+# CLI / utilities used by local scripts and debugging flows.
