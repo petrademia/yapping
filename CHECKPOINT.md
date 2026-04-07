@@ -240,6 +240,71 @@ This section supersedes several assumptions above.
 
 ---
 
+## Addendum: 2026-04-08 Typed Parser Refactor Slice
+
+### Current Parser Direction
+
+- `yapcore` is being refactored toward typed, value-driven protocol parsing instead of ad hoc label-first parsing.
+- The goal is:
+  - parse raw `MSG_*` payloads into typed prompt records first
+  - preserve raw fields like `code`, `controller`, `location`, `sequence`, `position`, `desc`
+  - derive `LegalAction` objects from those typed prompts
+  - treat human-readable labels as secondary/debug-only
+
+### Typed Prompt Families Now Implemented
+
+The following prompt families now have explicit typed prompt readers in:
+- `vendor/yapcore/ygoenv/ygoenv/ygopro/ygopro.h`
+
+Implemented slices:
+- `MSG_CONFIRM_CARDS`
+- `MSG_SELECT_UNSELECT_CARD`
+- `MSG_SELECT_CHAIN`
+- `MSG_SELECT_CARD`
+- `MSG_SELECT_OPTION`
+
+Added typed records include:
+- `ConfirmCardsPrompt`
+- `SelectUnselectCardPrompt`
+- `SelectChainPrompt`
+- `SelectCardPrompt`
+- `SelectOptionPrompt`
+
+### Focused Protocol Fixture Regression
+
+- Added:
+  - `scripts/regression_protocol_fixtures.py`
+- This pins the byte-layout assumptions for:
+  - `MSG_CONFIRM_CARDS`
+  - `MSG_SELECT_UNSELECT_CARD`
+  - `MSG_SELECT_CHAIN`
+  - `MSG_SELECT_CARD`
+  - `MSG_SELECT_OPTION`
+
+This is important because the earlier parser bugs came from frame-layout mismatches, not from DFS itself.
+
+### Verified Current Regression State
+
+Sequential runs pass for:
+- `scripts/regression_protocol_fixtures.py`
+- `scripts/regression_branded_recipe_replay.py`
+- `scripts/regression_branded_end_phase_recipe.py`
+- `scripts/regression_branded_dfs.py`
+
+Note:
+- running multiple engine-backed Python regressions in parallel can still produce `database is locked` during env/module init
+- this is a test-runner/environment issue, not a known parser regression
+
+### Current Best Next Slice
+
+- The next major parser families to convert in the same style are:
+  - `MSG_SELECT_IDLECMD`
+  - `MSG_SELECT_BATTLECMD`
+
+Those are the most important remaining ad hoc prompt builders for DFS expansion.
+
+---
+
 ## Addendum: 2026-04-06 Parser Fixes / DFS Follow-up
 
 ### Confirmed Adapter Parser Bugs Fixed
