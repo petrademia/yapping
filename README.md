@@ -45,11 +45,14 @@ cd vendor/yapcore
 PATH=/home/petru/code/yapping/.venv/bin:$PATH xmake f -c -m release -y
 PATH=/home/petru/code/yapping/.venv/bin:$PATH xmake b -r ygopro_ygoenv
 make assets scripts
+cd ../..
+ln -sfn vendor/yapcore/script script
 ```
 
 Notes:
 - The supported import path right now is `PYTHONPATH="$(pwd)/vendor/yapcore/ygoenv"`.
 - Do not use `pip install -e vendor/yapcore` right now. The top-level `vendor/yapcore/setup.py` is still stale old `ygoai` packaging.
+- `make scripts` now creates `vendor/yapcore/script -> scripts/script`, but when running from the `yapping` repo root you still need `./script -> vendor/yapcore/script`.
 - For the current workspace, `.venv/bin/python` is Python `3.14`, so the loaded native module must be the `cp314` build.
 - The important rule is ABI matching: rebuild `yapcore` with the same interpreter you use to run the repo, or Python will keep importing a stale interpreter-matching extension.
 

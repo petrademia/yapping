@@ -79,6 +79,8 @@ If you prefer a sibling repo instead of `vendor/yapcore`, clone to e.g. `~/Proje
    PATH=/path/to/yapping/.venv/bin:$PATH xmake f -m release -y
    PATH=/path/to/yapping/.venv/bin:$PATH xmake
    make
+   cd /path/to/yapping
+   ln -sfn vendor/yapcore/script script
    ```
 
    After `git pull` in `vendor/yapcore` when build recipes changed, force a clean configure and rebuild **only** the Python extension:
@@ -103,7 +105,17 @@ If you prefer a sibling repo instead of `vendor/yapcore`, clone to e.g. `~/Proje
 
 2. **Run from a directory that has Lua scripts**
 
-   When you run code that uses the environment, a **symlink to `third_party/ygopro-scripts` must exist in the directory you run from** (so the engine can find the Lua card scripts). Either run your Python from inside `yapcore`, or create a symlink from your run directory to `yapcore/third_party/ygopro-scripts`.
+   `make scripts` now creates these links inside `vendor/yapcore`:
+   - `scripts/script -> ../third_party/ygopro-scripts`
+   - `script -> scripts/script`
+
+   When you run code from the `yapping` repo root, you still need:
+
+   ```bash
+   ln -sfn vendor/yapcore/script script
+   ```
+
+   so the engine can find Lua scripts through `./script`.
 
 3. **Quick check**
 
