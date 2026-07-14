@@ -92,6 +92,12 @@ score of 8.75 after the opponent's optimal Ash timing.
 targets. The native adapter decodes zone choices from the selecting player's
 perspective, so player 1 can legally activate Infinite Impermanence from hand.
 
+Called by the Grave is modeled separately as an already Set card. It is not a
+turn-one hand trap: an opponent who starts with it in hand cannot Set and
+activate it during the combo player's first turn. Its fixture therefore models
+a turn-two or pre-established-backrow scenario and does not use a hand-opening
+probability in its report.
+
 The initial evaluator is deliberately visible in `tools/analyze_ash.py`. It
 weights live interaction such as Mirrorjade and Branded Retribution, reusable
 engines such as Guiding Quem and Cartesia, follow-up in hand, and generic card

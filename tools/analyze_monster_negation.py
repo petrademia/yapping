@@ -35,6 +35,7 @@ CARDS = {
     "called_by": CALLED_BY_THE_GRAVE,
 }
 NAMES = {
+    41373230: "Titaniklad the Ash Dragon",
     73819701: "Fallen of the White Dragon",
     55273560: "Incredible Ecclesia",
     78397661: "Ecclesia and the Dark Dragon",
@@ -45,6 +46,7 @@ NAMES = {
     44146295: "Mirrorjade",
     60303688: "Dogmatika Ecclesia",
 }
+PRESET_INTERRUPTION = "called_by"
 
 
 def windows(interruption):
@@ -72,25 +74,32 @@ def outcome(interruption, result, max_nodes):
     return search_recovery(result["prefix"], card, max_nodes=max_nodes)
 
 
-def analyze(interruption, max_nodes=1500):
+def analyze(interruption, max_nodes=1500, window=None):
     labels = windows(interruption)
     rows = []
-    for window, label in enumerate(labels):
-        first = interrupted_prefix(window, interruption, 0)
+    selected_windows = range(len(labels)) if window is None else (window,)
+    for current_window in selected_windows:
+        if current_window >= len(labels):
+            raise ValueError(f"window {current_window} is outside 0..{len(labels) - 1}")
+        label = labels[current_window]
+        first = interrupted_prefix(current_window, interruption, 0)
         target_count = max(1, len(first["targets"]))
         results = [first]
-        results.extend(interrupted_prefix(window, interruption, target)
+        results.extend(interrupted_prefix(current_window, interruption, target)
                        for target in range(1, target_count))
         for target, result in enumerate(results):
             target_card = result["targets"][target] if result["targets"] else 0
             rows.append({
-                "window": window,
+                "window": current_window,
                 "label": label,
                 "target": target_card,
                 "recovery": outcome(interruption, result, max_nodes),
             })
 
-    print(f"{interruption.replace('_', ' ').title()} adversarial analysis")
+    title = ("Called by the Grave pre-set backrow analysis"
+             if interruption == PRESET_INTERRUPTION
+             else f"{interruption.replace('_', ' ').title()} adversarial analysis")
+    print(title)
     print("window  score  states  target                         timing")
     for row in rows:
         recovery = row["recovery"]
@@ -101,9 +110,7 @@ def analyze(interruption, max_nodes=1500):
 
     worst = min(rows, key=lambda row: row["recovery"].score)
     recovery = worst["recovery"]
-    probability = opening_probability(40, 3, 5)
     full_score = endboard_score(replay(uninterrupted_prefix(interruption), CARDS[interruption]))
-    expected = (1 - probability) * full_score + probability * recovery.score
     target = NAMES.get(worst["target"], str(worst["target"]) if worst["target"] else "-")
     print(f"\nBest timing: window {worst['window']} — {worst['label']}")
     print(f"Best target: {target}")
@@ -111,7 +118,12 @@ def analyze(interruption, max_nodes=1500):
     actions = recovery.snapshot.actions[-len(recovery.suffix):] if recovery.suffix else ()
     print("Recovery actions: " + " -> ".join(actions))
     print("End board: " + json.dumps(recovery.snapshot.zones, sort_keys=True))
-    print(f"Expected score at 3 copies: {expected:.2f}")
+    if interruption == PRESET_INTERRUPTION:
+        print("Scenario: Called by the Grave began Set before this turn; it is not a hand trap.")
+    else:
+        probability = opening_probability(40, 3, 5)
+        expected = (1 - probability) * full_score + probability * recovery.score
+        print(f"Expected score at 3 copies: {expected:.2f}")
     if any(not row["recovery"].complete for row in rows):
         print("States with + reached the recovery-search limit.")
     return rows
@@ -121,5 +133,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("interruption", choices=CARDS)
     parser.add_argument("--max-nodes", type=int, default=1500)
+    parser.add_argument("--window", type=int)
     arguments = parser.parse_args()
-    analyze(arguments.interruption, arguments.max_nodes)
+    analyze(arguments.interruption, arguments.max_nodes, arguments.window)
