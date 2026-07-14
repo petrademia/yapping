@@ -41,6 +41,14 @@ The core is fetched during the native build and is not stored in this
 repository. Card scripts and `cards.cdb` are runtime inputs supplied by the
 user.
 
+## Continuous integration
+
+GitHub Actions builds the C++ adapter, checks out the pinned Lua scripts, and
+runs the portable test suite on every push and pull request. The full Albaz
+fixture remains conditionally skipped in public CI because `assets/cards.cdb`
+is intentionally untracked; provide that database through a private artifact
+or secret-backed download only if you want CI to run the full card fixture.
+
 ## Native adapter
 
 `yapping._ocgcore.Duel` currently supports:
