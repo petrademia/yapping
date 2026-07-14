@@ -54,6 +54,7 @@ class Recovery:
     suffix: tuple[int, ...]
     snapshot: Snapshot
     visited: int
+    complete: bool
 
 
 def interrupted_prefix(window, interruption="ash", target=0):
@@ -79,7 +80,7 @@ def interrupted_prefix(window, interruption="ash", target=0):
     line = next(line for line in lines if line.startswith("INTERRUPTION RESULT ")
                 or line.startswith("FULL RESULT "))
     value = json.loads(line.split(" ", 2)[2])
-    value["completed"] = line.startswith("FULL RESULT ")
+    value["completed"] = value.get("terminal", line.startswith("FULL RESULT "))
     return value
 
 
@@ -101,7 +102,8 @@ def uninterrupted_prefix(interruption="ash"):
 
 
 def replay(indices, opponent_card=ASH_BLOSSOM):
-    duel, decision = new_duel(opponent_card=opponent_card)
+    duel, decision = new_duel(opponent_card=opponent_card,
+                              opponent_set=opponent_card == 24224830)
     chosen = []
     for index in indices:
         action = decision["actions"][index]
@@ -161,7 +163,7 @@ def search_recovery(prefix, opponent_card=ASH_BLOSSOM, max_depth=80, max_nodes=1
         seen.add(snapshot.key)
         terminal = snapshot.decision["turn"] >= 2
         if terminal:
-            candidate = Recovery(endboard_score(snapshot), suffix, snapshot, len(seen))
+            candidate = Recovery(endboard_score(snapshot), suffix, snapshot, len(seen), False)
             if best is None or candidate.score > best.score:
                 best = candidate
             continue
@@ -169,8 +171,8 @@ def search_recovery(prefix, opponent_card=ASH_BLOSSOM, max_depth=80, max_nodes=1
             frontier.extend(suffix + (index,) for index in legal_indices(snapshot))
     if best is None:
         snapshot = replay(prefix, opponent_card)
-        best = Recovery(endboard_score(snapshot), tuple(), snapshot, len(seen))
-    return Recovery(best.score, best.suffix, best.snapshot, len(seen))
+        best = Recovery(endboard_score(snapshot), tuple(), snapshot, len(seen), False)
+    return Recovery(best.score, best.suffix, best.snapshot, len(seen), not frontier)
 
 
 def analyze():
@@ -183,8 +185,9 @@ def analyze():
     print("Ash Blossom adversarial analysis")
     print("window  score  states  choke point")
     for interruption, recovery in rows:
+        states = f"{recovery.visited}{'' if recovery.complete else '+'}"
         print(f"{interruption['window']:>6}  {recovery.score:>5.2f}  "
-              f"{recovery.visited:>6}  {interruption['label']}")
+              f"{states:>6}  {interruption['label']}")
     worst, recovery = min(rows, key=lambda row: row[1].score)
     full_score = endboard_score(replay(uninterrupted_prefix()))
     ash_probability = opening_probability(40, 3, 5)

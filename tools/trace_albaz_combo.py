@@ -25,6 +25,10 @@ CELTIC_GUARDIAN = 91152256
 ASH_BLOSSOM = 14558127
 EFFECT_VEILER = 97268402
 INFINITE_IMPERMANENCE = 10045474
+GHOST_OGRE = 59438930
+DROLL_LOCK_BIRD = 94145021
+NIBIRU = 27204311
+CALLED_BY_THE_GRAVE = 24224830
 
 ROOT = Path(__file__).parents[1]
 SCRIPTS = ROOT.parent / "fluorohydride-ygopro-scripts"
@@ -32,6 +36,10 @@ INTERRUPTIONS = {
     "ash": ASH_BLOSSOM,
     "veiler": EFFECT_VEILER,
     "impermanence": INFINITE_IMPERMANENCE,
+    "ghost_ogre": GHOST_OGRE,
+    "droll": DROLL_LOCK_BIRD,
+    "nibiru": NIBIRU,
+    "called_by": CALLED_BY_THE_GRAVE,
 }
 INTERRUPTION = os.getenv("YAPPING_INTERRUPTION")
 MODE = os.getenv("YAPPING_WINDOW")
@@ -61,7 +69,8 @@ def step(duel, index):
 
 def show(label, decision, duel):
     global current_label
-    current_label = label
+    if label not in {"after pass", "after place", "after position"}:
+        current_label = label
     print(f"\n{label}: player={decision['player']} counts={duel.counts()}")
     for index, action in enumerate(decision["actions"]):
         print(index, action)
@@ -132,7 +141,7 @@ def settle(duel, decision, stop_on_chain=False):
         show(f"after {kind}", decision, duel)
 
 
-def new_duel(opponent_ash=False, opponent_card=None):
+def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False):
     filler = [CELTIC_GUARDIAN] * 26
     deck = [
         FALLEN_WHITE,
@@ -161,14 +170,18 @@ def new_duel(opponent_ash=False, opponent_card=None):
     ]
     opponent_card = opponent_card or (ASH_BLOSSOM if opponent_ash else None)
     opponent = ([opponent_card] + [CELTIC_GUARDIAN] * 39
-                if opponent_card else [CELTIC_GUARDIAN] * 40)
+                if opponent_card and not opponent_set else [CELTIC_GUARDIAN] * 40)
     duel = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    decision = duel.reset(deck, opponent, extra, seed=11)
+    decision = duel.reset(deck, opponent, extra, seed=11,
+                          set1=[opponent_card] if opponent_set and opponent_card else [])
     return duel, decision
 
 
 def main():
-    duel, decision = new_duel(opponent_card=INTERRUPTIONS.get(INTERRUPTION))
+    duel, decision = new_duel(
+        opponent_card=INTERRUPTIONS.get(INTERRUPTION),
+        opponent_set=INTERRUPTION == "called_by",
+    )
     show("initial", decision, duel)
     decision = choose(duel, decision, "activate", FALLEN_WHITE)
     show("after Fallen hand effect", decision, duel)
@@ -323,12 +336,14 @@ def main():
     show("after choosing Incredible Ecclesia End Phase effect", decision, duel)
     decision = settle(duel, decision)
     counts = duel.counts()
-    assert decision["player"] == 1
-    assert {key: counts[key] for key in (
-        "deck0", "hand0", "monster0", "spell_trap0", "grave0"
-    )} == {
-        "deck0": 26, "hand0": 6, "monster0": 5, "spell_trap0": 1, "grave0": 5,
-    }
+    if not interruption_activated:
+        assert decision["player"] == 1
+        assert {key: counts[key] for key in (
+            "deck0", "hand0", "monster0", "spell_trap0", "grave0"
+        )} == {
+            "deck0": 26, "hand0": 6, "monster0": 5,
+            "spell_trap0": 1, "grave0": 5,
+        }
     show("FULL COMBO COMPLETE", decision, duel)
     if INTERRUPTION is not None:
         print("FULL RESULT " + json.dumps({
@@ -338,6 +353,7 @@ def main():
                       if MODE and MODE.isdigit() else None),
             "prefix": action_prefix,
             "targets": interruption_targets,
+            "terminal": decision["turn"] >= 2,
         }))
 
 

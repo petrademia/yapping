@@ -14,13 +14,25 @@ from analyze_ash import (
     search_recovery,
     uninterrupted_prefix,
 )
-from trace_albaz_combo import EFFECT_VEILER, INFINITE_IMPERMANENCE, ROOT
+from trace_albaz_combo import (
+    DROLL_LOCK_BIRD,
+    CALLED_BY_THE_GRAVE,
+    EFFECT_VEILER,
+    GHOST_OGRE,
+    INFINITE_IMPERMANENCE,
+    NIBIRU,
+    ROOT,
+)
 from yapping import opening_probability
 
 
 CARDS = {
     "veiler": EFFECT_VEILER,
     "impermanence": INFINITE_IMPERMANENCE,
+    "ghost_ogre": GHOST_OGRE,
+    "droll": DROLL_LOCK_BIRD,
+    "nibiru": NIBIRU,
+    "called_by": CALLED_BY_THE_GRAVE,
 }
 NAMES = {
     73819701: "Fallen of the White Dragon",
@@ -56,7 +68,7 @@ def outcome(interruption, result, max_nodes):
     card = CARDS[interruption]
     if result["completed"]:
         snapshot = replay(result["prefix"], card)
-        return Recovery(endboard_score(snapshot), tuple(), snapshot, 1)
+        return Recovery(endboard_score(snapshot), tuple(), snapshot, 1, True)
     return search_recovery(result["prefix"], card, max_nodes=max_nodes)
 
 
@@ -78,12 +90,13 @@ def analyze(interruption, max_nodes=1500):
                 "recovery": outcome(interruption, result, max_nodes),
             })
 
-    print(f"{interruption.title()} adversarial analysis")
+    print(f"{interruption.replace('_', ' ').title()} adversarial analysis")
     print("window  score  states  target                         timing")
     for row in rows:
         recovery = row["recovery"]
         target = NAMES.get(row["target"], str(row["target"]) if row["target"] else "-")
-        print(f"{row['window']:>6}  {recovery.score:>5.2f}  {recovery.visited:>6}  "
+        states = f"{recovery.visited}{'' if recovery.complete else '+'}"
+        print(f"{row['window']:>6}  {recovery.score:>5.2f}  {states:>6}  "
               f"{target:<29}  {row['label']}")
 
     worst = min(rows, key=lambda row: row["recovery"].score)
@@ -91,7 +104,7 @@ def analyze(interruption, max_nodes=1500):
     probability = opening_probability(40, 3, 5)
     full_score = endboard_score(replay(uninterrupted_prefix(interruption), CARDS[interruption]))
     expected = (1 - probability) * full_score + probability * recovery.score
-    target = NAMES.get(worst["target"], str(worst["target"]))
+    target = NAMES.get(worst["target"], str(worst["target"]) if worst["target"] else "-")
     print(f"\nBest timing: window {worst['window']} — {worst['label']}")
     print(f"Best target: {target}")
     print(f"Best recovery score: {recovery.score:.2f}")
@@ -99,6 +112,8 @@ def analyze(interruption, max_nodes=1500):
     print("Recovery actions: " + " -> ".join(actions))
     print("End board: " + json.dumps(recovery.snapshot.zones, sort_keys=True))
     print(f"Expected score at 3 copies: {expected:.2f}")
+    if any(not row["recovery"].complete for row in rows):
+        print("States with + reached the recovery-search limit.")
     return rows
 
 

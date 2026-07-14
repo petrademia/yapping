@@ -65,3 +65,26 @@ def test_monster_negation_targets_fallen(interruption):
     )
     assert '"targets": [73819701]' in result.stdout
     assert '"expected": "select_card 55273560"' in result.stdout
+
+
+@pytest.mark.parametrize("interruption, window", [
+    ("ghost_ogre", "0"), ("droll", "0"), ("nibiru", "9"), ("called_by", "0"),
+])
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_additional_interruptions_have_legal_fixture(interruption, window):
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/trace_albaz_combo.py")],
+        cwd=ROOT,
+        env=os.environ | {
+            "YAPPING_INTERRUPTION": interruption,
+            "YAPPING_WINDOW": window,
+        },
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert f"INTERRUPTION ACTIVATE {window}: {interruption}" in result.stdout
+    assert "INTERRUPTION RESULT" in result.stdout

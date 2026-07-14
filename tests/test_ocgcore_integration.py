@@ -78,3 +78,12 @@ def test_real_spell_then_normal_summon(tmp_path):
     assert duel.counts()["hand0"] == 5
     assert duel.counts()["monster0"] == 1
     assert duel.cards(0, 4) == [CELTIC_GUARDIAN]
+
+
+def test_reset_can_start_with_a_set_card(tmp_path):
+    database = tmp_path / "cards.cdb"
+    make_database(database)
+    deck = [CELTIC_GUARDIAN] * 40
+    duel = Duel(str(database), str(SCRIPTS))
+    duel.reset(deck, deck, seed=7, set1=[POT_OF_GREED])
+    assert duel.cards(1, 8) == [POT_OF_GREED]

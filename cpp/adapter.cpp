@@ -93,7 +93,8 @@ class DuelAdapter {
   py::dict reset(const std::vector<uint32_t>& deck0, const std::vector<uint32_t>& deck1,
                  const std::vector<uint32_t>& extra0 = {},
                  const std::vector<uint32_t>& extra1 = {}, uint32_t seed = 0,
-                 int start_hand = 5) {
+                 int start_hand = 5, const std::vector<uint32_t>& set0 = {},
+                 const std::vector<uint32_t>& set1 = {}) {
     if (deck0.empty() || deck1.empty()) throw std::invalid_argument("decks must not be empty");
     close_duel();
     errors_.clear();
@@ -111,6 +112,8 @@ class DuelAdapter {
     load_deck(deck1, 1);
     load_extra(extra0, 0);
     load_extra(extra1, 1);
+    load_set_cards(set0, 0);
+    load_set_cards(set1, 1);
     start_duel(duel_, (CURRENT_RULE << 16) | DUEL_PSEUDO_SHUFFLE);
     advance();
     return decision();
@@ -254,6 +257,12 @@ class DuelAdapter {
   void load_extra(const std::vector<uint32_t>& extra, uint8_t player) {
     for (auto card = extra.rbegin(); card != extra.rend(); ++card)
       new_card(duel_, *card, player, player, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+  }
+
+  void load_set_cards(const std::vector<uint32_t>& cards, uint8_t player) {
+    for (uint8_t sequence = 0; sequence < cards.size(); ++sequence)
+      new_card(duel_, cards[sequence], player, player, LOCATION_SZONE, sequence,
+               POS_FACEDOWN_DEFENSE);
   }
 
   void advance() {
@@ -456,19 +465,59 @@ class DuelAdapter {
     const uint8_t minimum = reader.u8();
     const uint8_t maximum = reader.u8();
     const int count = reader.u8();
-    if (minimum != 1 || maximum != 1)
-      throw std::runtime_error("multi-card selection is not implemented yet");
+    struct Candidate {
+      uint32_t card;
+      uint8_t controller;
+      uint8_t location;
+      uint8_t sequence;
+    };
+    std::vector<Candidate> candidates;
     for (int index = 0; index < count; ++index) {
-      Action action;
-      action.kind = tribute ? "tribute" : "select_card";
-      action.card = reader.u32();
-      action.controller = reader.u8();
-      action.location = reader.u8();
-      action.sequence = reader.u8();
+      Candidate candidate;
+      candidate.card = reader.u32();
+      candidate.controller = reader.u8();
+      candidate.location = reader.u8();
+      candidate.sequence = reader.u8();
       reader.skip(1);
-      action.response_bytes = {1, static_cast<uint8_t>(index)};
-      actions_.push_back(std::move(action));
+      candidates.push_back(candidate);
     }
+    if (minimum == 1 && maximum == 1) {
+      for (int index = 0; index < count; ++index) {
+        const auto& candidate = candidates[index];
+        Action action;
+        action.kind = tribute ? "tribute" : "select_card";
+        action.card = candidate.card;
+        action.controller = candidate.controller;
+        action.location = candidate.location;
+        action.sequence = candidate.sequence;
+        action.response_bytes = {1, static_cast<uint8_t>(index)};
+        actions_.push_back(std::move(action));
+      }
+      return;
+    }
+    std::vector<int> selected;
+    const auto enumerate = [&](const auto& self, int start) -> void {
+      if (selected.size() >= minimum) {
+        Action action;
+        action.kind = tribute ? "tribute_cards" : "select_cards";
+        if (!selected.empty()) action.card = candidates[selected.front()].card;
+        action.response_bytes.push_back(static_cast<uint8_t>(selected.size()));
+        for (int index : selected) {
+          action.cards.push_back(candidates[index].card);
+          action.response_bytes.push_back(static_cast<uint8_t>(index));
+        }
+        actions_.push_back(std::move(action));
+      }
+      if (selected.size() == maximum) return;
+      for (int index = start; index < count; ++index) {
+        selected.push_back(index);
+        self(self, index + 1);
+        selected.pop_back();
+      }
+    };
+    enumerate(enumerate, 0);
+    if (actions_.empty())
+      throw std::runtime_error("card selection has no legal subsets");
   }
 
   static std::vector<int> sum_values(uint32_t parameter) {
@@ -607,7 +656,8 @@ PYBIND11_MODULE(_ocgcore, module) {
       .def("reset", &DuelAdapter::reset, py::arg("deck0"), py::arg("deck1"),
            py::arg("extra0") = std::vector<uint32_t>{},
            py::arg("extra1") = std::vector<uint32_t>{}, py::arg("seed") = 0,
-           py::arg("start_hand") = 5)
+           py::arg("start_hand") = 5, py::arg("set0") = std::vector<uint32_t>{},
+           py::arg("set1") = std::vector<uint32_t>{})
       .def("step", &DuelAdapter::step)
       .def("counts", &DuelAdapter::counts)
       .def("cards", &DuelAdapter::cards)
