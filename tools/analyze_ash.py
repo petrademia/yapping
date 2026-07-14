@@ -20,6 +20,7 @@ from trace_albaz_combo import (
     MIRRORJADE,
     ROOT,
     new_duel,
+    fixture_deck,
 )
 from yapping import opening_probability
 
@@ -101,10 +102,15 @@ def uninterrupted_prefix(interruption="ash"):
     return json.loads(line.removeprefix("FULL RESULT "))["prefix"]
 
 
-def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None):
+def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
+           ecclesia_copies=1):
+    main_deck = fixture_deck()
+    if ecclesia_copies > 1:
+        main_deck[1:1 + ecclesia_copies - 1] = [INCREDIBLE_ECCLESIA] * (ecclesia_copies - 1)
     duel, decision = new_duel(opponent_card=opponent_card,
                               opponent_set=opponent_card == 24224830,
-                              opening_hand=opening_hand)
+                              opening_hand=opening_hand,
+                              main_deck=main_deck)
     chosen = []
     for index in indices:
         action = decision["actions"][index]
