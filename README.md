@@ -177,6 +177,10 @@ the same 8.75 worst-case score as the known-Ash search. It still reports
 The canonical Veiler/no-Veiler experiment also completes (4,043 states, 8.75
 worst-case score).
 
+Like known-interruption search, hidden-hand-trap search accepts `--hand` plus
+five card IDs, so its pre-reveal decision can be optimized from an exact
+opening hand rather than only the one-card baseline.
+
 ## Roadmap
 
 1. Add targeted move ordering and exhaustive opening reports for Ghost Ogre

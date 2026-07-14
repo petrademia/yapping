@@ -14,10 +14,10 @@ def key(snapshot, index):
     ))
 
 
-def search(interruption="ash", max_nodes=10_000, max_depth=180):
+def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None):
     cards = {interruption: CARDS[interruption], "none": None}
     result = hidden_minimax_replay(
-        lambda scenario, path: replay(path, cards[scenario]),
+        lambda scenario, path: replay(path, cards[scenario], opening_hand),
         legal,
         key,
         endboard_score,
@@ -28,6 +28,8 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180):
         max_depth=max_depth,
     )
     print(f"Opening-hand maximin against hidden {interruption}")
+    if opening_hand is not None:
+        print("opening hand: " + ", ".join(map(str, opening_hand)))
     print(f"common first action: {result.action}")
     print(f"worst-case score: {result.score:.2f}")
     print(f"visited states: {result.visited_states}")
@@ -40,5 +42,6 @@ if __name__ == "__main__":
     parser.add_argument("interruption", choices=CARDS, default="ash", nargs="?")
     parser.add_argument("--max-nodes", type=int, default=10_000)
     parser.add_argument("--max-depth", type=int, default=180)
+    parser.add_argument("--hand", type=int, nargs=5, metavar="CARD_ID")
     arguments = parser.parse_args()
-    search(arguments.interruption, arguments.max_nodes, arguments.max_depth)
+    search(arguments.interruption, arguments.max_nodes, arguments.max_depth, arguments.hand)
