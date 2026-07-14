@@ -12,6 +12,7 @@ from analyze_ash import (
     interrupted_prefix,
     replay,
     search_recovery,
+    score_breakdown,
     uninterrupted_prefix,
 )
 from trace_albaz_combo import (
@@ -118,6 +119,7 @@ def analyze(interruption, max_nodes=1500, window=None):
     actions = recovery.snapshot.actions[-len(recovery.suffix):] if recovery.suffix else ()
     print("Recovery actions: " + " -> ".join(actions))
     print("End board: " + json.dumps(recovery.snapshot.zones, sort_keys=True))
+    print("score breakdown: " + json.dumps(score_breakdown(recovery.snapshot), sort_keys=True))
     if interruption == PRESET_INTERRUPTION:
         print("Scenario: Called by the Grave began Set before this turn; it is not a hand trap.")
     else:
