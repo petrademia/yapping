@@ -83,7 +83,7 @@ Blazing Cartesia, and return Cartesia to hand.
 
 `python tools/search_opening.py ash` runs alpha-beta minimax from the opening
 decision rather than fixing the combo prefix. On the canonical hand it visits
-8,359 replayed states, proves the search complete under the fixture's action
+965 replayed states, proves the search complete under the fixture's action
 abstraction, chooses Titaniklad as the Extra Deck send, and reaches a worst-case
 score of 8.75 after the opponent's optimal Ash timing.
 
@@ -93,9 +93,13 @@ Called by the Grave is intentionally not in this list; see its separate model
 below.
 
 For the one-card baseline, known Effect Veiler and Infinite Impermanence also
-complete from the opening (2,250 and 4,719 states respectively). Both optimally
+complete from the opening (1,317 and 1,390 states respectively). Both optimally
 negate Fallen and leave the same 8.75 recovery line: Titaniklad supplies Guiding
 Quem, which sends and returns Blazing Cartesia.
+
+Known Droll & Lock Bird also completes from the opening in 8,696 states. Its
+15.75 worst-case line changes the route instead of merely recovering from a
+negated Fallen, demonstrating why each interruption needs its own search.
 
 Pass `--hand` followed by five card IDs to search an exact dealt opening hand,
 for example `--hand 73819701 55273560 91152256 91152256 91152256` for Fallen

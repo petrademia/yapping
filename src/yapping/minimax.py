@@ -41,26 +41,35 @@ def minimax_replay(
         nonlocal visited
         node = replay(path)
         cache_key = (getattr(node, "key", repr(node)), depth)
+        alpha_in, beta_in = alpha, beta
         if cache_key in cache:
-            score, actions = cache[cache_key]
-            return score, actions, True, True
+            score, actions, bound = cache[cache_key]
+            if bound == "exact":
+                return score, actions, True, True
+            if bound == "lower":
+                alpha = max(alpha, score)
+            else:
+                beta = min(beta, score)
+            if beta <= alpha:
+                return score, actions, True, False
         visited += 1
         actions = tuple(legal_actions(node))
         is_terminal = terminal(node)
         if is_terminal or depth == max_depth or not actions or visited >= max_nodes:
-            return float(evaluate(node)), tuple(), is_terminal, is_terminal
+            score = float(evaluate(node))
+            if is_terminal:
+                cache[cache_key] = score, tuple(), "exact"
+            return score, tuple(), is_terminal, is_terminal
 
         maximize = owner(node) == 0
         best_score = float("-inf") if maximize else float("inf")
         best_path = tuple()
         complete = True
-        exact = True
         for action in actions:
-            score, suffix, child_complete, child_exact = visit(
+            score, suffix, child_complete, _ = visit(
                 path + (action,), depth + 1, alpha, beta
             )
             complete &= child_complete
-            exact &= child_exact
             if (maximize and score > best_score) or (not maximize and score < best_score):
                 best_score, best_path = score, (action,) + suffix
             if maximize:
@@ -68,13 +77,21 @@ def minimax_replay(
             else:
                 beta = min(beta, best_score)
             if beta <= alpha:
+                if complete:
+                    cache[cache_key] = best_score, best_path, (
+                        "lower" if maximize else "upper"
+                    )
                 return best_score, best_path, complete, False
             if visited >= max_nodes:
                 complete = False
                 break
-        if exact:
-            cache[cache_key] = best_score, best_path
-        return best_score, best_path, complete, exact
+        if complete:
+            bound = ("upper" if best_score <= alpha_in else
+                     "lower" if best_score >= beta_in else "exact")
+            cache[cache_key] = best_score, best_path, bound
+        return best_score, best_path, complete, complete and cache.get(
+            cache_key, (None, None, None)
+        )[2] == "exact"
 
     score, actions, complete, _ = visit(tuple(), 0, float("-inf"), float("inf"))
     return MinimaxResult(actions, score, visited, complete)

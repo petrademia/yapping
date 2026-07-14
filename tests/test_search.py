@@ -98,7 +98,7 @@ def test_minimax_replay_reuses_exact_transposition():
         max_nodes=20,
     )
     assert result.actions == (0, 0)
-    assert result.visited_states == 4
+    assert result.visited_states == 3
     assert result.complete
 
 
