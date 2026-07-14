@@ -128,6 +128,21 @@ engines such as Guiding Quem and Cartesia, follow-up in hand, and generic card
 advantage. The opponent minimizes this end-board score; the combo player
 maximizes it. These weights are a testable baseline, not learned truth.
 
+### Current interruption coverage
+
+| Interaction | Opening minimax | Fixture coverage |
+| --- | --- | --- |
+| Ash Blossom | Complete (965 states) | Timing and recovery report |
+| Effect Veiler | Complete (1,317 states) | Timing and target report |
+| Infinite Impermanence | Complete (1,390 states) | Timing and target report |
+| Droll & Lock Bird | Complete (8,696 states) | Timing and recovery report |
+| Ghost Ogre | Provisional at 20,000 states | Legal timing/recovery fixture |
+| Nibiru | Provisional at 10,000 states | Legal multi-tribute timing/recovery fixture |
+| Called by the Grave | Not a turn-one hand-trap model | Pre-set backrow fixture |
+
+“Provisional” means the node limit evaluated nonterminal leaves with the
+heuristic; it is deliberately not presented as an optimal score.
+
 ## Two-layer optimization model
 
 **Inner problem:** Given an exact opening hand and legal opponent responses,
