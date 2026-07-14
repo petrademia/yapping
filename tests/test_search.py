@@ -4,6 +4,7 @@ import pytest
 from yapping import (
     Decision,
     expected_choice,
+    hidden_minimax_replay,
     minimax_replay,
     opening_probability,
     robust_choice,
@@ -78,3 +79,24 @@ def test_minimax_replay_chooses_strongest_worst_case():
     assert result.actions == (0, 0)
     assert result.score == 3
     assert result.complete
+
+
+def test_hidden_minimax_keeps_worlds_together_after_pass():
+    # The greedy start looks best only if player 0 is allowed to peek at Ash.
+    payoffs = {
+        ("ash", "greedy"): 1, ("no_ash", "greedy"): 9,
+        ("ash", "safe"): 5, ("no_ash", "safe"): 5,
+    }
+    result = hidden_minimax_replay(
+        lambda scenario, path: (scenario, path),
+        lambda state: () if state[1] else (0, 1),
+        lambda _state, index: ("greedy", "safe")[index],
+        lambda state: payoffs[(state[0], ("greedy", "safe")[state[1][0]])],
+        lambda state: bool(state[1]),
+        lambda _state: 0,
+        ("ash", "no_ash"),
+        max_depth=1,
+        max_nodes=20,
+    )
+    assert result.action == "safe"
+    assert result.score == 5

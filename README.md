@@ -117,18 +117,17 @@ YAPPING models three adversarial experiments:
 - **Probabilistic hidden hand:** choose one pre-reveal action with the highest
   probability-weighted outcome from an opponent deck model.
 
-`robust_choice` and `expected_choice` provide the hidden-scenario aggregation
-without leaking the opponent's private card into the player's earlier choice.
-The next search milestone connects those aggregators to full branching from
-the opening hand; the current card reports hold the known combo prefix fixed
-until the interruption and then search legal recovery actions. The opening
-minimax command removes that fixed-prefix limitation for a known interruption;
-multi-card hidden-information search remains the next layer.
+`python tools/search_hidden_ash.py` now connects this model to full opening
+branching for Ash versus no Ash. It intersects player-0 actions across both
+worlds, retains both worlds after an indistinguishable opponent pass, and
+splits them only when Ash is publicly activated. It reports `complete: false`
+when its state budget prevents an optimality claim; alpha-beta pruning is the
+next scaling step for this information-set search.
 
 ## Roadmap
 
-1. Add real fixtures for Effect Veiler, Infinite Impermanence, Ghost Ogre,
-   Droll & Lock Bird, Nibiru, and Called by the Grave.
+1. Add alpha-beta pruning and target-aware exhaustive reports for every
+   interruption fixture.
 2. Add matchup-specific evaluators and compare results with expert lines.
 3. Evaluate deck consistency by weighting the best adversarial line from each
    sampled or enumerated opening hand, including bricks and garnets.
