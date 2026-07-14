@@ -170,7 +170,19 @@ class DuelAdapter {
     ensure_duel();
     std::vector<uint8_t> buffer(SIZE_MESSAGE_BUFFER);
     const int length = query_field_info(duel_, buffer.data());
-    return py::bytes(reinterpret_cast<const char*>(buffer.data()), length);
+    std::string key(reinterpret_cast<const char*>(buffer.data()), length);
+    for (int player = 0; player < 2; ++player) {
+      for (uint8_t location : {LOCATION_DECK, LOCATION_HAND, LOCATION_MZONE,
+                               LOCATION_SZONE, LOCATION_GRAVE, LOCATION_REMOVED,
+                               LOCATION_EXTRA}) {
+        const int zone_length = query_field_card(
+            duel_, player, location, QUERY_CODE | QUERY_POSITION, buffer.data(), 0);
+        key.push_back(static_cast<char>(player));
+        key.push_back(static_cast<char>(location));
+        key.append(reinterpret_cast<const char*>(buffer.data()), zone_length);
+      }
+    }
+    return py::bytes(key);
   }
 
  private:

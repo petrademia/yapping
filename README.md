@@ -78,7 +78,14 @@ discovers every legal activation window in the canonical combo, replays each
 negation, and searches real legal continuations to the next turn. The current
 fixture exposes seven windows and identifies the Fallen of the White Dragon
 deck-summon trigger as the strongest choke point. Its best discovered recovery
-is to enter the End Phase and use Titaniklad to add Guiding Quem as follow-up.
+is to enter the End Phase, use Titaniklad to Special Summon Guiding Quem, send
+Blazing Cartesia, and return Cartesia to hand.
+
+`python tools/search_opening.py ash` runs alpha-beta minimax from the opening
+decision rather than fixing the combo prefix. On the canonical hand it visits
+8,359 replayed states, proves the search complete under the fixture's action
+abstraction, chooses Titaniklad as the Extra Deck send, and reaches a worst-case
+score of 8.75 after the opponent's optimal Ash timing.
 
 `python tools/analyze_monster_negation.py veiler` and the corresponding
 `impermanence` command enumerate both legal timing windows and legal monster
@@ -114,7 +121,9 @@ YAPPING models three adversarial experiments:
 without leaking the opponent's private card into the player's earlier choice.
 The next search milestone connects those aggregators to full branching from
 the opening hand; the current card reports hold the known combo prefix fixed
-until the interruption and then search legal recovery actions.
+until the interruption and then search legal recovery actions. The opening
+minimax command removes that fixed-prefix limitation for a known interruption;
+multi-card hidden-information search remains the next layer.
 
 ## Roadmap
 

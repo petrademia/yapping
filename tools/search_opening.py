@@ -1,0 +1,72 @@
+"""Search the Albaz fixture from its opening decision against a known hand trap."""
+
+import argparse
+
+from analyze_ash import action_name, endboard_score, replay
+from trace_albaz_combo import ASH_BLOSSOM, CELTIC_GUARDIAN
+from yapping import minimax_replay
+
+
+CARDS = {"ash": ASH_BLOSSOM}
+SKIP_KINDS = {"battle_phase", "shuffle"}
+MAX_PRIORITY = {
+    "activate": 0,
+    "yes": 0,
+    "chain": 0,
+    "special_summon": 1,
+    "select_card": 1,
+    "select_sum": 1,
+    "select_toggle": 1,
+    "option": 1,
+    "place": 2,
+    "position": 2,
+    "pass": 3,
+    "end_phase": 4,
+}
+
+
+def legal(snapshot):
+    actions = snapshot.decision["actions"]
+    seen = set()
+    choices = []
+    for index, action in enumerate(actions):
+        if action["kind"] in SKIP_KINDS or action["card"] == CELTIC_GUARDIAN:
+            continue
+        signature = (action["kind"], action["card"], action["description"])
+        if signature in seen:
+            continue
+        seen.add(signature)
+        choices.append(index)
+    if snapshot.decision["player"] == 1:
+        return sorted(choices, key=lambda i: actions[i]["kind"] == "pass")
+    return sorted(choices, key=lambda i: MAX_PRIORITY.get(actions[i]["kind"], 2))
+
+
+def search(interruption="ash", max_nodes=10_000, max_depth=180):
+    card = CARDS[interruption]
+    result = minimax_replay(
+        lambda path: replay(path, card),
+        legal,
+        endboard_score,
+        lambda snapshot: snapshot.decision["turn"] >= 2,
+        lambda snapshot: snapshot.decision["player"],
+        max_depth=max_depth,
+        max_nodes=max_nodes,
+    )
+    final = replay(result.actions, card)
+    print(f"Opening-hand minimax against known {interruption}")
+    print(f"score: {result.score:.2f}")
+    print(f"visited states: {result.visited_states}")
+    print(f"complete: {result.complete}")
+    print("actions: " + " -> ".join(final.actions))
+    print(f"end board: {final.zones}")
+    return result, final
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("interruption", choices=CARDS, default="ash", nargs="?")
+    parser.add_argument("--max-nodes", type=int, default=10_000)
+    parser.add_argument("--max-depth", type=int, default=180)
+    arguments = parser.parse_args()
+    search(arguments.interruption, arguments.max_nodes, arguments.max_depth)

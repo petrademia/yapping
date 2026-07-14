@@ -1,7 +1,14 @@
 import numpy as np
 import pytest
 
-from yapping import Decision, expected_choice, opening_probability, robust_choice, search
+from yapping import (
+    Decision,
+    expected_choice,
+    minimax_replay,
+    opening_probability,
+    robust_choice,
+    search,
+)
 
 
 class ComboEngine:
@@ -55,3 +62,19 @@ def test_hidden_interruption_choices_do_not_leak_information():
     choice, score = expected_choice(payoffs, {"ash": 0.2, "impermanence": 0.8})
     assert choice == "greedy_line"
     assert score == pytest.approx(7.6)
+
+
+def test_minimax_replay_chooses_strongest_worst_case():
+    payoffs = {(0, 0): 3, (0, 1): 5, (1, 0): 2, (1, 1): 8}
+    result = minimax_replay(
+        lambda path: path,
+        lambda path: () if len(path) == 2 else (0, 1),
+        lambda path: payoffs[path],
+        lambda path: len(path) == 2,
+        lambda path: len(path) % 2,
+        max_depth=2,
+        max_nodes=20,
+    )
+    assert result.actions == (0, 0)
+    assert result.score == 3
+    assert result.complete

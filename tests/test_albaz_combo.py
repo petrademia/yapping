@@ -40,8 +40,10 @@ def test_ash_finds_choke_point_and_recovery():
     )
     assert sum("  after " in line for line in result.stdout.splitlines()) == 7
     assert "Best Ash timing: window 0" in result.stdout
+    assert "Best recovery score: 8.75" in result.stdout
     assert "Recovery actions: end_phase" in result.stdout
     assert "select_card:45883110" in result.stdout  # Guiding Quem
+    assert "select_card:95515789" in result.stdout  # Blazing Cartesia
 
 
 @pytest.mark.parametrize("interruption", ["veiler", "impermanence"])

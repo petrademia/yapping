@@ -149,7 +149,7 @@ def legal_indices(snapshot):
     return tuple(result)
 
 
-def search_recovery(prefix, opponent_card=ASH_BLOSSOM, max_depth=32, max_nodes=1500):
+def search_recovery(prefix, opponent_card=ASH_BLOSSOM, max_depth=80, max_nodes=1500):
     frontier = [tuple()]
     seen = set()
     best = None
