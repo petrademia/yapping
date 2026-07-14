@@ -172,10 +172,9 @@ def settle(duel, decision, stop_on_chain=False):
         show(f"after {kind}", decision, duel)
 
 
-def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
-             opening_hand=None):
+def fixture_deck():
     filler = [CELTIC_GUARDIAN] * 26
-    deck = [
+    return [
         FALLEN_WHITE,
         CELTIC_GUARDIAN,
         CELTIC_GUARDIAN,
@@ -192,6 +191,13 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
         BRANDED_RETRIBUTION,
         *filler,
     ]
+
+
+def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
+             opening_hand=None, main_deck=None):
+    deck = list(fixture_deck() if main_deck is None else main_deck)
+    if len(deck) < 40:
+        raise ValueError("main_deck must contain at least 40 cards")
     if opening_hand is not None:
         if len(opening_hand) != 5:
             raise ValueError("opening_hand must contain exactly five cards")

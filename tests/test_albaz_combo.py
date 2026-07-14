@@ -15,6 +15,7 @@ from trace_albaz_combo import (  # noqa: E402
     FALLEN_WHITE,
     INCREDIBLE_ECCLESIA,
     card_id,
+    fixture_deck,
     new_duel,
 )
 
@@ -43,6 +44,15 @@ def test_fixture_deals_requested_exact_opening_hand():
             CELTIC_GUARDIAN, CELTIC_GUARDIAN]
     duel, _ = new_duel(opening_hand=hand)
     assert sorted(duel.cards(0, 2)) == sorted(hand)
+
+
+def test_fixture_can_model_three_ecclesia_copies():
+    deck = fixture_deck()
+    deck[1:3] = [INCREDIBLE_ECCLESIA, INCREDIBLE_ECCLESIA]
+    hand = [FALLEN_WHITE, INCREDIBLE_ECCLESIA, CELTIC_GUARDIAN,
+            CELTIC_GUARDIAN, CELTIC_GUARDIAN]
+    duel, _ = new_duel(opening_hand=hand, main_deck=deck)
+    assert duel.cards(0, 1).count(INCREDIBLE_ECCLESIA) == 2
 
 
 def test_fixture_card_aliases_resolve_for_command_line_hands():
