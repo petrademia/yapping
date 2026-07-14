@@ -428,12 +428,14 @@ class DuelAdapter {
         actions_.push_back(std::move(action));
       }
     };
-    add_zones(allowed, 0, LOCATION_MZONE, 0, 7);
-    add_zones(allowed, 0, LOCATION_SZONE, 8, 6);
-    add_zones(allowed, 0, LOCATION_SZONE, 14, 2, 6);
-    add_zones(allowed, 1, LOCATION_MZONE, 16, 7);
-    add_zones(allowed, 1, LOCATION_SZONE, 24, 6);
-    add_zones(allowed, 1, LOCATION_SZONE, 30, 2, 6);
+    const uint8_t self = selecting_player_;
+    const uint8_t opponent = 1 - selecting_player_;
+    add_zones(allowed, self, LOCATION_MZONE, 0, 7);
+    add_zones(allowed, self, LOCATION_SZONE, 8, 6);
+    add_zones(allowed, self, LOCATION_SZONE, 14, 2, 6);
+    add_zones(allowed, opponent, LOCATION_MZONE, 16, 7);
+    add_zones(allowed, opponent, LOCATION_SZONE, 24, 6);
+    add_zones(allowed, opponent, LOCATION_SZONE, 30, 2, 6);
   }
 
   void decode_single_card(Reader& reader, bool tribute) {

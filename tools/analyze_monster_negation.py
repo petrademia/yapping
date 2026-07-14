@@ -1,0 +1,110 @@
+"""Rank Effect Veiler and Infinite Impermanence timings and targets."""
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+
+from analyze_ash import (
+    Recovery,
+    endboard_score,
+    interrupted_prefix,
+    replay,
+    search_recovery,
+    uninterrupted_prefix,
+)
+from trace_albaz_combo import EFFECT_VEILER, INFINITE_IMPERMANENCE, ROOT
+from yapping import opening_probability
+
+
+CARDS = {
+    "veiler": EFFECT_VEILER,
+    "impermanence": INFINITE_IMPERMANENCE,
+}
+NAMES = {
+    73819701: "Fallen of the White Dragon",
+    55273560: "Incredible Ecclesia",
+    78397661: "Ecclesia and the Dark Dragon",
+    45883110: "Guiding Quem",
+    74405783: "Three Champions of Swordsoul",
+    95515789: "Blazing Cartesia",
+    87746184: "Albion the Branded Dragon",
+    44146295: "Mirrorjade",
+    60303688: "Dogmatika Ecclesia",
+}
+
+
+def windows(interruption):
+    environment = os.environ | {
+        "YAPPING_INTERRUPTION": interruption,
+        "YAPPING_WINDOW": "hold",
+    }
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/trace_albaz_combo.py")],
+        cwd=ROOT,
+        env=environment,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return [line.split(": ", 1)[1] for line in result.stdout.splitlines()
+            if line.startswith("INTERRUPTION WINDOW ")]
+
+
+def outcome(interruption, result, max_nodes):
+    card = CARDS[interruption]
+    if result["completed"]:
+        snapshot = replay(result["prefix"], card)
+        return Recovery(endboard_score(snapshot), tuple(), snapshot, 1)
+    return search_recovery(result["prefix"], card, max_nodes=max_nodes)
+
+
+def analyze(interruption, max_nodes=1500):
+    labels = windows(interruption)
+    rows = []
+    for window, label in enumerate(labels):
+        first = interrupted_prefix(window, interruption, 0)
+        target_count = max(1, len(first["targets"]))
+        results = [first]
+        results.extend(interrupted_prefix(window, interruption, target)
+                       for target in range(1, target_count))
+        for target, result in enumerate(results):
+            target_card = result["targets"][target] if result["targets"] else 0
+            rows.append({
+                "window": window,
+                "label": label,
+                "target": target_card,
+                "recovery": outcome(interruption, result, max_nodes),
+            })
+
+    print(f"{interruption.title()} adversarial analysis")
+    print("window  score  states  target                         timing")
+    for row in rows:
+        recovery = row["recovery"]
+        target = NAMES.get(row["target"], str(row["target"]) if row["target"] else "-")
+        print(f"{row['window']:>6}  {recovery.score:>5.2f}  {recovery.visited:>6}  "
+              f"{target:<29}  {row['label']}")
+
+    worst = min(rows, key=lambda row: row["recovery"].score)
+    recovery = worst["recovery"]
+    probability = opening_probability(40, 3, 5)
+    full_score = endboard_score(replay(uninterrupted_prefix(interruption), CARDS[interruption]))
+    expected = (1 - probability) * full_score + probability * recovery.score
+    target = NAMES.get(worst["target"], str(worst["target"]))
+    print(f"\nBest timing: window {worst['window']} — {worst['label']}")
+    print(f"Best target: {target}")
+    print(f"Best recovery score: {recovery.score:.2f}")
+    actions = recovery.snapshot.actions[-len(recovery.suffix):] if recovery.suffix else ()
+    print("Recovery actions: " + " -> ".join(actions))
+    print("End board: " + json.dumps(recovery.snapshot.zones, sort_keys=True))
+    print(f"Expected score at 3 copies: {expected:.2f}")
+    return rows
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("interruption", choices=CARDS)
+    parser.add_argument("--max-nodes", type=int, default=1500)
+    arguments = parser.parse_args()
+    analyze(arguments.interruption, arguments.max_nodes)

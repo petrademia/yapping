@@ -80,6 +80,11 @@ fixture exposes seven windows and identifies the Fallen of the White Dragon
 deck-summon trigger as the strongest choke point. Its best discovered recovery
 is to enter the End Phase and use Titaniklad to add Guiding Quem as follow-up.
 
+`python tools/analyze_monster_negation.py veiler` and the corresponding
+`impermanence` command enumerate both legal timing windows and legal monster
+targets. The native adapter decodes zone choices from the selecting player's
+perspective, so player 1 can legally activate Infinite Impermanence from hand.
+
 The initial evaluator is deliberately visible in `tools/analyze_ash.py`. It
 weights live interaction such as Mirrorjade and Branded Retribution, reusable
 engines such as Guiding Quem and Cartesia, follow-up in hand, and generic card
@@ -96,6 +101,20 @@ solve this tactical problem.
 deck reach a valuable board, recover through disruption, and avoid bricks or
 excessive garnets? Hypergeometric probabilities, hand enumeration, and later
 sampling aggregate the inner solver's results into deck-level analysis.
+
+YAPPING models three adversarial experiments:
+
+- **Known interruption:** optimize against one named card for diagnosis.
+- **Guaranteed hidden interruption:** choose one pre-reveal action whose worst
+  outcome is strongest across a set of possible hidden cards.
+- **Probabilistic hidden hand:** choose one pre-reveal action with the highest
+  probability-weighted outcome from an opponent deck model.
+
+`robust_choice` and `expected_choice` provide the hidden-scenario aggregation
+without leaking the opponent's private card into the player's earlier choice.
+The next search milestone connects those aggregators to full branching from
+the opening hand; the current card reports hold the known combo prefix fixed
+until the interruption and then search legal recovery actions.
 
 ## Roadmap
 

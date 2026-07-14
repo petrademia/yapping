@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -41,3 +42,24 @@ def test_ash_finds_choke_point_and_recovery():
     assert "Best Ash timing: window 0" in result.stdout
     assert "Recovery actions: end_phase" in result.stdout
     assert "select_card:45883110" in result.stdout  # Guiding Quem
+
+
+@pytest.mark.parametrize("interruption", ["veiler", "impermanence"])
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_monster_negation_targets_fallen(interruption):
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/trace_albaz_combo.py")],
+        cwd=ROOT,
+        env=os.environ | {
+            "YAPPING_INTERRUPTION": interruption,
+            "YAPPING_WINDOW": "0",
+        },
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert '"targets": [73819701]' in result.stdout
+    assert '"expected": "select_card 55273560"' in result.stdout

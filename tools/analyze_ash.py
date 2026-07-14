@@ -56,22 +56,38 @@ class Recovery:
     visited: int
 
 
-def interrupted_prefix(window):
-    environment = os.environ | {"YAPPING_ASH": str(window)}
+def interrupted_prefix(window, interruption="ash", target=0):
+    environment = os.environ | {
+        "YAPPING_INTERRUPTION": interruption,
+        "YAPPING_WINDOW": str(window),
+        "YAPPING_TARGET": str(target),
+    }
     result = subprocess.run(
         [sys.executable, str(ROOT / "tools/trace_albaz_combo.py")],
         cwd=ROOT,
         env=environment,
         capture_output=True,
         text=True,
-        check=True,
+        check=False,
     )
-    line = next(line for line in result.stdout.splitlines() if line.startswith("ASH RESULT "))
-    return json.loads(line.removeprefix("ASH RESULT "))
+    if result.returncode:
+        raise RuntimeError(
+            f"{interruption} window {window} target {target} trace failed:\n"
+            + result.stderr[-2000:]
+        )
+    lines = result.stdout.splitlines()
+    line = next(line for line in lines if line.startswith("INTERRUPTION RESULT ")
+                or line.startswith("FULL RESULT "))
+    value = json.loads(line.split(" ", 2)[2])
+    value["completed"] = line.startswith("FULL RESULT ")
+    return value
 
 
-def uninterrupted_prefix():
-    environment = os.environ | {"YAPPING_ASH": "hold"}
+def uninterrupted_prefix(interruption="ash"):
+    environment = os.environ | {
+        "YAPPING_INTERRUPTION": interruption,
+        "YAPPING_WINDOW": "hold",
+    }
     result = subprocess.run(
         [sys.executable, str(ROOT / "tools/trace_albaz_combo.py")],
         cwd=ROOT,
@@ -84,8 +100,8 @@ def uninterrupted_prefix():
     return json.loads(line.removeprefix("FULL RESULT "))["prefix"]
 
 
-def replay(indices):
-    duel, decision = new_duel(opponent_ash=True)
+def replay(indices, opponent_card=ASH_BLOSSOM):
+    duel, decision = new_duel(opponent_card=opponent_card)
     chosen = []
     for index in indices:
         action = decision["actions"][index]
@@ -133,13 +149,13 @@ def legal_indices(snapshot):
     return tuple(result)
 
 
-def search_recovery(prefix, max_depth=32, max_nodes=1500):
+def search_recovery(prefix, opponent_card=ASH_BLOSSOM, max_depth=32, max_nodes=1500):
     frontier = [tuple()]
     seen = set()
     best = None
     while frontier and len(seen) < max_nodes:
         suffix = frontier.pop()
-        snapshot = replay(tuple(prefix) + suffix)
+        snapshot = replay(tuple(prefix) + suffix, opponent_card)
         if snapshot.key in seen:
             continue
         seen.add(snapshot.key)
@@ -152,7 +168,7 @@ def search_recovery(prefix, max_depth=32, max_nodes=1500):
         if len(suffix) < max_depth:
             frontier.extend(suffix + (index,) for index in legal_indices(snapshot))
     if best is None:
-        snapshot = replay(prefix)
+        snapshot = replay(prefix, opponent_card)
         best = Recovery(endboard_score(snapshot), tuple(), snapshot, len(seen))
     return Recovery(best.score, best.suffix, best.snapshot, len(seen))
 
