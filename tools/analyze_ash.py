@@ -101,9 +101,10 @@ def uninterrupted_prefix(interruption="ash"):
     return json.loads(line.removeprefix("FULL RESULT "))["prefix"]
 
 
-def replay(indices, opponent_card=ASH_BLOSSOM):
+def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None):
     duel, decision = new_duel(opponent_card=opponent_card,
-                              opponent_set=opponent_card == 24224830)
+                              opponent_set=opponent_card == 24224830,
+                              opening_hand=opening_hand)
     chosen = []
     for index in indices:
         action = decision["actions"][index]

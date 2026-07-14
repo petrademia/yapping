@@ -141,7 +141,8 @@ def settle(duel, decision, stop_on_chain=False):
         show(f"after {kind}", decision, duel)
 
 
-def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False):
+def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
+             opening_hand=None):
     filler = [CELTIC_GUARDIAN] * 26
     deck = [
         FALLEN_WHITE,
@@ -160,6 +161,16 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False):
         BRANDED_RETRIBUTION,
         *filler,
     ]
+    if opening_hand is not None:
+        if len(opening_hand) != 5:
+            raise ValueError("opening_hand must contain exactly five cards")
+        remaining = list(deck)
+        for card in opening_hand:
+            try:
+                remaining.remove(card)
+            except ValueError as error:
+                raise ValueError(f"opening hand card {card} is not in this deck") from error
+        deck = [*opening_hand, *remaining]
     extra = [
         TITANIKLAD,
         ECCLESIA_DARK_DRAGON,

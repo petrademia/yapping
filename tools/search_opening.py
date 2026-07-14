@@ -58,10 +58,10 @@ def legal(snapshot):
     return sorted(choices, key=lambda i: MAX_PRIORITY.get(actions[i]["kind"], 2))
 
 
-def search(interruption="ash", max_nodes=10_000, max_depth=180):
+def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None):
     card = CARDS[interruption]
     result = minimax_replay(
-        lambda path: replay(path, card),
+        lambda path: replay(path, card, opening_hand),
         legal,
         endboard_score,
         lambda snapshot: snapshot.decision["turn"] >= 2,
@@ -69,8 +69,10 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180):
         max_depth=max_depth,
         max_nodes=max_nodes,
     )
-    final = replay(result.actions, card)
+    final = replay(result.actions, card, opening_hand)
     print(f"Opening-hand minimax against known {interruption}")
+    if opening_hand is not None:
+        print("opening hand: " + ", ".join(map(str, opening_hand)))
     print(f"score: {result.score:.2f}")
     print(f"visited states: {result.visited_states}")
     print(f"complete: {result.complete}")
@@ -84,5 +86,6 @@ if __name__ == "__main__":
     parser.add_argument("interruption", choices=CARDS, default="ash", nargs="?")
     parser.add_argument("--max-nodes", type=int, default=10_000)
     parser.add_argument("--max-depth", type=int, default=180)
+    parser.add_argument("--hand", type=int, nargs=5, metavar="CARD_ID")
     arguments = parser.parse_args()
-    search(arguments.interruption, arguments.max_nodes, arguments.max_depth)
+    search(arguments.interruption, arguments.max_nodes, arguments.max_depth, arguments.hand)

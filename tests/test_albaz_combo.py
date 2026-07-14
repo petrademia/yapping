@@ -9,6 +9,13 @@ import pytest
 ROOT = Path(__file__).parents[1]
 SCRIPTS = ROOT.parent / "fluorohydride-ygopro-scripts"
 CARDS = ROOT / "assets/cards.cdb"
+sys.path.insert(0, str(ROOT / "tools"))
+from trace_albaz_combo import (  # noqa: E402
+    CELTIC_GUARDIAN,
+    FALLEN_WHITE,
+    INCREDIBLE_ECCLESIA,
+    new_duel,
+)
 
 
 @pytest.mark.skipif(
@@ -24,6 +31,17 @@ def test_full_albaz_swordsoul_combo():
         check=True,
     )
     assert "FULL COMBO COMPLETE" in result.stdout
+
+
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_fixture_deals_requested_exact_opening_hand():
+    hand = [FALLEN_WHITE, INCREDIBLE_ECCLESIA, CELTIC_GUARDIAN,
+            CELTIC_GUARDIAN, CELTIC_GUARDIAN]
+    duel, _ = new_duel(opening_hand=hand)
+    assert sorted(duel.cards(0, 2)) == sorted(hand)
 
 
 @pytest.mark.skipif(

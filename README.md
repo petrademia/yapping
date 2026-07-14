@@ -92,6 +92,12 @@ The same command accepts `veiler`, `impermanence`, `droll`, `nibiru`, and
 Called by the Grave is intentionally not in this list; see its separate model
 below.
 
+Pass `--hand` followed by five card IDs to search an exact dealt opening hand,
+for example `--hand 73819701 55273560 91152256 91152256 91152256` for Fallen
+of the White Dragon plus Incredible Ecclesia and three fillers. Those cards
+are removed from the deck before the deterministic deal, so deck searches
+correctly account for a card already being in hand.
+
 `python tools/analyze_monster_negation.py veiler` and the corresponding
 `impermanence` command enumerate both legal timing windows and legal monster
 targets. The native adapter decodes zone choices from the selecting player's
