@@ -2,7 +2,7 @@
 
 import argparse
 
-from analyze_ash import action_name, endboard_score, replay
+from analyze_ash import CARD_WEIGHTS, action_name, endboard_score, replay
 from trace_albaz_combo import (
     ASH_BLOSSOM,
     CELTIC_GUARDIAN,
@@ -55,7 +55,13 @@ def legal(snapshot):
         choices.append(index)
     if snapshot.decision["player"] == 1:
         return sorted(choices, key=lambda i: actions[i]["kind"] == "pass")
-    return sorted(choices, key=lambda i: MAX_PRIORITY.get(actions[i]["kind"], 2))
+    # Alpha-beta reaches a useful lower bound sooner when high-value legal
+    # continuations are examined first; every action remains searchable.
+    return sorted(
+        choices,
+        key=lambda i: (MAX_PRIORITY.get(actions[i]["kind"], 2),
+                       -CARD_WEIGHTS.get(actions[i]["card"], 0), i),
+    )
 
 
 def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None):
