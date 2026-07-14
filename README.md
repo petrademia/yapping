@@ -107,6 +107,10 @@ of the White Dragon plus Incredible Ecclesia and three fillers. Those cards
 are removed from the deck before the deterministic deal, so deck searches
 correctly account for a card already being in hand.
 
+An opening report is optimal only when it says `complete: True`. At a node
+limit, its displayed value is explicitly a provisional heuristic score rather
+than a proven bound.
+
 `python tools/analyze_monster_negation.py veiler` and the corresponding
 `impermanence` command enumerate both legal timing windows and legal monster
 targets. The native adapter decodes zone choices from the selecting player's
