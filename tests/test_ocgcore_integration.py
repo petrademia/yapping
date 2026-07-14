@@ -61,6 +61,7 @@ def test_real_spell_then_normal_summon(tmp_path):
     assert {action["kind"] for action in decision["actions"]} >= {"activate", "summon"}
     assert 11 in decision["events"]  # MSG_SELECT_IDLECMD
     assert duel.counts()["hand0"] == 5
+    assert duel.cards(0, 2).count(POT_OF_GREED) >= 2
 
     decision = choose(duel, decision, "activate", POT_OF_GREED)
     assert 18 in decision["events"]  # MSG_SELECT_PLACE
@@ -76,3 +77,4 @@ def test_real_spell_then_normal_summon(tmp_path):
     assert 61 in decision["events"]  # MSG_SUMMONED
     assert duel.counts()["hand0"] == 5
     assert duel.counts()["monster0"] == 1
+    assert duel.cards(0, 4) == [CELTIC_GUARDIAN]

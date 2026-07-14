@@ -1,3 +1,5 @@
+import os
+import json
 from pathlib import Path
 
 from yapping._ocgcore import Duel
@@ -20,28 +22,77 @@ DEVOURS_DOGMA = 76666602
 MERCOURIER = 19096726
 BRANDED_RETRIBUTION = 17751597
 CELTIC_GUARDIAN = 91152256
+ASH_BLOSSOM = 14558127
 
 ROOT = Path(__file__).parents[1]
 SCRIPTS = ROOT.parent / "fluorohydride-ygopro-scripts"
+ASH_MODE = os.getenv("YAPPING_ASH")
+ash_windows = []
+current_label = "initial"
+action_prefix = []
+ash_activated = False
+
+
+class LineInterrupted(RuntimeError):
+    def __init__(self, duel, decision, expected):
+        super().__init__(f"missing {expected}")
+        self.duel = duel
+        self.decision = decision
+        self.expected = expected
+
+
+def step(duel, index):
+    action_prefix.append(index)
+    return duel.step(index)
 
 
 def show(label, decision, duel):
+    global current_label
+    current_label = label
     print(f"\n{label}: player={decision['player']} counts={duel.counts()}")
     for index, action in enumerate(decision["actions"]):
         print(index, action)
 
 
+def answer_ash(duel, decision):
+    global ash_activated
+    actions = decision["actions"]
+    ash = next((i for i, action in enumerate(actions)
+                if action["kind"] == "chain" and action["card"] == ASH_BLOSSOM), None)
+    if decision["player"] != 1 or ash is None:
+        return None
+    window = len(ash_windows)
+    ash_windows.append(current_label)
+    print(f"ASH WINDOW {window}: {current_label}")
+    if ASH_MODE == str(window):
+        print(f"ASH ACTIVATE {window}")
+        ash_activated = True
+        return step(duel, ash)
+    return step(duel, next(i for i, action in enumerate(actions) if action["kind"] == "pass"))
+
+
 def choose(duel, decision, kind, card=None, description=None):
-    for index, action in enumerate(decision["actions"]):
-        if (action["kind"] == kind
-                and (card is None or action["card"] == card)
-                and (description is None or action["description"] == description)):
-            return duel.step(index)
+    while True:
+        for index, action in enumerate(decision["actions"]):
+            if (action["kind"] == kind
+                    and (card is None or action["card"] == card)
+                    and (description is None or action["description"] == description)):
+                return step(duel, index)
+        answered = answer_ash(duel, decision)
+        if answered is None:
+            break
+        decision = answered
+    if ash_activated:
+        raise LineInterrupted(duel, decision, f"{kind} {card}")
     raise RuntimeError(f"missing {kind} {card}")
 
 
 def settle(duel, decision, stop_on_chain=False):
     while True:
+        answered = answer_ash(duel, decision)
+        if answered is not None:
+            decision = answered
+            continue
         kinds = {action["kind"] for action in decision["actions"]}
         if stop_on_chain and "chain" in kinds:
             return decision
@@ -52,7 +103,7 @@ def settle(duel, decision, stop_on_chain=False):
         show(f"after {kind}", decision, duel)
 
 
-def main():
+def new_duel(opponent_ash=False):
     filler = [CELTIC_GUARDIAN] * 26
     deck = [
         FALLEN_WHITE,
@@ -79,8 +130,15 @@ def main():
         MIRRORJADE,
         DEVOURS_DOGMA,
     ]
+    opponent = ([ASH_BLOSSOM] + [CELTIC_GUARDIAN] * 39
+                if opponent_ash else [CELTIC_GUARDIAN] * 40)
     duel = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    decision = duel.reset(deck, [CELTIC_GUARDIAN] * 40, extra, seed=11)
+    decision = duel.reset(deck, opponent, extra, seed=11)
+    return duel, decision
+
+
+def main():
+    duel, decision = new_duel(ASH_MODE is not None)
     show("initial", decision, duel)
     decision = choose(duel, decision, "activate", FALLEN_WHITE)
     show("after Fallen hand effect", decision, duel)
@@ -241,7 +299,18 @@ def main():
         "deck1": 34, "hand1": 6, "monster1": 0, "spell_trap1": 0, "grave1": 0,
     }
     show("FULL COMBO COMPLETE", decision, duel)
+    if ASH_MODE is not None:
+        print("FULL RESULT " + json.dumps({"prefix": action_prefix}))
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except LineInterrupted as interrupted:
+        print("ASH RESULT " + json.dumps({
+            "window": int(ASH_MODE),
+            "label": ash_windows[int(ASH_MODE)],
+            "expected": interrupted.expected,
+            "prefix": action_prefix,
+            "counts": interrupted.duel.counts(),
+        }))

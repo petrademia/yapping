@@ -1,6 +1,7 @@
 import numpy as np
+import pytest
 
-from yapping import Decision, search
+from yapping import Decision, opening_probability, search
 
 
 class ComboEngine:
@@ -39,3 +40,7 @@ def test_search_finds_best_combo():
     assert result.actions == (1, 1)
     assert result.score == 4
     assert result.visited_states == 6
+
+
+def test_opening_probability():
+    assert opening_probability(40, 3, 5) == pytest.approx(0.3375506073)

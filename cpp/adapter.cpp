@@ -146,6 +146,26 @@ class DuelAdapter {
     return result;
   }
 
+  std::vector<uint32_t> cards(uint8_t player, uint8_t location) const {
+    ensure_duel();
+    std::vector<uint8_t> buffer(SIZE_MESSAGE_BUFFER);
+    const int length = query_field_card(duel_, player, location, QUERY_CODE,
+                                        buffer.data(), 0);
+    Reader reader(buffer.data(), length);
+    std::vector<uint32_t> result;
+    while (reader.remaining()) {
+      const auto record_length = reader.u32();
+      if (record_length == LEN_EMPTY) continue;
+      if (record_length < 12 || record_length - 4 > reader.remaining())
+        throw std::runtime_error("invalid OCGCore card query");
+      const auto flags = reader.u32();
+      const auto code = flags & QUERY_CODE ? reader.u32() : 0;
+      if (record_length > 12) reader.skip(record_length - 12);
+      if (code) result.push_back(code);
+    }
+    return result;
+  }
+
   py::bytes state_key() const {
     ensure_duel();
     std::vector<uint8_t> buffer(SIZE_MESSAGE_BUFFER);
@@ -576,5 +596,6 @@ PYBIND11_MODULE(_ocgcore, module) {
            py::arg("start_hand") = 5)
       .def("step", &DuelAdapter::step)
       .def("counts", &DuelAdapter::counts)
+      .def("cards", &DuelAdapter::cards)
       .def("state_key", &DuelAdapter::state_key);
 }

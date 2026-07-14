@@ -50,7 +50,7 @@ user.
 - global and per-card Lua script loading;
 - idle, chain, yes/no, option, position, zone, card, sum, and toggle decisions;
 - legal actions that retain player, card, location, sequence, and description;
-- field counts and a binary field-state key.
+- field counts, card identities by zone, and a binary field-state key.
 
 The main integration fixture executes the complete deterministic line in
 [`combos/albaz_swordsoul_full.yaml`](combos/albaz_swordsoul_full.yaml), including:
@@ -70,6 +70,44 @@ fixture test runs when `assets/cards.cdb` and the adjacent
 `fluorohydride-ygopro-scripts` checkout are available; otherwise it is skipped.
 Unsupported protocol messages raise an explicit error, and new prompt types are
 added only when canonical fixtures require them.
+
+## Adversarial combo search
+
+`python tools/analyze_ash.py` gives the opponent exactly one Ash Blossom,
+discovers every legal activation window in the canonical combo, replays each
+negation, and searches real legal continuations to the next turn. The current
+fixture exposes seven windows and identifies the Fallen of the White Dragon
+deck-summon trigger as the strongest choke point. Its best discovered recovery
+is to enter the End Phase and use Titaniklad to add Guiding Quem as follow-up.
+
+The initial evaluator is deliberately visible in `tools/analyze_ash.py`. It
+weights live interaction such as Mirrorjade and Branded Retribution, reusable
+engines such as Guiding Quem and Cartesia, follow-up in hand, and generic card
+advantage. The opponent minimizes this end-board score; the combo player
+maximizes it. These weights are a testable baseline, not learned truth.
+
+## Two-layer optimization model
+
+**Inner problem:** Given an exact opening hand and legal opponent responses,
+which line survives the worst interruption? Deterministic replay and minimax
+solve this tactical problem.
+
+**Outer problem:** Across all likely opening hands, how consistently can the
+deck reach a valuable board, recover through disruption, and avoid bricks or
+excessive garnets? Hypergeometric probabilities, hand enumeration, and later
+sampling aggregate the inner solver's results into deck-level analysis.
+
+## Roadmap
+
+1. Add real fixtures for Effect Veiler, Infinite Impermanence, Ghost Ogre,
+   Droll & Lock Bird, Nibiru, and Called by the Grave.
+2. Add matchup-specific evaluators and compare results with expert lines.
+3. Evaluate deck consistency by weighting the best adversarial line from each
+   sampled or enumerated opening hand, including bricks and garnets.
+4. Use Monte Carlo Tree Search when unknown hands and interruption
+   probabilities make exhaustive branching too large.
+5. Train policy/value models only after deterministic search can generate and
+   verify trustworthy state, legal-action, and outcome data.
 
 ## Development
 
