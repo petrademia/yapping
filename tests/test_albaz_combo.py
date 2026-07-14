@@ -18,6 +18,20 @@ from trace_albaz_combo import (  # noqa: E402
     fixture_deck,
     new_duel,
 )
+from analyze_ash import Snapshot, endboard_score  # noqa: E402
+from trace_albaz_combo import (  # noqa: E402
+    ASH_BLOSSOM,
+    EFFECT_VEILER,
+    INFINITE_IMPERMANENCE,
+    TITANIKLAD,
+)
+
+
+def step_action(duel, decision, kind, card=None):
+    for index, action in enumerate(decision["actions"]):
+        if action["kind"] == kind and (card is None or action["card"] == card):
+            return duel.step(index)
+    raise AssertionError(f"missing {kind} {card}: {decision['actions']}")
 
 
 @pytest.mark.skipif(
@@ -53,6 +67,47 @@ def test_fixture_can_model_three_ecclesia_copies():
             CELTIC_GUARDIAN, CELTIC_GUARDIAN]
     duel, _ = new_duel(opening_hand=hand, main_deck=deck)
     assert duel.cards(0, 1).count(INCREDIBLE_ECCLESIA) == 2
+
+
+@pytest.mark.parametrize("interruption", [ASH_BLOSSOM, EFFECT_VEILER,
+                                           INFINITE_IMPERMANENCE])
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_fallen_ecclesia_recovers_after_hand_trap(interruption):
+    hand = [FALLEN_WHITE, INCREDIBLE_ECCLESIA, CELTIC_GUARDIAN,
+            CELTIC_GUARDIAN, CELTIC_GUARDIAN]
+    duel, decision = new_duel(opponent_card=interruption, opening_hand=hand)
+    decision = step_action(duel, decision, "activate", FALLEN_WHITE)
+    decision = step_action(duel, decision, "select_card", TITANIKLAD)
+    for kind in ("pass", "pass", "place", "position", "yes"):
+        decision = step_action(duel, decision, kind,
+                               FALLEN_WHITE if kind in {"position", "yes"} else None)
+    decision = step_action(duel, decision, "chain", interruption)
+    while not (any(action["kind"] == "summon" and
+                   action["card"] == INCREDIBLE_ECCLESIA
+                   for action in decision["actions"])):
+        if any(action["kind"] == "select_card" and
+               action["card"] == FALLEN_WHITE for action in decision["actions"]):
+            decision = step_action(duel, decision, "select_card", FALLEN_WHITE)
+        elif any(action["kind"] == "place" for action in decision["actions"]):
+            decision = step_action(duel, decision, "place")
+        else:
+            decision = step_action(duel, decision, "pass")
+    decision = step_action(duel, decision, "summon", INCREDIBLE_ECCLESIA)
+    decision = step_action(duel, decision, "place")
+    zones = {
+        "hand": duel.cards(0, 2),
+        "monster": duel.cards(0, 4),
+        "spell_trap": duel.cards(0, 8),
+        "grave": duel.cards(0, 16),
+        "banished": duel.cards(0, 32),
+    }
+    snapshot = Snapshot(decision, duel.counts(), zones, b"recovery", ())
+    assert FALLEN_WHITE in zones["monster"]
+    assert INCREDIBLE_ECCLESIA in zones["monster"]
+    assert endboard_score(snapshot) == pytest.approx(3.25)
 
 
 def test_fixture_card_aliases_resolve_for_command_line_hands():
