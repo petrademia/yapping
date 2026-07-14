@@ -135,3 +135,6 @@ def test_additional_interruptions_have_legal_fixture(interruption, window):
     if interruption == "nibiru":
         assert '"monster0": 1' in result.stdout  # Primal Being Token
         assert '"monster1": 1' in result.stdout  # Nibiru, the Primal Being
+    if interruption == "called_by":
+        assert '"targets": [41373230]' in result.stdout  # Titaniklad the Ash Dragon
+        assert '"grave1": 1' in result.stdout  # Called by the Grave resolved from its Set zone
