@@ -1,10 +1,9 @@
-"""Choose an opening action without revealing whether the opponent holds Ash."""
+"""Choose an opening action without revealing whether the opponent holds a hand trap."""
 
 import argparse
 
 from analyze_ash import endboard_score, replay
-from search_opening import legal
-from trace_albaz_combo import ASH_BLOSSOM
+from search_opening import CARDS, legal
 from yapping import hidden_minimax_replay
 
 
@@ -15,8 +14,8 @@ def key(snapshot, index):
     ))
 
 
-def search(max_nodes=10_000, max_depth=180):
-    cards = {"ash": ASH_BLOSSOM, "no_ash": None}
+def search(interruption="ash", max_nodes=10_000, max_depth=180):
+    cards = {interruption: CARDS[interruption], "none": None}
     result = hidden_minimax_replay(
         lambda scenario, path: replay(path, cards[scenario]),
         legal,
@@ -28,7 +27,7 @@ def search(max_nodes=10_000, max_depth=180):
         max_nodes=max_nodes,
         max_depth=max_depth,
     )
-    print("Opening-hand maximin against hidden Ash")
+    print(f"Opening-hand maximin against hidden {interruption}")
     print(f"common first action: {result.action}")
     print(f"worst-case score: {result.score:.2f}")
     print(f"visited states: {result.visited_states}")
@@ -38,7 +37,8 @@ def search(max_nodes=10_000, max_depth=180):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("interruption", choices=CARDS, default="ash", nargs="?")
     parser.add_argument("--max-nodes", type=int, default=10_000)
     parser.add_argument("--max-depth", type=int, default=180)
     arguments = parser.parse_args()
-    search(arguments.max_nodes, arguments.max_depth)
+    search(arguments.interruption, arguments.max_nodes, arguments.max_depth)

@@ -162,13 +162,16 @@ YAPPING models three adversarial experiments:
 - **Probabilistic hidden hand:** choose one pre-reveal action with the highest
   probability-weighted outcome from an opponent deck model.
 
-`python tools/search_hidden_ash.py` now connects this model to full opening
-branching for Ash versus no Ash. It intersects player-0 actions across both
-worlds, retains both worlds after an indistinguishable opponent pass, and
-splits them only when Ash is publicly activated. Its belief-state alpha-beta
+`python tools/search_hidden_ash.py ash` now connects this model to full opening
+branching for Ash versus no Ash; replace `ash` with any known hand-trap name to
+run the same experiment. It intersects player-0 actions across both worlds,
+retains both worlds after an indistinguishable opponent pass, and splits them
+only when the interruption is publicly activated. Its belief-state alpha-beta
 search completes the canonical Ash/no-Ash fixture in 4,298 state visits with
 the same 8.75 worst-case score as the known-Ash search. It still reports
 `complete: false` if a future hand exceeds the configured state budget.
+The canonical Veiler/no-Veiler experiment also completes (4,043 states, 8.75
+worst-case score).
 
 ## Roadmap
 
