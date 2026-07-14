@@ -143,6 +143,10 @@ maximizes it. These weights are a testable baseline, not learned truth.
 “Provisional” means the node limit evaluated nonterminal leaves with the
 heuristic; it is deliberately not presented as an optimal score.
 
+The canonical hidden-hand experiments also complete for Ash (4,298 states),
+Veiler (4,043), Infinite Impermanence (4,075), and Droll (4,851). Each forces
+the combo player to choose before seeing whether the interruption exists.
+
 ## Two-layer optimization model
 
 **Inner problem:** Given an exact opening hand and legal opponent responses,
