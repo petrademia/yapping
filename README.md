@@ -138,7 +138,7 @@ maximizes it. These weights are a testable baseline, not learned truth.
 | Effect Veiler | Complete (1,317 states) | Timing and target report |
 | Infinite Impermanence | Complete (1,390 states) | Timing and target report |
 | Droll & Lock Bird | Complete (8,696 states) | Timing and recovery report |
-| Ghost Ogre | Provisional at 20,000 states | Legal timing/recovery fixture |
+| Ghost Ogre | Complete (22,756 states) | Legal timing/recovery fixture |
 | Nibiru | Provisional at 10,000 states | Legal multi-tribute timing/recovery fixture |
 | Called by the Grave | Not a turn-one hand-trap model | Pre-set backrow fixture |
 
@@ -185,8 +185,7 @@ opening hand rather than only the one-card baseline.
 
 ## Roadmap
 
-1. Add targeted move ordering and exhaustive opening reports for Ghost Ogre
-   and Nibiru.
+1. Add targeted move ordering and an exhaustive opening report for Nibiru.
 2. Add matchup-specific evaluators and compare results with expert lines.
 3. Evaluate deck consistency by weighting the best adversarial line from each
    sampled or enumerated opening hand, including bricks and garnets.
