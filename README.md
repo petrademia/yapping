@@ -92,6 +92,11 @@ The same command accepts `veiler`, `impermanence`, `droll`, `nibiru`, and
 Called by the Grave is intentionally not in this list; see its separate model
 below.
 
+For the one-card baseline, known Effect Veiler and Infinite Impermanence also
+complete from the opening (2,250 and 4,719 states respectively). Both optimally
+negate Fallen and leave the same 8.75 recovery line: Titaniklad supplies Guiding
+Quem, which sends and returns Blazing Cartesia.
+
 Pass `--hand` followed by five card IDs to search an exact dealt opening hand,
 for example `--hand 73819701 55273560 91152256 91152256 91152256` for Fallen
 of the White Dragon plus Incredible Ecclesia and three fillers. Those cards
