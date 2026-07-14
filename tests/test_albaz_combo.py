@@ -14,6 +14,7 @@ from trace_albaz_combo import (  # noqa: E402
     CELTIC_GUARDIAN,
     FALLEN_WHITE,
     INCREDIBLE_ECCLESIA,
+    card_id,
     new_duel,
 )
 
@@ -42,6 +43,13 @@ def test_fixture_deals_requested_exact_opening_hand():
             CELTIC_GUARDIAN, CELTIC_GUARDIAN]
     duel, _ = new_duel(opening_hand=hand)
     assert sorted(duel.cards(0, 2)) == sorted(hand)
+
+
+def test_fixture_card_aliases_resolve_for_command_line_hands():
+    assert card_id("Fallen White") == FALLEN_WHITE
+    assert card_id("incredible_ecclesia") == INCREDIBLE_ECCLESIA
+    with pytest.raises(ValueError, match="unknown fixture card"):
+        card_id("not_a_card")
 
 
 @pytest.mark.skipif(

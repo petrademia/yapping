@@ -101,11 +101,11 @@ Known Droll & Lock Bird also completes from the opening in 8,696 states. Its
 15.75 worst-case line changes the route instead of merely recovering from a
 negated Fallen, demonstrating why each interruption needs its own search.
 
-Pass `--hand` followed by five card IDs to search an exact dealt opening hand,
-for example `--hand 73819701 55273560 91152256 91152256 91152256` for Fallen
-of the White Dragon plus Incredible Ecclesia and three fillers. Those cards
-are removed from the deck before the deterministic deal, so deck searches
-correctly account for a card already being in hand.
+Pass `--hand` followed by five card IDs or fixture aliases to search an exact
+dealt opening hand, for example `--hand fallen incredible_ecclesia
+celtic_guardian celtic_guardian celtic_guardian`. Those cards are removed from
+the deck before the deterministic deal, so deck searches correctly account for
+a card already being in hand.
 
 An opening report is optimal only when it says `complete: True`. At a node
 limit, its displayed value is explicitly a provisional heuristic score rather

@@ -30,6 +30,37 @@ DROLL_LOCK_BIRD = 94145021
 NIBIRU = 27204311
 CALLED_BY_THE_GRAVE = 24224830
 
+CARD_IDS = {
+    "fallen": FALLEN_WHITE,
+    "fallen_white": FALLEN_WHITE,
+    "titaniklad": TITANIKLAD,
+    "incredible_ecclesia": INCREDIBLE_ECCLESIA,
+    "golden_swordsoul": GOLDEN_SWORDSOUL,
+    "ecclesia_dark": ECCLESIA_DARK_DRAGON,
+    "guiding_quem": GUIDING_QUEM,
+    "kitt": TRIBRIGADE_SPRINGANS_KITT,
+    "three_champions": THREE_CHAMPIONS,
+    "cartesia": BLAZING_CARTESIA,
+    "albion": ALBION_BRANDED,
+    "mirrorjade": MIRRORJADE,
+    "dogmatika_ecclesia": DOGMATIKA_ECCLESIA,
+    "fallen_virtuous": FALLEN_VIRTUOUS,
+    "mercourier": MERCOURIER,
+    "branded_retribution": BRANDED_RETRIBUTION,
+    "celtic_guardian": CELTIC_GUARDIAN,
+}
+
+
+def card_id(value):
+    """Resolve a fixture card alias or numeric card ID for command-line hands."""
+    normalized = value.strip().lower().replace(" ", "_").replace("-", "_")
+    if normalized in CARD_IDS:
+        return CARD_IDS[normalized]
+    try:
+        return int(value)
+    except ValueError as error:
+        raise ValueError(f"unknown fixture card: {value}") from error
+
 ROOT = Path(__file__).parents[1]
 SCRIPTS = ROOT.parent / "fluorohydride-ygopro-scripts"
 INTERRUPTIONS = {

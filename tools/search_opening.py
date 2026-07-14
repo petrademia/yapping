@@ -12,6 +12,7 @@ from trace_albaz_combo import (
     GHOST_OGRE,
     INFINITE_IMPERMANENCE,
     NIBIRU,
+    card_id,
 )
 from yapping import minimax_replay
 
@@ -95,6 +96,6 @@ if __name__ == "__main__":
     parser.add_argument("interruption", choices=CARDS, default="ash", nargs="?")
     parser.add_argument("--max-nodes", type=int, default=10_000)
     parser.add_argument("--max-depth", type=int, default=180)
-    parser.add_argument("--hand", type=int, nargs=5, metavar="CARD_ID")
+    parser.add_argument("--hand", type=card_id, nargs=5, metavar="CARD")
     arguments = parser.parse_args()
     search(arguments.interruption, arguments.max_nodes, arguments.max_depth, arguments.hand)
