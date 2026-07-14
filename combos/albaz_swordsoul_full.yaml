@@ -1,0 +1,98 @@
+name: Fallen White Dragon full Albaz/Swordsoul line
+ruleset: OCG
+first_player: 0
+opponent_policy: decline_optional_responses
+
+cards:
+  fallen_white: {id: 73819701, name: Fallen of the White Dragon}
+  titaniklad: {id: 41373230, name: Titaniklad the Ash Dragon}
+  incredible_ecclesia: {id: 55273560, name: "Incredible Ecclesia, the Virtuous"}
+  golden_swordsoul: {id: 82489470, name: The Golden Swordsoul}
+  ecclesia_dark: {id: 78397661, name: Ecclesia and the Dark Dragon}
+  guiding_quem: {id: 45883110, name: "Guiding Quem, the Virtuous"}
+  springans_kitt: {id: 19304410, name: Tri-Brigade Springans Kitt}
+  three_champions: {id: 74405783, name: The Three Champions of Swordsoul}
+  blazing_cartesia: {id: 95515789, name: "Blazing Cartesia, the Virtuous"}
+  albion_branded: {id: 87746184, name: Albion the Branded Dragon}
+  mirrorjade: {id: 44146295, name: Mirrorjade the Iceblade Dragon}
+  dogmatika_ecclesia: {id: 60303688, name: "Dogmatika Ecclesia, the Virtuous"}
+  fallen_virtuous: {id: 30271097, name: The Fallen & The Virtuous}
+  devours_dogma: {id: 76666602, name: The Dragon that Devours the Dogma}
+  mercourier: {id: 19096726, name: Tri-Brigade Mercourier}
+  branded_retribution: {id: 17751597, name: Branded Retribution}
+
+starting_hand:
+  - fallen_white
+
+main_deck_required:
+  - incredible_ecclesia
+  - golden_swordsoul
+  - guiding_quem
+  - springans_kitt
+  - blazing_cartesia
+  - dogmatika_ecclesia
+  - fallen_virtuous
+  - mercourier
+  - branded_retribution
+
+extra_deck_required:
+  - titaniklad
+  - ecclesia_dark
+  - three_champions
+  - albion_branded
+  - mirrorjade
+  - devours_dogma
+
+steps:
+  - activate: fallen_white
+    from: hand
+    send_from_extra: titaniklad
+  - trigger: fallen_white
+    summon_from_deck: incredible_ecclesia
+  - activate: incredible_ecclesia
+    summon_from_deck: golden_swordsoul
+  - synchro_summon: ecclesia_dark
+    materials: [golden_swordsoul, fallen_white]
+  - activate: ecclesia_dark
+    summon_from_deck: guiding_quem
+  - chain:
+      cl1: {activate: guiding_quem}
+      cl2: {activate: golden_swordsoul}
+  - resolve:
+      cl2: {summon_from_grave: incredible_ecclesia}
+      cl1: {send_from_deck: springans_kitt}
+  - trigger: springans_kitt
+    summon_from_grave: fallen_white
+  - synchro_summon: three_champions
+    materials: [incredible_ecclesia, fallen_white]
+  - chain:
+      cl1: {activate: three_champions}
+      cl2: {activate: guiding_quem, target: fallen_white}
+  - resolve:
+      cl2: {summon_from_grave: fallen_white}
+      cl1: {add_from_deck: blazing_cartesia}
+  - activate: blazing_cartesia
+    from: hand
+    result: special_summon_self
+  - fusion_summon: albion_branded
+    materials: [fallen_white, three_champions]
+  - activate: albion_branded
+    fusion_summon: mirrorjade
+    materials_from_grave: [fallen_white, three_champions]
+  - move_to_phase: end
+  - trigger: titaniklad
+    summon_from_deck: dogmatika_ecclesia
+  - trigger: dogmatika_ecclesia
+    add_from_deck: fallen_virtuous
+  - activate: fallen_virtuous
+    send_from_extra: devours_dogma
+    target: albion_branded
+    result: destroy_target
+  - trigger: devours_dogma
+    add_from_deck: mercourier
+  - trigger: albion_branded
+    set_from_deck: branded_retribution
+  - trigger: incredible_ecclesia
+    result: return_from_grave_to_hand
+  - mandatory_end_phase_return: ecclesia_dark
+    result: return_from_banishment
