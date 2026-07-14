@@ -35,23 +35,32 @@ def minimax_replay(
 ) -> MinimaxResult:
     """Alpha-beta minimax for deterministic engines reconstructed by replay."""
     visited = 0
+    cache = {}
 
     def visit(path, depth, alpha, beta):
         nonlocal visited
         node = replay(path)
+        cache_key = (getattr(node, "key", repr(node)), depth)
+        if cache_key in cache:
+            score, actions = cache[cache_key]
+            return score, actions, True, True
         visited += 1
         actions = tuple(legal_actions(node))
         is_terminal = terminal(node)
         if is_terminal or depth == max_depth or not actions or visited >= max_nodes:
-            return float(evaluate(node)), tuple(), is_terminal
+            return float(evaluate(node)), tuple(), is_terminal, is_terminal
 
         maximize = owner(node) == 0
         best_score = float("-inf") if maximize else float("inf")
         best_path = tuple()
         complete = True
+        exact = True
         for action in actions:
-            score, suffix, child_complete = visit(path + (action,), depth + 1, alpha, beta)
+            score, suffix, child_complete, child_exact = visit(
+                path + (action,), depth + 1, alpha, beta
+            )
             complete &= child_complete
+            exact &= child_exact
             if (maximize and score > best_score) or (not maximize and score < best_score):
                 best_score, best_path = score, (action,) + suffix
             if maximize:
@@ -59,13 +68,15 @@ def minimax_replay(
             else:
                 beta = min(beta, best_score)
             if beta <= alpha:
-                break
+                return best_score, best_path, complete, False
             if visited >= max_nodes:
                 complete = False
                 break
-        return best_score, best_path, complete
+        if exact:
+            cache[cache_key] = best_score, best_path
+        return best_score, best_path, complete, exact
 
-    score, actions, complete = visit(tuple(), 0, float("-inf"), float("inf"))
+    score, actions, complete, _ = visit(tuple(), 0, float("-inf"), float("inf"))
     return MinimaxResult(actions, score, visited, complete)
 
 

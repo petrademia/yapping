@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+from types import SimpleNamespace
 
 from yapping import (
     Decision,
@@ -78,6 +79,26 @@ def test_minimax_replay_chooses_strongest_worst_case():
     )
     assert result.actions == (0, 0)
     assert result.score == 3
+    assert result.complete
+
+
+def test_minimax_replay_reuses_exact_transposition():
+    def replay(path):
+        depth = len(path)
+        key = (b"root" if depth == 0 else b"middle" if depth == 1 else b"terminal")
+        return SimpleNamespace(key=key, depth=depth)
+
+    result = minimax_replay(
+        replay,
+        lambda node: () if node.depth == 2 else (0, 1),
+        lambda _node: 5.0,
+        lambda node: node.depth == 2,
+        lambda node: node.depth % 2,
+        max_depth=2,
+        max_nodes=20,
+    )
+    assert result.actions == (0, 0)
+    assert result.visited_states == 4
     assert result.complete
 
 
