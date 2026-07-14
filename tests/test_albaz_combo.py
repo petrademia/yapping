@@ -132,3 +132,6 @@ def test_additional_interruptions_have_legal_fixture(interruption, window):
     )
     assert f"INTERRUPTION ACTIVATE {window}: {interruption}" in result.stdout
     assert "INTERRUPTION RESULT" in result.stdout
+    if interruption == "nibiru":
+        assert '"monster0": 1' in result.stdout  # Primal Being Token
+        assert '"monster1": 1' in result.stdout  # Nibiru, the Primal Being
