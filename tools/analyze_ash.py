@@ -128,12 +128,17 @@ def action_name(action):
 
 
 def endboard_score(snapshot):
+    return sum(score_breakdown(snapshot).values())
+
+
+def score_breakdown(snapshot):
     zones = snapshot.zones
-    score = snapshot.counts["hand0"] * 0.25
-    score += sum(CARD_WEIGHTS.get(card, 0.5) for card in zones["monster"])
-    score += sum(CARD_WEIGHTS.get(card, 0.5) for card in zones["spell_trap"])
-    score += sum(CARD_WEIGHTS.get(card, 0) for card in zones["hand"])
-    return score
+    return {
+        "generic_hand": snapshot.counts["hand0"] * 0.25,
+        "monsters": sum(CARD_WEIGHTS.get(card, 0.5) for card in zones["monster"]),
+        "spell_traps": sum(CARD_WEIGHTS.get(card, 0.5) for card in zones["spell_trap"]),
+        "named_hand_followup": sum(CARD_WEIGHTS.get(card, 0) for card in zones["hand"]),
+    }
 
 
 def legal_indices(snapshot):
@@ -199,6 +204,7 @@ def analyze():
     actions = recovery.snapshot.actions[-len(recovery.suffix):] if recovery.suffix else ()
     print("Recovery actions: " + " -> ".join(actions))
     print("End board: " + json.dumps(recovery.snapshot.zones, sort_keys=True))
+    print("score breakdown: " + json.dumps(score_breakdown(recovery.snapshot), sort_keys=True))
     print(f"\nOpen 3 Ash in 40 cards / 5-card hand: {ash_probability:.2%}")
     print(f"Uninterrupted score: {full_score:.2f}")
     print(f"Expected score versus Ash/no-Ash: {expected_score:.2f}")

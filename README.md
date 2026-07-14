@@ -110,6 +110,8 @@ correctly account for a card already being in hand.
 An opening report is optimal only when it says `complete: True`. At a node
 limit, its displayed value is explicitly a provisional heuristic score rather
 than a proven bound.
+Each opening report also prints the evaluator breakdown: board monsters,
+spell/traps, named follow-up in hand, and generic hand advantage.
 
 `python tools/analyze_monster_negation.py veiler` and the corresponding
 `impermanence` command enumerate both legal timing windows and legal monster

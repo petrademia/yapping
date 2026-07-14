@@ -1,8 +1,9 @@
 """Search the Albaz fixture from its opening decision against a known hand trap."""
 
 import argparse
+import json
 
-from analyze_ash import CARD_WEIGHTS, action_name, endboard_score, replay
+from analyze_ash import CARD_WEIGHTS, action_name, endboard_score, replay, score_breakdown
 from trace_albaz_combo import (
     ASH_BLOSSOM,
     CELTIC_GUARDIAN,
@@ -85,6 +86,7 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
     print(f"complete: {result.complete}")
     print("actions: " + " -> ".join(final.actions))
     print(f"end board: {final.zones}")
+    print("score breakdown: " + json.dumps(score_breakdown(final), sort_keys=True))
     return result, final
 
 

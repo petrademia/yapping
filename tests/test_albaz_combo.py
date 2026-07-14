@@ -62,6 +62,7 @@ def test_ash_finds_choke_point_and_recovery():
     assert "Recovery actions: end_phase" in result.stdout
     assert "select_card:45883110" in result.stdout  # Guiding Quem
     assert "select_card:95515789" in result.stdout  # Blazing Cartesia
+    assert "score breakdown:" in result.stdout
 
 
 @pytest.mark.skipif(
