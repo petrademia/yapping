@@ -31,8 +31,6 @@ def search(max_nodes=10_000, max_depth=180):
     print("Opening-hand maximin against hidden Ash")
     print(f"common first action: {result.action}")
     print(f"worst-case score: {result.score:.2f}")
-    print("scenario scores: " + ", ".join(
-        f"{scenario}={score:.2f}" for scenario, score in result.scenario_scores.items()))
     print(f"visited states: {result.visited_states}")
     print(f"complete: {result.complete}")
     return result

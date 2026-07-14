@@ -82,20 +82,25 @@ def test_minimax_replay_chooses_strongest_worst_case():
 
 
 def test_hidden_minimax_keeps_worlds_together_after_pass():
-    # The greedy start looks best only if player 0 is allowed to peek at Ash.
+    # Ash may pass and remain hidden, or activate and reveal its world.
     payoffs = {
-        ("ash", "greedy"): 1, ("no_ash", "greedy"): 9,
-        ("ash", "safe"): 5, ("no_ash", "safe"): 5,
+        ("ash", "greedy", "pass"): 9, ("ash", "greedy", "hit"): 1,
+        ("no_ash", "greedy", "pass"): 9,
+        ("ash", "safe", "pass"): 5, ("ash", "safe", "hit"): 5,
+        ("no_ash", "safe", "pass"): 5,
     }
     result = hidden_minimax_replay(
         lambda scenario, path: (scenario, path),
-        lambda state: () if state[1] else (0, 1),
-        lambda _state, index: ("greedy", "safe")[index],
-        lambda state: payoffs[(state[0], ("greedy", "safe")[state[1][0]])],
-        lambda state: bool(state[1]),
-        lambda _state: 0,
+        lambda state: (() if len(state[1]) == 2 else
+                       ((0, 1) if not state[1] or state[0] == "ash" else (0,))),
+        lambda state, index: (("greedy", "safe")[index] if not state[1] else
+                              (("pass", "hit")[index] if state[0] == "ash" else "pass")),
+        lambda state: payoffs[(state[0], ("greedy", "safe")[state[1][0]],
+                               (("pass", "hit")[state[1][1]] if state[0] == "ash" else "pass"))],
+        lambda state: len(state[1]) == 2,
+        lambda state: 0 if not state[1] else 1,
         ("ash", "no_ash"),
-        max_depth=1,
+        max_depth=2,
         max_nodes=20,
     )
     assert result.action == "safe"

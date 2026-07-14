@@ -90,22 +90,20 @@ def hidden_minimax_replay(
     visited = 0
     cache = {}
 
-    def visit(paths, depth):
+    def visit(paths, depth, alpha, beta):
         nonlocal visited
         nodes = {scenario: replay(scenario, path) for scenario, path in paths.items()}
         cache_key = tuple(sorted(
             (scenario, getattr(node, "key", repr(node))) for scenario, node in nodes.items()
         ))
         if cache_key in cache:
-            return cache[cache_key]
+            value, action = cache[cache_key]
+            return value, action, True, True
         visited += len(nodes)
-        complete = visited < max_nodes
-        if (depth >= max_depth or not complete
-                or all(terminal(node) for node in nodes.values())):
-            result = ({scenario: float(evaluate(node)) for scenario, node in nodes.items()},
-                      None, all(terminal(node) for node in nodes.values()) and complete)
-            cache[cache_key] = result
-            return result
+        is_terminal = all(terminal(node) for node in nodes.values())
+        if depth >= max_depth or visited >= max_nodes or is_terminal:
+            return (min(float(evaluate(node)) for node in nodes.values()), None,
+                    is_terminal and visited < max_nodes, is_terminal)
 
         node_owner = {owner(node) for node in nodes.values()}
         if len(node_owner) != 1:
@@ -117,41 +115,49 @@ def hidden_minimax_replay(
                     keyed.setdefault(action_key(node, index), {})[scenario] = index
             common = [key for key, indices in keyed.items() if len(indices) == len(nodes)]
             if not common:
-                result = ({scenario: float(evaluate(node)) for scenario, node in nodes.items()},
-                          None, False)
-                cache[cache_key] = result
-                return result
-            candidates = []
+                return min(float(evaluate(node)) for node in nodes.values()), None, False, False
+            best, best_key, complete, exact = float("-inf"), None, True, True
             for key in common:
                 child_paths = {scenario: paths[scenario] + (keyed[key][scenario],)
                                for scenario in nodes}
-                scores, _, child_complete = visit(child_paths, depth + 1)
-                candidates.append((min(scores.values()), key, scores, child_complete))
-            score, key, scores, child_complete = max(candidates, key=lambda item: item[0])
-            result = scores, key, complete and all(item[3] for item in candidates)
-            cache[cache_key] = result
-            return result
+                value, _, child_complete, child_exact = visit(child_paths, depth + 1, alpha, beta)
+                complete &= child_complete
+                exact &= child_exact
+                if value > best:
+                    best, best_key = value, key
+                alpha = max(alpha, best)
+                if beta <= alpha:
+                    return best, best_key, complete, False
+            if exact:
+                cache[cache_key] = best, best_key
+            return best, best_key, complete, exact
 
         choices = [
             [(scenario, index, action_key(node, index)) for index in legal_actions(node)]
             for scenario, node in nodes.items()
         ]
-        candidates = []
+        best, complete, exact = float("inf"), True, True
         for policy in product(*choices):
             groups = {}
             for scenario, index, key in policy:
                 groups.setdefault(key, {})[scenario] = paths[scenario] + (index,)
-            scores, policy_complete = {}, complete
+            value = float("inf")
             for group in groups.values():
-                child_scores, _, child_complete = visit(group, depth + 1)
-                scores.update(child_scores)
-                policy_complete &= child_complete
-            candidates.append((min(scores.values()), scores, policy_complete))
-        _, scores, child_complete = min(candidates, key=lambda item: item[0])
-        result = scores, None, complete and all(item[2] for item in candidates)
-        cache[cache_key] = result
-        return result
+                child, _, child_complete, child_exact = visit(group, depth + 1, alpha, beta)
+                complete &= child_complete
+                exact &= child_exact
+                value = min(value, child)
+                if value <= alpha:
+                    break
+            best = min(best, value)
+            beta = min(beta, best)
+            if beta <= alpha:
+                return best, None, complete, False
+        if exact:
+            cache[cache_key] = best, None
+        return best, None, complete, exact
 
-    paths = {scenario: tuple() for scenario in scenarios}
-    scores, action, complete = visit(paths, 0)
-    return HiddenMinimaxResult(action, min(scores.values()), scores, visited, complete)
+    value, action, complete, _ = visit(
+        {scenario: tuple() for scenario in scenarios}, 0, float("-inf"), float("inf")
+    )
+    return HiddenMinimaxResult(action, value, {}, visited, complete)

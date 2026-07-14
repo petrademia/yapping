@@ -120,9 +120,9 @@ YAPPING models three adversarial experiments:
 `python tools/search_hidden_ash.py` now connects this model to full opening
 branching for Ash versus no Ash. It intersects player-0 actions across both
 worlds, retains both worlds after an indistinguishable opponent pass, and
-splits them only when Ash is publicly activated. It reports `complete: false`
-when its state budget prevents an optimality claim; alpha-beta pruning is the
-next scaling step for this information-set search.
+splits them only when Ash is publicly activated. Its belief-state alpha-beta
+search reports `complete: false` when its state budget prevents an optimality
+claim; move ordering and stronger bounds are the next scaling step.
 
 ## Roadmap
 
