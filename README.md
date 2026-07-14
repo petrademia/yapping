@@ -166,13 +166,14 @@ YAPPING models three adversarial experiments:
 branching for Ash versus no Ash. It intersects player-0 actions across both
 worlds, retains both worlds after an indistinguishable opponent pass, and
 splits them only when Ash is publicly activated. Its belief-state alpha-beta
-search reports `complete: false` when its state budget prevents an optimality
-claim; move ordering and stronger bounds are the next scaling step.
+search completes the canonical Ash/no-Ash fixture in 4,298 state visits with
+the same 8.75 worst-case score as the known-Ash search. It still reports
+`complete: false` if a future hand exceeds the configured state budget.
 
 ## Roadmap
 
-1. Add alpha-beta pruning and target-aware exhaustive reports for every
-   interruption fixture.
+1. Add targeted move ordering and exhaustive opening reports for Ghost Ogre
+   and Nibiru.
 2. Add matchup-specific evaluators and compare results with expert lines.
 3. Evaluate deck consistency by weighting the best adversarial line from each
    sampled or enumerated opening hand, including bricks and garnets.

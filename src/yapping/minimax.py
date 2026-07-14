@@ -124,14 +124,24 @@ def hidden_minimax_replay(
         cache_key = tuple(sorted(
             (scenario, getattr(node, "key", repr(node))) for scenario, node in nodes.items()
         ))
+        alpha_in, beta_in = alpha, beta
         if cache_key in cache:
-            value, action = cache[cache_key]
-            return value, action, True, True
+            value, action, bound = cache[cache_key]
+            if bound == "exact":
+                return value, action, True, True
+            if bound == "lower":
+                alpha = max(alpha, value)
+            else:
+                beta = min(beta, value)
+            if beta <= alpha:
+                return value, action, True, False
         visited += len(nodes)
         is_terminal = all(terminal(node) for node in nodes.values())
         if depth >= max_depth or visited >= max_nodes or is_terminal:
-            return (min(float(evaluate(node)) for node in nodes.values()), None,
-                    is_terminal and visited < max_nodes, is_terminal)
+            value = min(float(evaluate(node)) for node in nodes.values())
+            if is_terminal:
+                cache[cache_key] = value, None, "exact"
+            return value, None, is_terminal and visited < max_nodes, is_terminal
 
         node_owner = {owner(node) for node in nodes.values()}
         if len(node_owner) != 1:
@@ -144,46 +154,56 @@ def hidden_minimax_replay(
             common = [key for key, indices in keyed.items() if len(indices) == len(nodes)]
             if not common:
                 return min(float(evaluate(node)) for node in nodes.values()), None, False, False
-            best, best_key, complete, exact = float("-inf"), None, True, True
+            best, best_key, complete = float("-inf"), None, True
             for key in common:
                 child_paths = {scenario: paths[scenario] + (keyed[key][scenario],)
                                for scenario in nodes}
-                value, _, child_complete, child_exact = visit(child_paths, depth + 1, alpha, beta)
+                value, _, child_complete, _ = visit(child_paths, depth + 1, alpha, beta)
                 complete &= child_complete
-                exact &= child_exact
                 if value > best:
                     best, best_key = value, key
                 alpha = max(alpha, best)
                 if beta <= alpha:
+                    if complete:
+                        cache[cache_key] = best, best_key, "lower"
                     return best, best_key, complete, False
-            if exact:
-                cache[cache_key] = best, best_key
-            return best, best_key, complete, exact
+            if complete:
+                bound = ("upper" if best <= alpha_in else
+                         "lower" if best >= beta_in else "exact")
+                cache[cache_key] = best, best_key, bound
+            return best, best_key, complete, complete and cache.get(
+                cache_key, (None, None, None)
+            )[2] == "exact"
 
         choices = [
             [(scenario, index, action_key(node, index)) for index in legal_actions(node)]
             for scenario, node in nodes.items()
         ]
-        best, complete, exact = float("inf"), True, True
+        best, complete = float("inf"), True
         for policy in product(*choices):
             groups = {}
             for scenario, index, key in policy:
                 groups.setdefault(key, {})[scenario] = paths[scenario] + (index,)
             value = float("inf")
             for group in groups.values():
-                child, _, child_complete, child_exact = visit(group, depth + 1, alpha, beta)
+                child, _, child_complete, _ = visit(group, depth + 1, alpha, beta)
                 complete &= child_complete
-                exact &= child_exact
                 value = min(value, child)
                 if value <= alpha:
                     break
             best = min(best, value)
             beta = min(beta, best)
             if beta <= alpha:
+                if complete:
+                    cache[cache_key] = best, None, "upper"
                 return best, None, complete, False
-        if exact:
-            cache[cache_key] = best, None
-        return best, None, complete, exact
+        if complete:
+            bound = ("upper" if best <= alpha_in else
+                     "lower" if best >= beta_in else "exact")
+            cache[cache_key] = best, None, bound
+        return best, None, complete, complete and cache.get(
+            cache_key, (None, None, None)
+        )[2] == "exact"
 
     value, action, complete, _ = visit(
         {scenario: tuple() for scenario in scenarios}, 0, float("-inf"), float("inf")
