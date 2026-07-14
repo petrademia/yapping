@@ -87,6 +87,11 @@ decision rather than fixing the combo prefix. On the canonical hand it visits
 abstraction, chooses Titaniklad as the Extra Deck send, and reaches a worst-case
 score of 8.75 after the opponent's optimal Ash timing.
 
+The same command accepts `veiler`, `impermanence`, `droll`, `nibiru`, and
+`ghost_ogre` to search the opening decision against one known legal hand trap.
+Called by the Grave is intentionally not in this list; see its separate model
+below.
+
 `python tools/analyze_monster_negation.py veiler` and the corresponding
 `impermanence` command enumerate both legal timing windows and legal monster
 targets. The native adapter decodes zone choices from the selecting player's

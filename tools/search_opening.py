@@ -3,11 +3,27 @@
 import argparse
 
 from analyze_ash import action_name, endboard_score, replay
-from trace_albaz_combo import ASH_BLOSSOM, CELTIC_GUARDIAN
+from trace_albaz_combo import (
+    ASH_BLOSSOM,
+    CELTIC_GUARDIAN,
+    DROLL_LOCK_BIRD,
+    EFFECT_VEILER,
+    GHOST_OGRE,
+    INFINITE_IMPERMANENCE,
+    NIBIRU,
+)
 from yapping import minimax_replay
 
 
-CARDS = {"ash": ASH_BLOSSOM}
+# Cards that can legally interrupt the opponent's first turn from hand.
+CARDS = {
+    "ash": ASH_BLOSSOM,
+    "veiler": EFFECT_VEILER,
+    "impermanence": INFINITE_IMPERMANENCE,
+    "droll": DROLL_LOCK_BIRD,
+    "nibiru": NIBIRU,
+    "ghost_ogre": GHOST_OGRE,
+}
 SKIP_KINDS = {"battle_phase", "shuffle"}
 MAX_PRIORITY = {
     "activate": 0,

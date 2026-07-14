@@ -46,6 +46,23 @@ def test_ash_finds_choke_point_and_recovery():
     assert "select_card:95515789" in result.stdout  # Blazing Cartesia
 
 
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_opening_minimax_handles_known_veiler():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/search_opening.py"), "veiler"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "complete: True" in result.stdout
+    assert "score: 8.75" in result.stdout
+    assert "chain:97268402" in result.stdout
+
+
 @pytest.mark.parametrize("interruption", ["veiler", "impermanence"])
 @pytest.mark.skipif(
     not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
