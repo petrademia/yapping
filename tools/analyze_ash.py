@@ -137,6 +137,24 @@ def endboard_score(snapshot):
     return sum(score_breakdown(snapshot).values())
 
 
+def evaluation_context(snapshot):
+    """Expose state facts for future calibrated card/location scoring."""
+    actions = snapshot.decision["actions"]
+    activated = {action["card"] for action in actions
+                 if action["kind"] in {"activate", "chain"}}
+    return {
+        "normal_summon_available": any(action["kind"] == "summon"
+                                       for action in actions),
+        "legal_activations": [action["card"] for action in actions
+                               if action["kind"] in {"activate", "chain"}],
+        "effects_used_in_line": sorted(activated),
+        "opponent_interrupted": any(action.startswith("chain:")
+                                     for action in snapshot.actions),
+        "searchable_or_recoverable": [card for card in snapshot.zones["hand"]
+                                       if card in CARD_WEIGHTS],
+    }
+
+
 def score_breakdown(snapshot):
     zones = snapshot.zones
     return {

@@ -3,7 +3,8 @@
 import argparse
 import json
 
-from analyze_ash import CARD_WEIGHTS, action_name, endboard_score, replay, score_breakdown
+from analyze_ash import (CARD_WEIGHTS, action_name, endboard_score,
+                          evaluation_context, replay, score_breakdown)
 from trace_albaz_combo import (
     ASH_BLOSSOM,
     CELTIC_GUARDIAN,
@@ -69,7 +70,7 @@ def legal(snapshot):
 
 def recovery_terminal(snapshot):
     return (INCREDIBLE_ECCLESIA in snapshot.zones["monster"]
-            and any(action.startswith("chain:") for action in snapshot.actions))
+            and any(action == "activate:73819701" for action in snapshot.actions))
 
 
 def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None,
@@ -98,6 +99,7 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
     print("actions: " + " -> ".join(final.actions))
     print(f"end board: {final.zones}")
     print("score breakdown: " + json.dumps(score_breakdown(final), sort_keys=True))
+    print("evaluation context: " + json.dumps(evaluation_context(final), sort_keys=True))
     return result, final
 
 
