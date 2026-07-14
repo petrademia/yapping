@@ -139,7 +139,7 @@ maximizes it. These weights are a testable baseline, not learned truth.
 | Infinite Impermanence | Complete (1,390 states) | Timing and target report |
 | Droll & Lock Bird | Complete (8,696 states) | Timing and recovery report |
 | Ghost Ogre | Complete (22,756 states) | Legal timing/recovery fixture |
-| Nibiru | Provisional at 10,000 states | Legal multi-tribute timing/recovery fixture |
+| Nibiru | Complete (10,975 states) | Legal multi-tribute timing/recovery fixture |
 | Called by the Grave | Not a turn-one hand-trap model | Pre-set backrow fixture |
 
 “Provisional” means the node limit evaluated nonterminal leaves with the
@@ -185,13 +185,12 @@ opening hand rather than only the one-card baseline.
 
 ## Roadmap
 
-1. Add targeted move ordering and an exhaustive opening report for Nibiru.
-2. Add matchup-specific evaluators and compare results with expert lines.
-3. Evaluate deck consistency by weighting the best adversarial line from each
+1. Add matchup-specific evaluators and compare results with expert lines.
+2. Evaluate deck consistency by weighting the best adversarial line from each
    sampled or enumerated opening hand, including bricks and garnets.
-4. Use Monte Carlo Tree Search when unknown hands and interruption
+3. Use Monte Carlo Tree Search when unknown hands and interruption
    probabilities make exhaustive branching too large.
-5. Train policy/value models only after deterministic search can generate and
+4. Train policy/value models only after deterministic search can generate and
    verify trustworthy state, legal-action, and outcome data.
 
 ## Development
