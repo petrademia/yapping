@@ -194,7 +194,7 @@ def fixture_deck():
 
 
 def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
-             opening_hand=None, main_deck=None):
+             opening_hand=None, main_deck=None, adapter=None):
     deck = list(fixture_deck() if main_deck is None else main_deck)
     if len(deck) < 40:
         raise ValueError("main_deck must contain at least 40 cards")
@@ -219,7 +219,7 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
     opponent_card = opponent_card or (ASH_BLOSSOM if opponent_ash else None)
     opponent = ([opponent_card] + [CELTIC_GUARDIAN] * 39
                 if opponent_card and not opponent_set else [CELTIC_GUARDIAN] * 40)
-    duel = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    duel = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     decision = duel.reset(deck, opponent, extra, seed=11,
                           set1=[opponent_card] if opponent_set and opponent_card else [])
     return duel, decision

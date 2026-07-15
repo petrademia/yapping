@@ -15,8 +15,11 @@ from trace_albaz_combo import (
     NIBIRU,
     card_id,
     INCREDIBLE_ECCLESIA,
+    ROOT,
+    SCRIPTS,
 )
 from yapping import minimax_replay
+from yapping._ocgcore import Duel
 
 
 # Cards that can legally interrupt the opponent's first turn from hand.
@@ -76,8 +79,9 @@ def recovery_terminal(snapshot):
 def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None,
            ecclesia_copies=1, recovery_only=False):
     card = CARDS[interruption]
+    adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     result = minimax_replay(
-        lambda path: replay(path, card, opening_hand, ecclesia_copies),
+        lambda path: replay(path, card, opening_hand, ecclesia_copies, adapter),
         legal,
         endboard_score,
         recovery_terminal if recovery_only
@@ -86,7 +90,7 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
         max_depth=max_depth,
         max_nodes=max_nodes,
     )
-    final = replay(result.actions, card, opening_hand, ecclesia_copies)
+    final = replay(result.actions, card, opening_hand, ecclesia_copies, adapter)
     print(f"Opening-hand minimax against known {interruption}")
     if opening_hand is not None:
         print("opening hand: " + ", ".join(map(str, opening_hand)))
