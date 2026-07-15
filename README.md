@@ -232,3 +232,23 @@ source .venv/bin/activate
 pip install -e '.[test]'
 pytest
 ```
+# Validation results
+
+The search has two replay modes: the default `ReplayCursor` search mode and
+the slower replay-from-seed oracle mode. Use
+`python tools/verify_replay_equivalence.py ghost_ogre` to compare their
+decoded score, action line, completion flag, endboard, and score breakdown.
+The production-depth Ghost Ogre A/B matched byte-for-byte; the cursor took
+about 48 seconds versus about 245 seconds for the oracle at 22,756 nodes.
+
+Sampled hidden search uses the configured hypergeometric prior. With the
+Albaz config, Ash's probability in a 40-card opponent deck is 0.3375506.
+An eight-sample Ash comparison at 5,000 nodes found exact hidden-world
+maximin 8.75 (complete) versus sampled determinization mean 12.375
+(incomplete), with a 95% interval of [9.69, 15.06]. Treat this as a
+provisional strategy-fusion measurement until the sampled worlds complete.
+
+The first 50-hand Ash consistency report is saved at
+`reports/consistency-ash-50.json`. It used 5,000 nodes and depth 180 per
+hand: weighted score 4.03965, brick fraction 0.58, complete fraction 0.88,
+and 6 provisional hands.

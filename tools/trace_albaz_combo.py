@@ -194,7 +194,7 @@ def fixture_deck():
 
 
 def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
-             opening_hand=None, main_deck=None, adapter=None):
+             opening_hand=None, main_deck=None, extra_deck=None, adapter=None):
     deck = list(fixture_deck() if main_deck is None else main_deck)
     if len(deck) < 40:
         raise ValueError("main_deck must contain at least 40 cards")
@@ -208,7 +208,7 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
             except ValueError as error:
                 raise ValueError(f"opening hand card {card} is not in this deck") from error
         deck = [*opening_hand, *remaining]
-    extra = [
+    extra = extra_deck or [
         TITANIKLAD,
         ECCLESIA_DARK_DRAGON,
         THREE_CHAMPIONS,

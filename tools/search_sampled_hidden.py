@@ -6,10 +6,12 @@ import json
 import random
 import statistics
 
-from analyze_ash import endboard_score, replay
+from analyze_ash import ReplayCursor, endboard_score, replay
 from matchup_config import load_config
 from search_opening import legal
 from trace_albaz_combo import card_id
+from trace_albaz_combo import ROOT, SCRIPTS
+from yapping._ocgcore import Duel
 from yapping import minimax_replay, opening_probability
 
 
@@ -49,9 +51,11 @@ def search(interruption="ash", opening_hand=None, samples=8, seed=7,
         complete = True
         for world in sampled:
             prefix = (indices[world],)
+            adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+            cursor = ReplayCursor(world, opening_hand, 1, adapter, config)
             result = minimax_replay(
                 lambda path, world=world, prefix=prefix:
-                    replay(prefix + path, world, opening_hand, matchup=config),
+                    cursor(prefix + path),
                 lambda node: legal(node, config),
                 lambda node: endboard_score(node, config["weights"]),
                 lambda node: node.decision["turn"] >= 2,
@@ -60,6 +64,9 @@ def search(interruption="ash", opening_hand=None, samples=8, seed=7,
             )
             values.append(result.score)
             complete &= result.complete
+            del cursor
+            del adapter
+            gc.collect()
         reports.append({"action": key, "mean": statistics.fmean(values),
                         "complete": complete, "samples": len(values),
                         "values": values})

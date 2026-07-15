@@ -1,0 +1,1670 @@
+{
+  "config": "albaz",
+  "reports": {
+    "ash": {
+      "hands": [
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 4.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              82489470
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            82489470,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "visited_states": 60
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              55273560,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "visited_states": 32
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 5.25,
+          "visited_states": 27
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.21657183499288762,
+          "score": 1.25,
+          "visited_states": 3
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "visited_states": 27
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              82489470
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.5,
+          "visited_states": 185
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              82489470,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 6.25,
+          "visited_states": 9
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "visited_states": 9
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              60303688,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            60303688,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 7.25,
+          "visited_states": 27
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              60303688,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            60303688,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "visited_states": 27
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              45883110,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            45883110,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 10.25,
+          "visited_states": 52
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19304410,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "visited_states": 32
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              55273560,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 6.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": false,
+          "endboard": {
+            "banished": [
+              17751597
+            ],
+            "grave": [
+              44146295,
+              41373230
+            ],
+            "hand": [
+              91152256,
+              30271097,
+              95515789,
+              91152256
+            ],
+            "monster": [
+              73819701,
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            73819701,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 10.5,
+          "visited_states": 5000
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": false,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              87746184,
+              30271097
+            ],
+            "hand": [
+              91152256,
+              91152256,
+              17751597,
+              91152256
+            ],
+            "monster": [
+              73819701,
+              60303688,
+              45883110,
+              14558127
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            73819701,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 13.0,
+          "visited_states": 5000
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              45883110,
+              60303688,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            45883110,
+            60303688,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 12.25,
+          "visited_states": 52
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": false,
+          "endboard": {
+            "banished": [
+              82489470,
+              17751597
+            ],
+            "grave": [
+              87746184,
+              73819701
+            ],
+            "hand": [
+              91152256,
+              91152256,
+              30271097,
+              45883110,
+              91152256
+            ],
+            "monster": [
+              78397661,
+              74405783,
+              60303688
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            73819701,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 11.75,
+          "visited_states": 5000
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              82489470,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            82489470,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 4.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              55273560,
+              82489470,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            82489470,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 6.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              60303688,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            60303688,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "visited_states": 52
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              55273560,
+              82489470,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            55273560,
+            82489470,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 5.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              87746184,
+              41373230,
+              73819701,
+              30271097
+            ],
+            "hand": [
+              91152256,
+              95515789,
+              91152256,
+              91152256,
+              17751597
+            ],
+            "monster": [
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            73819701,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 13.25,
+          "visited_states": 2368
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 7.25,
+          "visited_states": 27
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              30271097,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            30271097,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 5.25,
+          "visited_states": 185
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19304410,
+              55273560,
+              60303688,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            55273560,
+            60303688,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 5.25,
+          "visited_states": 32
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              41373230
+            ],
+            "hand": [
+              91152256,
+              82489470,
+              91152256,
+              95515789
+            ],
+            "monster": [
+              73819701,
+              19304410,
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            73819701,
+            82489470,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 9.0,
+          "visited_states": 1747
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19096726,
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            19096726,
+            19304410,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 8.25,
+          "visited_states": 45
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              45883110,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            45883110,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 10.25,
+          "visited_states": 1565
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19304410,
+              45883110,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            45883110,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 5.25,
+          "visited_states": 27
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              82489470,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 1.5,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              55273560,
+              82489470,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            55273560,
+            82489470,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 7.25,
+          "visited_states": 27
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            30271097,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.5,
+          "visited_states": 185
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              41373230
+            ],
+            "hand": [
+              91152256,
+              95515789,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              73819701,
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            73819701,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 8.75,
+          "visited_states": 965
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              45883110,
+              60303688,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            45883110,
+            60303688,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.0006610861874019768,
+          "score": 9.25,
+          "visited_states": 1597
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              19096726,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            19096726,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "visited_states": 26
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19096726,
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            19304410,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "visited_states": 20
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              41373230
+            ],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [
+              73819701,
+              19304410,
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            73819701,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 9.0,
+          "visited_states": 1774
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              55273560,
+              60303688,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            60303688,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 5.25,
+          "visited_states": 32
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              41373230,
+              60303688,
+              30271097
+            ],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            60303688,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 8.0,
+          "visited_states": 807
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 5.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": false,
+          "endboard": {
+            "banished": [
+              82489470
+            ],
+            "grave": [
+              44146295,
+              19304410,
+              73819701
+            ],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              45883110,
+              74405783,
+              55273560,
+              60303688,
+              78397661
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            73819701,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 13.5,
+          "visited_states": 5000
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19304410,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 4.25,
+          "visited_states": 11
+        },
+        {
+          "classification": {
+            "brick": true,
+            "garnets": [
+              17751597
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              82489470
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 6.5,
+          "visited_states": 26
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": false,
+          "endboard": {
+            "banished": [
+              82489470,
+              17751597
+            ],
+            "grave": [
+              87746184,
+              73819701,
+              74405783
+            ],
+            "hand": [
+              91152256,
+              55273560,
+              30271097,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              45883110,
+              78397661,
+              60303688
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            60303688,
+            73819701,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 13.25,
+          "visited_states": 5000
+        },
+        {
+          "classification": {
+            "brick": false,
+            "garnets": []
+          },
+          "complete": false,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              44146295
+            ],
+            "hand": [
+              91152256,
+              30271097,
+              91152256,
+              45883110,
+              91152256
+            ],
+            "monster": [
+              73819701,
+              60303688
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            73819701,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 9.75,
+          "visited_states": 5000
+        }
+      ],
+      "summary": {
+        "brick_fraction": 0.58,
+        "complete_fraction": 0.88,
+        "hands": 50,
+        "provisional_hands": 6,
+        "weighted_score": 4.0396522020028
+      }
+    }
+  }
+}
