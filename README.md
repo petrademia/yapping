@@ -191,6 +191,15 @@ Like known-interruption search, hidden-hand-trap search accepts `--hand` plus
 five card IDs, so its pre-reveal decision can be optimized from an exact
 opening hand rather than only the one-card baseline.
 
+For larger hidden-world sets, `python tools/search_sampled_hidden.py ash`
+uses sampled determinization instead of enumerating every opponent policy
+product. It reports the random seed, sample count, estimated action score,
+standard error, 95% interval, and whether every sampled sub-search completed.
+This is an estimate, not a guarantee; `search_hidden_ash.py` remains the exact
+two-world maximin mode. The outer consistency report is available with
+`python tools/analyze_consistency.py --hands 20` and preserves each hand's
+hypergeometric weight and complete/provisional status.
+
 ## Roadmap
 
 1. Add matchup-specific evaluators and compare results with expert lines.
