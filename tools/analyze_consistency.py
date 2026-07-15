@@ -73,14 +73,20 @@ def analyze(config, hands, interruption, max_nodes, max_depth):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default=None)
-    parser.add_argument("--interruption", default="ash")
+    parser.add_argument("--interruption", default="all")
     parser.add_argument("--hands", type=int, default=4)
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--max-nodes", type=int, default=100)
     parser.add_argument("--max-depth", type=int, default=40)
     args = parser.parse_args()
     config = load_config(args.config)
-    rows, summary = analyze(config, sample_hands(config["main_deck"], args.hands, args.seed),
-                            args.interruption, args.max_nodes, args.max_depth)
-    print(json.dumps({"config": config["name"], "interruption": args.interruption,
-                      "summary": summary, "hands": rows}, indent=2, sort_keys=True))
+    hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
+    interruptions = (list(config["interruptions"])
+                     if args.interruption == "all" else [args.interruption])
+    reports = {}
+    for interruption in interruptions:
+        rows, summary = analyze(config, hands, interruption,
+                                args.max_nodes, args.max_depth)
+        reports[interruption] = {"summary": summary, "hands": rows}
+    print(json.dumps({"config": config["name"], "reports": reports},
+                     indent=2, sort_keys=True))
