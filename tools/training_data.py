@@ -12,6 +12,7 @@ from matchup_config import load_config
 from search_opening import legal, search
 from trace_albaz_combo import ASH_BLOSSOM, ROOT, SCRIPTS
 from yapping._ocgcore import Duel
+from yapping.models import TabularPolicyValue
 
 
 def export(path, interruption="ash", max_nodes=100, max_depth=40, config=None):
@@ -43,10 +44,13 @@ def export(path, interruption="ash", max_nodes=100, max_depth=40, config=None):
 
 def evaluate(path):
     rows = [json.loads(line) for line in Path(path).read_text().splitlines() if line]
-    policy = {row["state_key"]: row["oracle_action"] for row in rows}
-    agreement = sum(policy[row["state_key"]] == row["oracle_action"] for row in rows)
-    errors = [abs(row["oracle_value"] - row["oracle_value"]) for row in rows]
-    return {"examples": len(rows), "policy_agreement": agreement / len(rows) if rows else 0,
+    split = max(1, len(rows) // 2)
+    model = TabularPolicyValue().fit(rows[:split])
+    holdout = rows[split:]
+    agreement = sum(model.predict_action(row) == row["oracle_action"] for row in holdout)
+    errors = [abs(model.predict_value(row) - row["oracle_value"]) for row in holdout]
+    return {"examples": len(rows), "holdout_examples": len(holdout),
+            "policy_agreement": agreement / len(holdout) if holdout else 0,
             "value_mae": sum(errors) / len(errors) if errors else 0,
             "complete_examples": sum(row["complete"] for row in rows)}
 
