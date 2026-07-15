@@ -200,6 +200,13 @@ two-world maximin mode. The outer consistency report is available with
 `python tools/analyze_consistency.py --hands 20` and preserves each hand's
 hypergeometric weight and complete/provisional status.
 
+The learned-model stage starts with oracle data rather than the Gymnasium
+environment: `python tools/training_data.py export artifacts/training.jsonl`
+writes state keys, legal actions, oracle actions, values, and completion flags.
+`python tools/training_data.py evaluate artifacts/training.jsonl` evaluates the
+reproducible lookup baseline. Node-limited examples remain provisional and
+must not be treated as solved labels.
+
 ## Roadmap
 
 1. Add matchup-specific evaluators and compare results with expert lines.

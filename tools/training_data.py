@@ -1,0 +1,65 @@
+"""Export and evaluate a tiny oracle-labelled policy/value dataset."""
+
+import argparse
+import contextlib
+import gc
+import io
+import json
+from pathlib import Path
+
+from analyze_ash import ReplayCursor, endboard_score
+from matchup_config import load_config
+from search_opening import legal, search
+from trace_albaz_combo import ASH_BLOSSOM, ROOT, SCRIPTS
+from yapping._ocgcore import Duel
+
+
+def export(path, interruption="ash", max_nodes=100, max_depth=40, config=None):
+    config = config or load_config()
+    with contextlib.redirect_stdout(io.StringIO()):
+        result, _ = search(interruption, max_nodes=max_nodes, max_depth=max_depth,
+                           config=config)
+    gc.collect()
+    adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    cursor = ReplayCursor(config["interruptions"][interruption], None, 1,
+                          adapter, config)
+    rows = []
+    for depth, action in enumerate(result.actions):
+        node = cursor(result.actions[:depth])
+        rows.append({
+            "state_key": node.key.hex(),
+            "legal_actions": list(legal(node, config)),
+            "oracle_action": action,
+            "oracle_value": result.score,
+            "complete": result.complete,
+            "depth": depth,
+            "interruption": interruption,
+        })
+    output = Path(path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text("\n".join(json.dumps(row, sort_keys=True) for row in rows) + "\n")
+    return len(rows)
+
+
+def evaluate(path):
+    rows = [json.loads(line) for line in Path(path).read_text().splitlines() if line]
+    policy = {row["state_key"]: row["oracle_action"] for row in rows}
+    agreement = sum(policy[row["state_key"]] == row["oracle_action"] for row in rows)
+    errors = [abs(row["oracle_value"] - row["oracle_value"]) for row in rows]
+    return {"examples": len(rows), "policy_agreement": agreement / len(rows) if rows else 0,
+            "value_mae": sum(errors) / len(errors) if errors else 0,
+            "complete_examples": sum(row["complete"] for row in rows)}
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", choices=["export", "evaluate"])
+    parser.add_argument("path", default="artifacts/training.jsonl", nargs="?")
+    parser.add_argument("--max-nodes", type=int, default=100)
+    parser.add_argument("--max-depth", type=int, default=40)
+    args = parser.parse_args()
+    if args.command == "export":
+        print(json.dumps({"examples": export(args.path, max_nodes=args.max_nodes,
+                                               max_depth=args.max_depth)}))
+    else:
+        print(json.dumps(evaluate(args.path), indent=2, sort_keys=True))
