@@ -1,0 +1,174 @@
+{
+  "scenarios": [
+    {
+      "complete": true,
+      "fixture": "one_card_aluber",
+      "interruption": "ash",
+      "interruption_used": true,
+      "line_complete": false,
+      "recovery": "aluber_search_negated",
+      "zones": {
+        "banished": [],
+        "grave": [],
+        "hand": [
+          14558127,
+          14558127,
+          59438930,
+          59438930
+        ],
+        "monster": [
+          62962630
+        ],
+        "spell_trap": []
+      }
+    },
+    {
+      "complete": true,
+      "fixture": "one_card_aluber",
+      "interruption": "veiler",
+      "interruption_used": true,
+      "line_complete": false,
+      "recovery": "aluber_search_negated",
+      "zones": {
+        "banished": [],
+        "grave": [],
+        "hand": [
+          14558127,
+          14558127,
+          59438930,
+          59438930
+        ],
+        "monster": [
+          62962630
+        ],
+        "spell_trap": []
+      }
+    },
+    {
+      "complete": true,
+      "fixture": "one_card_aluber",
+      "interruption": "impermanence",
+      "interruption_used": true,
+      "line_complete": false,
+      "recovery": "aluber_search_negated",
+      "zones": {
+        "banished": [],
+        "grave": [],
+        "hand": [
+          14558127,
+          14558127,
+          59438930,
+          59438930
+        ],
+        "monster": [
+          62962630
+        ],
+        "spell_trap": []
+      }
+    },
+    {
+      "complete": true,
+      "fixture": "one_card_aluber",
+      "interruption": "droll",
+      "interruption_used": true,
+      "line_complete": false,
+      "recovery": "droll_blocks_followup_search",
+      "zones": {
+        "banished": [
+          62962630,
+          95515789
+        ],
+        "grave": [
+          73819701,
+          44362883,
+          76666602
+        ],
+        "hand": [
+          14558127,
+          59438930,
+          14558127,
+          59438930
+        ],
+        "monster": [
+          24915933,
+          87746184
+        ],
+        "spell_trap": []
+      }
+    },
+    {
+      "complete": true,
+      "fixture": "one_card_aluber",
+      "interruption": "nibiru",
+      "interruption_used": false,
+      "line_complete": true,
+      "recovery": "full_line",
+      "zones": {
+        "banished": [
+          62962630,
+          95515789
+        ],
+        "grave": [
+          44362883,
+          76666602,
+          41373230,
+          87746184,
+          30271097,
+          19304410
+        ],
+        "hand": [
+          59438930,
+          59438930,
+          14558127,
+          14558127
+        ],
+        "monster": [
+          24915933,
+          45883110,
+          73819701,
+          55273560
+        ],
+        "spell_trap": [
+          17751597
+        ]
+      }
+    },
+    {
+      "complete": true,
+      "fixture": "one_card_aluber",
+      "interruption": "ghost_ogre",
+      "interruption_used": true,
+      "line_complete": true,
+      "recovery": "full_line",
+      "zones": {
+        "banished": [
+          95515789,
+          62962630
+        ],
+        "grave": [
+          44362883,
+          76666602,
+          41373230,
+          87746184,
+          30271097,
+          19304410
+        ],
+        "hand": [
+          59438930,
+          59438930,
+          14558127,
+          14558127
+        ],
+        "monster": [
+          45883110,
+          24915933,
+          73819701,
+          55273560
+        ],
+        "spell_trap": [
+          17751597
+        ]
+      }
+    }
+  ]
+}

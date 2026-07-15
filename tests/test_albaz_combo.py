@@ -65,6 +65,30 @@ def test_configured_one_card_aluber_combo():
     assert 17751597 in output["zones"]["spell_trap"]
 
 
+@pytest.mark.parametrize("interruption, used, line_complete, recovery", [
+    ("ash", True, False, "aluber_search_negated"),
+    ("veiler", True, False, "aluber_search_negated"),
+    ("impermanence", True, False, "aluber_search_negated"),
+    ("droll", True, False, "droll_blocks_followup_search"),
+    ("nibiru", False, True, "full_line"),
+    ("ghost_ogre", True, True, "full_line"),
+])
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_aluber_interruption_matrix(interruption, used, line_complete, recovery):
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/trace_aluber_combo.py")],
+        cwd=ROOT, env=os.environ | {"YAPPING_ALUBER_INTERRUPTION": interruption},
+        capture_output=True, text=True, check=True,
+    )
+    output = json.loads(result.stdout)
+    assert output["interruption_used"] is used
+    assert output["line_complete"] is line_complete
+    assert output["recovery"] == recovery
+
+
 @pytest.mark.skipif(
     not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
     reason="full card database and ygopro scripts are not installed",

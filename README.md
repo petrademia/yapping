@@ -252,3 +252,19 @@ The first 50-hand Ash consistency report is saved at
 `reports/consistency-ash-50.json`. It used 5,000 nodes and depth 180 per
 hand: weighted score 4.03965, brick fraction 0.58, complete fraction 0.88,
 and 6 provisional hands.
+# Aluber interruption matrix
+
+The one-card Aluber fixture can be run against all configured interruptions
+with `python tools/run_aluber_interruptions.py`. The reproducible output is
+stored in `reports/aluber-interruptions.json`.
+
+Under the current fixture hand and legal timing windows:
+
+- Ash Blossom, Effect Veiler, and Infinite Impermanence negate Aluber's
+  search, leaving Aluber on the field.
+- Droll & Lock Bird blocks the later Dogma follow-up search after the line
+  reaches Granguignol and Albion.
+- Nibiru has no legal activation in this line and the full board completes.
+- Ghost Ogre activates, but the full board still completes.
+
+These are deterministic engine results, not estimated matchup probabilities.
