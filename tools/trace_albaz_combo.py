@@ -29,6 +29,9 @@ GHOST_OGRE = 59438930
 DROLL_LOCK_BIRD = 94145021
 NIBIRU = 27204311
 CALLED_BY_THE_GRAVE = 24224830
+ALUBER = 62962630
+BRANDED_FUSION = 44362883
+GRANGUIGNOL = 24915933
 
 CARD_IDS = {
     "fallen": FALLEN_WHITE,
@@ -48,6 +51,10 @@ CARD_IDS = {
     "mercourier": MERCOURIER,
     "branded_retribution": BRANDED_RETRIBUTION,
     "celtic_guardian": CELTIC_GUARDIAN,
+    "aluber": ALUBER,
+    "aluber_the_jester": ALUBER,
+    "branded_fusion": BRANDED_FUSION,
+    "granguignol": GRANGUIGNOL,
 }
 
 
@@ -194,7 +201,8 @@ def fixture_deck():
 
 
 def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
-             opening_hand=None, main_deck=None, extra_deck=None, adapter=None):
+             opening_hand=None, main_deck=None, extra_deck=None,
+             opponent_deck=None, adapter=None):
     deck = list(fixture_deck() if main_deck is None else main_deck)
     if len(deck) < 40:
         raise ValueError("main_deck must contain at least 40 cards")
@@ -217,8 +225,9 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
         DEVOURS_DOGMA,
     ]
     opponent_card = opponent_card or (ASH_BLOSSOM if opponent_ash else None)
-    opponent = ([opponent_card] + [CELTIC_GUARDIAN] * 39
-                if opponent_card and not opponent_set else [CELTIC_GUARDIAN] * 40)
+    filler = list(opponent_deck or [CELTIC_GUARDIAN] * 40)
+    opponent = ([opponent_card] + filler[1:]
+                if opponent_card and not opponent_set else filler)
     duel = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     decision = duel.reset(deck, opponent, extra, seed=11,
                           set1=[opponent_card] if opponent_set and opponent_card else [])

@@ -26,6 +26,7 @@ from matchup_config import load_config
 
 # Cards that can legally interrupt the opponent's first turn from hand.
 CARDS = {
+    "none": None,
     "ash": ASH_BLOSSOM,
     "veiler": EFFECT_VEILER,
     "impermanence": INFINITE_IMPERMANENCE,
@@ -82,7 +83,7 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
            ecclesia_copies=1, recovery_only=False, config=None,
            replay_mode="cursor", adapter=None):
     config = config or load_config()
-    card = config["interruptions"][interruption]
+    card = config["interruptions"].get(interruption)
     adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, config)
     replay_fn = cursor if replay_mode == "cursor" else lambda path: replay(

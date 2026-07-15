@@ -1,0 +1,25 @@
+[
+  {
+    "name": "one_card_aluber",
+    "deck": "branded_albaz_v1",
+    "opening_hand": [62962630],
+    "scenarios": ["none", "ash", "veiler", "impermanence"],
+    "expected": {
+      "endboard_contains": [24915933, 73819701, 55273560, 17751597],
+      "required_actions": [
+        ["activate", 62962630],
+        ["select_card", 44362883],
+        ["select_card", 68468459],
+        ["select_card", 95515789],
+        ["select_card", 76666602],
+        ["select_card", 30271097],
+        ["select_card", 41373230],
+        ["select_card", 45883110],
+        ["select_card", 19304410],
+        ["select_card", 73819701],
+        ["select_card", 55273560],
+        ["select_card", 17751597]
+      ]
+    }
+  }
+]

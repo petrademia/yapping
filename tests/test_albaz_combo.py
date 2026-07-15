@@ -1,4 +1,5 @@
 import os
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -47,6 +48,21 @@ def test_full_albaz_swordsoul_combo():
         check=True,
     )
     assert "FULL COMBO COMPLETE" in result.stdout
+
+
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_configured_one_card_aluber_combo():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/trace_aluber_combo.py")],
+        cwd=ROOT, capture_output=True, text=True, check=True,
+    )
+    output = json.loads(result.stdout)
+    assert output["complete"] is True
+    assert {24915933, 45883110, 73819701, 55273560} <= set(output["zones"]["monster"])
+    assert 17751597 in output["zones"]["spell_trap"]
 
 
 @pytest.mark.skipif(
