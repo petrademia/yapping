@@ -81,6 +81,7 @@ INTERRUPTIONS = {
 }
 INTERRUPTION = os.getenv("YAPPING_INTERRUPTION")
 MODE = os.getenv("YAPPING_WINDOW")
+TWO_CARD = bool(os.getenv("YAPPING_TWO_CARD"))
 if os.getenv("YAPPING_ASH") is not None:  # Backward-compatible report/test entrypoint.
     INTERRUPTION, MODE = "ash", os.environ["YAPPING_ASH"]
 if INTERRUPTION is not None and INTERRUPTION not in INTERRUPTIONS:
@@ -89,6 +90,7 @@ interruption_windows = []
 current_label = "initial"
 action_prefix = []
 interruption_activated = False
+two_card_recovery = False
 interruption_targets = []
 
 
@@ -159,6 +161,15 @@ def choose(duel, decision, kind, card=None, description=None):
             break
         decision = answered
     if interruption_activated:
+        if TWO_CARD and kind == "select_card" and card == INCREDIBLE_ECCLESIA:
+            summon = next((i for i, candidate in enumerate(decision["actions"])
+                           if candidate["kind"] == "summon"
+                           and candidate["card"] == INCREDIBLE_ECCLESIA), None)
+            if summon is not None:
+                global two_card_recovery
+                two_card_recovery = True
+                print("TWO_CARD RECOVERY: normal summon Incredible Ecclesia")
+                return step(duel, summon)
         raise LineInterrupted(duel, decision, f"{kind} {card}")
     raise RuntimeError(f"missing {kind} {card}")
 
@@ -235,9 +246,23 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
 
 
 def main():
+    main_deck = None
+    extra_deck = None
+    opening_hand = None
+    config_path = os.getenv("YAPPING_CONFIG")
+    if config_path:
+        config = json.loads(Path(config_path).read_text())
+        main_deck = config["main_deck"]
+        extra_deck = config["extra_deck"]
+    if os.getenv("YAPPING_TWO_CARD"):
+        opening_hand = [
+            FALLEN_WHITE, INCREDIBLE_ECCLESIA,
+            ASH_BLOSSOM, ASH_BLOSSOM, GHOST_OGRE,
+        ]
     duel, decision = new_duel(
         opponent_card=INTERRUPTIONS.get(INTERRUPTION),
         opponent_set=INTERRUPTION == "called_by",
+        opening_hand=opening_hand, main_deck=main_deck, extra_deck=extra_deck,
     )
     show("initial", decision, duel)
     decision = choose(duel, decision, "activate", FALLEN_WHITE)
@@ -373,6 +398,12 @@ def main():
     show("after targeting Albion", decision, duel)
     decision = settle(duel, decision, stop_on_chain=True)
     show("The Fallen and The Virtuous resolved", decision, duel)
+    while not any(candidate["kind"] == "chain" and candidate["card"] == DEVOURS_DOGMA
+                  for candidate in decision["actions"]):
+        if any(candidate["kind"] == "pass" for candidate in decision["actions"]):
+            decision = choose(duel, decision, "pass")
+        else:
+            raise RuntimeError(f"Dogma trigger window not reached: {decision['actions']}")
     decision = choose(duel, decision, "chain", DEVOURS_DOGMA)
     show("after choosing Devours the Dogma effect", decision, duel)
     decision = settle(duel, decision)
@@ -380,6 +411,12 @@ def main():
     show("after selecting Tri-Brigade Mercourier", decision, duel)
     decision = settle(duel, decision, stop_on_chain=True)
     show("Mercourier added", decision, duel)
+    while not any(candidate["kind"] == "chain" and candidate["card"] == ALBION_BRANDED
+                  for candidate in decision["actions"]):
+        if any(candidate["kind"] == "pass" for candidate in decision["actions"]):
+            decision = choose(duel, decision, "pass")
+        else:
+            raise RuntimeError(f"Albion end-phase trigger window not reached: {decision['actions']}")
     decision = choose(duel, decision, "chain", ALBION_BRANDED)
     show("after choosing Albion End Phase effect", decision, duel)
     decision = settle(duel, decision)
@@ -389,11 +426,17 @@ def main():
     show("after choosing to Set Branded Retribution", decision, duel)
     decision = settle(duel, decision, stop_on_chain=True)
     show("Branded Retribution set", decision, duel)
+    while not any(candidate["kind"] == "chain" and candidate["card"] == INCREDIBLE_ECCLESIA
+                  for candidate in decision["actions"]):
+        if any(candidate["kind"] == "pass" for candidate in decision["actions"]):
+            decision = choose(duel, decision, "pass")
+        else:
+            raise RuntimeError(f"Ecclesia End Phase window not reached: {decision['actions']}")
     decision = choose(duel, decision, "chain", INCREDIBLE_ECCLESIA)
     show("after choosing Incredible Ecclesia End Phase effect", decision, duel)
     decision = settle(duel, decision)
     counts = duel.counts()
-    if not interruption_activated:
+    if not interruption_activated and not config_path:
         assert decision["player"] == 1
         assert {key: counts[key] for key in (
             "deck0", "hand0", "monster0", "spell_trap0", "grave0"

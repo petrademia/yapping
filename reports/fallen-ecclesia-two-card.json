@@ -1,0 +1,56 @@
+{
+  "scenarios": [
+    {
+      "complete": true,
+      "counts": "{'deck0': 33, 'hand0': 5, 'monster0': 4, 'spell_trap0': 1, 'grave0': 6, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}",
+      "expected_endboard": [
+        24915933,
+        45883110,
+        73819701,
+        55273560,
+        17751597
+      ],
+      "interruption": null,
+      "recovery_normal_summon": false
+    },
+    {
+      "complete": true,
+      "counts": "{'deck0': 34, 'hand0': 5, 'monster0': 4, 'spell_trap0': 1, 'grave0': 5, 'deck1': 35, 'hand1': 4, 'monster1': 0, 'spell_trap1': 0, 'grave1': 1}",
+      "expected_endboard": [
+        24915933,
+        45883110,
+        73819701,
+        55273560,
+        17751597
+      ],
+      "interruption": "ash",
+      "recovery_normal_summon": true
+    },
+    {
+      "complete": true,
+      "counts": "{'deck0': 34, 'hand0': 5, 'monster0': 4, 'spell_trap0': 1, 'grave0': 5, 'deck1': 35, 'hand1': 4, 'monster1': 0, 'spell_trap1': 0, 'grave1': 1}",
+      "expected_endboard": [
+        24915933,
+        45883110,
+        73819701,
+        55273560,
+        17751597
+      ],
+      "interruption": "veiler",
+      "recovery_normal_summon": true
+    },
+    {
+      "complete": true,
+      "counts": "{'deck0': 34, 'hand0': 5, 'monster0': 4, 'spell_trap0': 1, 'grave0': 5, 'deck1': 35, 'hand1': 4, 'monster1': 0, 'spell_trap1': 0, 'grave1': 1}",
+      "expected_endboard": [
+        24915933,
+        45883110,
+        73819701,
+        55273560,
+        17751597
+      ],
+      "interruption": "impermanence",
+      "recovery_normal_summon": true
+    }
+  ]
+}

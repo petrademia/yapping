@@ -89,6 +89,30 @@ def test_aluber_interruption_matrix(interruption, used, line_complete, recovery)
     assert output["recovery"] == recovery
 
 
+@pytest.mark.parametrize("interruption", [None, "ash", "veiler", "impermanence"])
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
+def test_two_card_fallen_ecclesia_fixture(interruption):
+    env = os.environ | {
+        "YAPPING_CONFIG": "configs/branded_albaz_v1.json",
+        "YAPPING_TWO_CARD": "1",
+    }
+    if interruption:
+        env.update({"YAPPING_INTERRUPTION": interruption, "YAPPING_WINDOW": "0"})
+    else:
+        env.pop("YAPPING_INTERRUPTION", None)
+        env.pop("YAPPING_WINDOW", None)
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/trace_albaz_combo.py")],
+        cwd=ROOT, env=env, capture_output=True, text=True, check=True,
+    )
+    assert "FULL COMBO COMPLETE" in result.stdout
+    if interruption:
+        assert "TWO_CARD RECOVERY: normal summon Incredible Ecclesia" in result.stdout
+
+
 @pytest.mark.skipif(
     not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
     reason="full card database and ygopro scripts are not installed",

@@ -268,3 +268,14 @@ Under the current fixture hand and legal timing windows:
 - Ghost Ogre activates, but the full board still completes.
 
 These are deterministic engine results, not estimated matchup probabilities.
+# Fallen + Ecclesia recovery fixture
+
+The two-card fixture uses Fallen of the White Dragon plus Incredible Ecclesia
+from the configured 47-card deck. It can be run with
+`python tools/run_fallen_ecclesia_fixture.py`; results are stored in
+`reports/fallen-ecclesia-two-card.json`.
+
+With no interruption, the original line completes. When Ash Blossom, Effect
+Veiler, or Infinite Impermanence negates Fallen's field effect, the engine
+preserves the Normal Summon, summons Incredible Ecclesia from hand, and the
+line still completes with the expected board and Branded Retribution set.
