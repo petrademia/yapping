@@ -207,6 +207,13 @@ writes state keys, legal actions, oracle actions, values, and completion flags.
 reproducible lookup baseline. Node-limited examples remain provisional and
 must not be treated as solved labels.
 
+`python tools/compare_hidden.py ash` compares the sampled expected-value result
+with exact hidden maximin on the same input. The reported gap is an information
+modeling diagnostic: sampled determinization may use the sampled world after
+the first action, while hidden maximin retains uncertainty. The exact result
+is labeled as a worst-case guarantee; the sampled result includes its seed,
+standard error, confidence interval, and completion flag.
+
 ## Roadmap
 
 1. Add matchup-specific evaluators and compare results with expert lines.
