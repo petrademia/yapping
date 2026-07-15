@@ -7,5 +7,7 @@
   "skip_kinds": ["battle_phase", "shuffle"],
   "move_priority": {"activate": 0, "yes": 0, "chain": 0, "special_summon": 1, "select_card": 1, "select_sum": 1, "select_toggle": 1, "option": 1, "place": 2, "position": 2, "pass": 3, "end_phase": 4},
   "recovery_card": 55273560,
+  "anchors": [73819701, 55273560],
+  "garnets": [],
   "weights": {"44146295": 10, "17751597": 5, "45883110": 4, "95515789": 3, "60303688": 2, "78397661": 2, "55273560": 2, "19096726": 2, "30271097": 2, "87746184": 1}
 }
