@@ -6,6 +6,7 @@ from analyze_ash import endboard_score, replay
 from search_opening import CARDS, legal
 from trace_albaz_combo import card_id
 from yapping import hidden_minimax_replay
+from matchup_config import load_config
 
 
 def key(snapshot, index):
@@ -15,13 +16,15 @@ def key(snapshot, index):
     ))
 
 
-def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None):
-    cards = {interruption: CARDS[interruption], "none": None}
+def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None,
+           config=None):
+    config = config or load_config()
+    cards = {interruption: config["interruptions"][interruption], "none": None}
     result = hidden_minimax_replay(
-        lambda scenario, path: replay(path, cards[scenario], opening_hand),
-        legal,
+        lambda scenario, path: replay(path, cards[scenario], opening_hand, matchup=config),
+        lambda node: legal(node, config),
         key,
-        endboard_score,
+        lambda node: endboard_score(node, config["weights"]),
         lambda snapshot: snapshot.decision["turn"] >= 2,
         lambda snapshot: snapshot.decision["player"],
         tuple(cards),
@@ -44,5 +47,7 @@ if __name__ == "__main__":
     parser.add_argument("--max-nodes", type=int, default=10_000)
     parser.add_argument("--max-depth", type=int, default=180)
     parser.add_argument("--hand", type=card_id, nargs=5, metavar="CARD")
+    parser.add_argument("--config")
     arguments = parser.parse_args()
-    search(arguments.interruption, arguments.max_nodes, arguments.max_depth, arguments.hand)
+    search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
+           arguments.hand, load_config(arguments.config))
