@@ -1,12 +1,25 @@
 """Compare seed replay with the safe forward-descent replay cursor."""
 
 import gc
-import sys
+import multiprocessing as mp
 import time
 
 from analyze_ash import ReplayCursor, replay
 from trace_albaz_combo import ASH_BLOSSOM, ROOT, SCRIPTS
 from yapping._ocgcore import Duel
+
+
+_worker_adapter = None
+
+
+def init_worker():
+    global _worker_adapter
+    _worker_adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+
+
+def parallel_replay(path):
+    node = replay(path, ASH_BLOSSOM, None, 1, _worker_adapter)
+    return node.key
 
 
 def collect_paths(adapter, limit=200, path=(), result=None):
@@ -43,11 +56,19 @@ def main():
     cursor_seconds = time.perf_counter() - started
 
     equivalent = all(left.key == right.key for left, right in zip(oracle, optimized))
+    workers = min(4, mp.cpu_count())
+    started = time.perf_counter()
+    with mp.Pool(workers, initializer=init_worker) as pool:
+        parallel_keys = pool.map(parallel_replay, paths)
+    parallel_seconds = time.perf_counter() - started
     print(f"paths: {len(paths)}")
     print(f"oracle_seconds: {oracle_seconds:.3f}")
     print(f"cursor_seconds: {cursor_seconds:.3f}")
     print(f"speedup: {oracle_seconds / cursor_seconds:.2f}x")
     print(f"equivalent: {equivalent}")
+    print(f"parallel_workers: {workers}")
+    print(f"parallel_seconds: {parallel_seconds:.3f}")
+    print(f"parallel_equivalent: {parallel_keys == [node.key for node in oracle]}")
     if not equivalent:
         raise SystemExit("cursor diverged from replay oracle")
 
