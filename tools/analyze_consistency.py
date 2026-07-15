@@ -6,11 +6,22 @@ import gc
 import io
 import json
 import math
+import multiprocessing as mp
 import random
 from collections import Counter
 
 from matchup_config import load_config
 from search_opening import search
+from trace_albaz_combo import ROOT, SCRIPTS
+from yapping._ocgcore import Duel
+
+
+_worker_adapter = None
+
+
+def init_worker():
+    global _worker_adapter
+    _worker_adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
 
 
 def hand_probability(deck, hand, hand_size=5):
@@ -48,12 +59,13 @@ def analyze(config, hands, interruption, max_nodes, max_depth):
                 max_nodes=max_nodes,
                 max_depth=max_depth,
                 opening_hand=list(hand),
-                config=config,
+                config=config, adapter=_worker_adapter,
             )
         gc.collect()
         rows.append({
             "hand": list(hand),
             "probability": hand_probability(config["main_deck"], hand),
+            "interruption": interruption,
             "classification": classify(hand, config),
             "score": result.score,
             "complete": result.complete,
@@ -70,6 +82,21 @@ def analyze(config, hands, interruption, max_nodes, max_depth):
     }
 
 
+def analyze_job(job):
+    config, hand, interruption, max_nodes, max_depth = job
+    row = analyze(config, [hand], interruption, max_nodes, max_depth)[0][0]
+    gc.collect()
+    return row
+
+
+def analyze_parallel(config, hands, interruptions, max_nodes, max_depth, workers):
+    jobs = [(config, hand, interruption, max_nodes, max_depth)
+            for interruption in interruptions for hand in hands]
+    with mp.Pool(workers, initializer=init_worker) as pool:
+        rows = pool.map(analyze_job, jobs)
+    return rows
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default=None)
@@ -78,15 +105,32 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--max-nodes", type=int, default=100)
     parser.add_argument("--max-depth", type=int, default=40)
+    parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()
     config = load_config(args.config)
     hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
     interruptions = (list(config["interruptions"])
                      if args.interruption == "all" else [args.interruption])
     reports = {}
-    for interruption in interruptions:
-        rows, summary = analyze(config, hands, interruption,
-                                args.max_nodes, args.max_depth)
-        reports[interruption] = {"summary": summary, "hands": rows}
+    if args.workers > 1:
+        rows = analyze_parallel(config, hands, interruptions, args.max_nodes,
+                                args.max_depth, args.workers)
+        grouped = {interruption: [] for interruption in interruptions}
+        for row in rows:
+            grouped[row["interruption"]].append(row)
+        for interruption, grouped_rows in grouped.items():
+            weight = sum(row["probability"] for row in grouped_rows) or 1
+            reports[interruption] = {"summary": {
+                "hands": len(grouped_rows),
+                "weighted_score": sum(row["score"] * row["probability"] for row in grouped_rows) / weight,
+                "complete_fraction": sum(row["complete"] for row in grouped_rows) / len(grouped_rows),
+                "brick_fraction": sum(row["classification"]["brick"] for row in grouped_rows) / len(grouped_rows),
+                "provisional_hands": sum(not row["complete"] for row in grouped_rows),
+            }, "hands": grouped_rows}
+    else:
+        for interruption in interruptions:
+            rows, summary = analyze(config, hands, interruption,
+                                    args.max_nodes, args.max_depth)
+            reports[interruption] = {"summary": summary, "hands": rows}
     print(json.dumps({"config": config["name"], "reports": reports},
                      indent=2, sort_keys=True))

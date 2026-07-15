@@ -80,10 +80,10 @@ def recovery_terminal(snapshot, config):
 
 def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None,
            ecclesia_copies=1, recovery_only=False, config=None,
-           replay_mode="cursor"):
+           replay_mode="cursor", adapter=None):
     config = config or load_config()
     card = config["interruptions"][interruption]
-    adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, config)
     replay_fn = cursor if replay_mode == "cursor" else lambda path: replay(
         path, card, opening_hand, ecclesia_copies, adapter, config)
