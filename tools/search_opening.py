@@ -79,13 +79,16 @@ def recovery_terminal(snapshot, config):
 
 
 def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None,
-           ecclesia_copies=1, recovery_only=False, config=None):
+           ecclesia_copies=1, recovery_only=False, config=None,
+           replay_mode="cursor"):
     config = config or load_config()
     card = config["interruptions"][interruption]
     adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, config)
+    replay_fn = cursor if replay_mode == "cursor" else lambda path: replay(
+        path, card, opening_hand, ecclesia_copies, adapter, config)
     result = minimax_replay(
-        cursor,
+        replay_fn,
         lambda snapshot: legal(snapshot, config),
         lambda snapshot: endboard_score(snapshot, config["weights"]),
         (lambda snapshot: recovery_terminal(snapshot, config)) if recovery_only
@@ -94,12 +97,13 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
         max_depth=max_depth,
         max_nodes=max_nodes,
     )
-    final = cursor(result.actions)
+    final = replay_fn(result.actions)
     print(f"Opening-hand minimax against known {interruption}")
     if opening_hand is not None:
         print("opening hand: " + ", ".join(map(str, opening_hand)))
     print(f"Ecclesia copies: {ecclesia_copies}")
     print(f"recovery-only: {recovery_only}")
+    print(f"replay-mode: {replay_mode}")
     score_label = "score" if result.complete else "provisional score at search limit"
     print(f"{score_label}: {result.score:.2f}")
     print(f"visited states: {result.visited_states}")
@@ -120,7 +124,8 @@ if __name__ == "__main__":
     parser.add_argument("--ecclesia-copies", type=int, default=1)
     parser.add_argument("--recovery-only", action="store_true")
     parser.add_argument("--config", type=str)
+    parser.add_argument("--replay-mode", choices=["cursor", "oracle"], default="cursor")
     arguments = parser.parse_args()
     search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
            arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
-           load_config(arguments.config))
+           load_config(arguments.config), arguments.replay_mode)
