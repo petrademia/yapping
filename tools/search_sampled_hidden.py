@@ -10,7 +10,7 @@ from analyze_ash import endboard_score, replay
 from matchup_config import load_config
 from search_opening import legal
 from trace_albaz_combo import card_id
-from yapping import minimax_replay
+from yapping import minimax_replay, opening_probability
 
 
 def action_key(snapshot, index):
@@ -24,8 +24,14 @@ def search(interruption="ash", opening_hand=None, samples=8, seed=7,
            max_nodes=500, max_depth=80, config=None):
     config = config or load_config()
     rng = random.Random(seed)
-    worlds = [None] + [config["interruptions"][interruption]]
-    sampled = [rng.choice(worlds) for _ in range(samples)]
+    worlds = [None, config["interruptions"][interruption]]
+    copies = config.get("opponent_copies", {}).get(interruption, 0)
+    p_interruption = opening_probability(
+        config.get("opponent_deck_size", 40), copies,
+        config.get("opponent_hand_size", 5),
+    )
+    sampled = [worlds[1] if rng.random() < p_interruption else worlds[0]
+               for _ in range(samples)]
     unique = list(dict.fromkeys(sampled))
     roots = {}
     for world in unique:
@@ -63,6 +69,7 @@ def search(interruption="ash", opening_hand=None, samples=8, seed=7,
     stderr = (statistics.stdev(values) / len(values) ** 0.5
               if len(values) > 1 else 0.0)
     return {"mode": "sampled_determinization", "interruption": interruption,
+            "interruption_probability": p_interruption,
             "sample_count": samples, "seed": seed, "worlds": sampled,
             "chosen": chosen, "stderr": stderr,
             "confidence_95": [chosen["mean"] - 1.96 * stderr,
