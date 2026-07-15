@@ -1,0 +1,11 @@
+{
+  "name": "albaz",
+  "main_deck": [73819701, 91152256, 91152256, 91152256, 91152256, 55273560, 82489470, 45883110, 19304410, 95515789, 60303688, 30271097, 19096726, 17751597],
+  "main_deck_filler": {"card": 91152256, "count": 26},
+  "extra_deck": [41373230, 78397661, 74405783, 87746184, 44146295, 76666602],
+  "interruptions": {"ash": 14558127, "veiler": 97268402, "impermanence": 10045474, "droll": 94145021, "nibiru": 27204311, "ghost_ogre": 59438930},
+  "skip_kinds": ["battle_phase", "shuffle"],
+  "move_priority": {"activate": 0, "yes": 0, "chain": 0, "special_summon": 1, "select_card": 1, "select_sum": 1, "select_toggle": 1, "option": 1, "place": 2, "position": 2, "pass": 3, "end_phase": 4},
+  "recovery_card": 55273560,
+  "weights": {"44146295": 10, "17751597": 5, "45883110": 4, "95515789": 3, "60303688": 2, "78397661": 2, "55273560": 2, "19096726": 2, "30271097": 2, "87746184": 1}
+}

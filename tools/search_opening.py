@@ -21,6 +21,7 @@ from trace_albaz_combo import (
 )
 from yapping import minimax_replay
 from yapping._ocgcore import Duel
+from matchup_config import load_config
 
 
 # Cards that can legally interrupt the opponent's first turn from hand.
@@ -49,12 +50,12 @@ MAX_PRIORITY = {
 }
 
 
-def legal(snapshot):
+def legal(snapshot, config):
     actions = snapshot.decision["actions"]
     seen = set()
     choices = []
     for index, action in enumerate(actions):
-        if action["kind"] in SKIP_KINDS or action["card"] == CELTIC_GUARDIAN:
+        if action["kind"] in config["skip_kinds"] or action["card"] == CELTIC_GUARDIAN:
             continue
         signature = (action["kind"], action["card"], action["description"])
         if signature in seen:
@@ -67,26 +68,27 @@ def legal(snapshot):
     # continuations are examined first; every action remains searchable.
     return sorted(
         choices,
-        key=lambda i: (MAX_PRIORITY.get(actions[i]["kind"], 2),
-                       -CARD_WEIGHTS.get(actions[i]["card"], 0), i),
+        key=lambda i: (config["move_priority"].get(actions[i]["kind"], 2),
+                       -config["weights"].get(actions[i]["card"], 0), i),
     )
 
 
-def recovery_terminal(snapshot):
-    return (INCREDIBLE_ECCLESIA in snapshot.zones["monster"]
+def recovery_terminal(snapshot, config):
+    return (config["recovery_card"] in snapshot.zones["monster"]
             and any(action == "activate:73819701" for action in snapshot.actions))
 
 
 def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=None,
-           ecclesia_copies=1, recovery_only=False):
-    card = CARDS[interruption]
+           ecclesia_copies=1, recovery_only=False, config=None):
+    config = config or load_config()
+    card = config["interruptions"][interruption]
     adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter)
+    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, config)
     result = minimax_replay(
         cursor,
-        legal,
-        endboard_score,
-        recovery_terminal if recovery_only
+        lambda snapshot: legal(snapshot, config),
+        lambda snapshot: endboard_score(snapshot, config["weights"]),
+        (lambda snapshot: recovery_terminal(snapshot, config)) if recovery_only
         else lambda snapshot: snapshot.decision["turn"] >= 2,
         lambda snapshot: snapshot.decision["player"],
         max_depth=max_depth,
@@ -104,7 +106,7 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
     print(f"complete: {result.complete}")
     print("actions: " + " -> ".join(final.actions))
     print(f"end board: {final.zones}")
-    print("score breakdown: " + json.dumps(score_breakdown(final), sort_keys=True))
+    print("score breakdown: " + json.dumps(score_breakdown(final, config["weights"]), sort_keys=True))
     print("evaluation context: " + json.dumps(evaluation_context(final), sort_keys=True))
     return result, final
 
@@ -117,6 +119,8 @@ if __name__ == "__main__":
     parser.add_argument("--hand", type=card_id, nargs=5, metavar="CARD")
     parser.add_argument("--ecclesia-copies", type=int, default=1)
     parser.add_argument("--recovery-only", action="store_true")
+    parser.add_argument("--config", type=str)
     arguments = parser.parse_args()
     search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
-           arguments.hand, arguments.ecclesia_copies, arguments.recovery_only)
+           arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
+           load_config(arguments.config))

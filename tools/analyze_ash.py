@@ -62,20 +62,21 @@ class ReplayCursor:
     """Reuse forward descent; reconstruct only after backtracking."""
 
     def __init__(self, opponent_card=ASH_BLOSSOM, opening_hand=None,
-                 ecclesia_copies=1, adapter=None):
+                 ecclesia_copies=1, adapter=None, matchup=None):
         self.opponent_card = opponent_card
         self.opening_hand = opening_hand
         self.ecclesia_copies = ecclesia_copies
         self.adapter = adapter
+        self.matchup = matchup
         self.path = ()
         self.snapshot = replay((), opponent_card, opening_hand,
-                               ecclesia_copies, adapter)
+                               ecclesia_copies, adapter, matchup)
 
     def __call__(self, path):
         if not (len(path) >= len(self.path) and
                 path[:len(self.path)] == self.path):
             self.snapshot = replay((), self.opponent_card, self.opening_hand,
-                                   self.ecclesia_copies, self.adapter)
+                                   self.ecclesia_copies, self.adapter, self.matchup)
             self.path = ()
         if path != self.path:
             chosen = list(self.snapshot.actions)
@@ -135,14 +136,15 @@ def uninterrupted_prefix(interruption="ash"):
 
 
 def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
-           ecclesia_copies=1, adapter=None):
-    main_deck = fixture_deck()
+           ecclesia_copies=1, adapter=None, matchup=None):
+    main_deck = (matchup["main_deck"] if matchup else fixture_deck())
     if ecclesia_copies > 1:
         main_deck[1:1 + ecclesia_copies - 1] = [INCREDIBLE_ECCLESIA] * (ecclesia_copies - 1)
     duel, decision = new_duel(opponent_card=opponent_card,
                               opponent_set=opponent_card == 24224830,
                               opening_hand=opening_hand,
                               main_deck=main_deck,
+                              extra_deck=matchup.get("extra_deck") if matchup else None,
                               adapter=adapter)
     chosen = []
     for index in indices:
@@ -170,8 +172,8 @@ def action_name(action):
     return f"{action['kind']}:{card}" if card else action["kind"]
 
 
-def endboard_score(snapshot):
-    return sum(score_breakdown(snapshot).values())
+def endboard_score(snapshot, weights=None):
+    return sum(score_breakdown(snapshot, weights).values())
 
 
 def evaluation_context(snapshot):
@@ -192,13 +194,14 @@ def evaluation_context(snapshot):
     }
 
 
-def score_breakdown(snapshot):
+def score_breakdown(snapshot, weights=None):
     zones = snapshot.zones
+    weights = CARD_WEIGHTS if weights is None else weights
     return {
         "generic_hand": snapshot.counts["hand0"] * 0.25,
-        "monsters": sum(CARD_WEIGHTS.get(card, 0.5) for card in zones["monster"]),
-        "spell_traps": sum(CARD_WEIGHTS.get(card, 0.5) for card in zones["spell_trap"]),
-        "named_hand_followup": sum(CARD_WEIGHTS.get(card, 0) for card in zones["hand"]),
+        "monsters": sum(weights.get(card, 0.5) for card in zones["monster"]),
+        "spell_traps": sum(weights.get(card, 0.5) for card in zones["spell_trap"]),
+        "named_hand_followup": sum(weights.get(card, 0) for card in zones["hand"]),
     }
 
 
