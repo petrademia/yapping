@@ -60,6 +60,10 @@ def test_fixture_deals_requested_exact_opening_hand():
     assert sorted(duel.cards(0, 2)) == sorted(hand)
 
 
+@pytest.mark.skipif(
+    not CARDS.is_file() or not (SCRIPTS / "constant.lua").is_file(),
+    reason="full card database and ygopro scripts are not installed",
+)
 def test_fixture_can_model_three_ecclesia_copies():
     deck = fixture_deck()
     deck[1:3] = [INCREDIBLE_ECCLESIA, INCREDIBLE_ECCLESIA]
