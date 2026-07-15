@@ -3,8 +3,9 @@
 import argparse
 import json
 
-from analyze_ash import (CARD_WEIGHTS, action_name, endboard_score,
-                          evaluation_context, replay, score_breakdown)
+from analyze_ash import (CARD_WEIGHTS, ReplayCursor, action_name,
+                          endboard_score, evaluation_context, replay,
+                          score_breakdown)
 from trace_albaz_combo import (
     ASH_BLOSSOM,
     CELTIC_GUARDIAN,
@@ -80,8 +81,9 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
            ecclesia_copies=1, recovery_only=False):
     card = CARDS[interruption]
     adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter)
     result = minimax_replay(
-        lambda path: replay(path, card, opening_hand, ecclesia_copies, adapter),
+        cursor,
         legal,
         endboard_score,
         recovery_terminal if recovery_only
@@ -90,7 +92,7 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
         max_depth=max_depth,
         max_nodes=max_nodes,
     )
-    final = replay(result.actions, card, opening_hand, ecclesia_copies, adapter)
+    final = cursor(result.actions)
     print(f"Opening-hand minimax against known {interruption}")
     if opening_hand is not None:
         print("opening hand: " + ", ".join(map(str, opening_hand)))

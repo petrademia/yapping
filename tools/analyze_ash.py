@@ -58,6 +58,38 @@ class Recovery:
     complete: bool
 
 
+class ReplayCursor:
+    """Reuse forward descent; reconstruct only after backtracking."""
+
+    def __init__(self, opponent_card=ASH_BLOSSOM, opening_hand=None,
+                 ecclesia_copies=1, adapter=None):
+        self.opponent_card = opponent_card
+        self.opening_hand = opening_hand
+        self.ecclesia_copies = ecclesia_copies
+        self.adapter = adapter
+        self.path = ()
+        self.snapshot = replay((), opponent_card, opening_hand,
+                               ecclesia_copies, adapter)
+
+    def __call__(self, path):
+        if not (len(path) >= len(self.path) and
+                path[:len(self.path)] == self.path):
+            self.snapshot = replay((), self.opponent_card, self.opening_hand,
+                                   self.ecclesia_copies, self.adapter)
+            self.path = ()
+        if path != self.path:
+            chosen = list(self.snapshot.actions)
+            decision = self.snapshot.decision
+            for index in path[len(self.path):]:
+                action = decision["actions"][index]
+                chosen.append(action_name(action))
+                decision = self.adapter.step(index)
+            self.snapshot = snapshot_from_duel(self.adapter, decision,
+                                               tuple(chosen))
+            self.path = path
+        return self.snapshot
+
+
 def interrupted_prefix(window, interruption="ash", target=0):
     environment = os.environ | {
         "YAPPING_INTERRUPTION": interruption,
@@ -117,6 +149,10 @@ def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
         action = decision["actions"][index]
         chosen.append(action_name(action))
         decision = duel.step(index)
+    return snapshot_from_duel(duel, decision, tuple(chosen))
+
+
+def snapshot_from_duel(duel, decision, chosen):
     zones = {
         "hand": duel.cards(0, HAND),
         "monster": duel.cards(0, MZONE),
@@ -126,7 +162,7 @@ def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
     }
     action_key = repr((decision["player"], decision["turn"], decision["actions"])).encode()
     return Snapshot(decision, duel.counts(), zones, bytes(duel.state_key()) + action_key,
-                    tuple(chosen))
+                    chosen)
 
 
 def action_name(action):
