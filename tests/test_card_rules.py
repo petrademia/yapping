@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import pytest
 
 from yapping.card_rules import CardDatabase
 from yapping import load_archetype
@@ -7,6 +8,7 @@ from yapping import load_archetype
 ROOT = Path(__file__).parents[1]
 
 
+@pytest.mark.skipif(not (ROOT / "assets/cards.cdb").is_file(), reason="card database is not installed")
 def test_card_database_identifies_high_spirits_races_and_targets():
     archetype = load_archetype(ROOT / "configs/archetypes/branded.json")
     cards = CardDatabase(ROOT / "assets/cards.cdb")
