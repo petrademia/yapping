@@ -1,0 +1,36 @@
+{
+  "source": {
+    "site": "Master Duel Meta",
+    "url": "https://www.masterduelmeta.com/combo/6a20a6ee6afb227e26a6e927?combosDeckType=631ac6d9e0507c998e6f2a34",
+    "deck_type": "Branded",
+    "retrieved": "2026-07-16"
+  },
+  "entries": [
+    {
+      "id": "mdm-walbaz-through-droll",
+      "title": "Only Walbaz through Droll",
+      "starting_hand": ["Fallen of the White Dragon"],
+      "branches": [
+        {
+          "id": "droll",
+          "opponent_interruption": "Droll & Lock Bird",
+          "description": "Reduced line; no LIGHT/DARK Normal Summon",
+          "validation": "unverified"
+        },
+        {
+          "id": "no-droll",
+          "opponent_interruption": null,
+          "description": "Stronger optional line; requires a discard",
+          "validation": "unverified"
+        }
+      ],
+      "validation": {
+        "status": "fixture_prepared",
+        "notes": [
+          "Dedicated page exposes distinct Droll and no-Droll outcomes.",
+          "Exact card-by-card continuation still needs controlled Lua replay."
+        ]
+      }
+    }
+  ]
+}

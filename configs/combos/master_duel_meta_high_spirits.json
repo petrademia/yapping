@@ -1,0 +1,58 @@
+{
+  "source": {
+    "site": "Master Duel Meta",
+    "url": "https://www.masterduelmeta.com/combo/6a1cccd2eb8a437549c5a6db?combosDeckType=631ac6d9e0507c998e6f2a34",
+    "deck_type": "Branded",
+    "retrieved": "2026-07-16"
+  },
+  "entries": [
+    {
+      "id": "mdm-high-spirits-spellcaster-discard",
+      "title": "High Spirits + Spellcaster + Any discard",
+      "starting_hand": ["Branded in High Spirits", "Spellcaster", "any discard"],
+      "steps": [
+        {
+          "card": "Branded in High Spirits",
+          "action": "activate",
+          "requires": {
+            "revealed_hand_card_race": "SPELLCASTER",
+            "extra_deck_target": {
+              "level": 8,
+              "same_race_as_revealed": true,
+              "attack_or_defense": 2500
+            },
+            "discard_available": true
+          },
+          "result": "send matching Level 8 Fusion and add Fallen of Albaz or a monster that mentions it"
+        },
+        {
+          "action": "continue_from_result",
+          "notes": [
+            "The exact continuation depends on the selected Spellcaster and discard card.",
+            "Enumerate every matching Spellcaster in hand rather than selecting one fixed card."
+          ]
+        }
+      ],
+      "target_variants": [
+        "Blazing Cartesia, the Virtuous",
+        "Guiding Quem, the Virtuous",
+        "Incredible Ecclesia, the Virtuous",
+        "Aluber the Jester of Despia"
+      ],
+      "interruption_branches": {
+        "ash": { "status": "unverified", "expected": "High Spirits or subsequent search may be negated" },
+        "droll": { "status": "unverified", "expected": "Search/follow-up branch is restricted" },
+        "veiler": { "status": "unverified", "expected": "Evaluate Fallen/ Ecclesia field-effect timing" },
+        "impermanence": { "status": "unverified", "expected": "Evaluate Fallen/ Ecclesia field-effect timing" },
+        "nibiru": { "status": "unverified", "expected": "Evaluate summon-count stopping point" }
+      },
+      "validation": {
+        "status": "partial_validated",
+        "notes": [
+          "OCGCore validates activation, Cartesia reveal, Granguignol selection, Fallen search, and the Fallen hand effect sending Albion.",
+          "The engine validates the uninterrupted line through Fallen, Ecclesia, Golden Swordsoul, Ecclesia and the Dark Dragon, Guiding Quem, Kitt, Three Champions, and Cartesia follow-up. Interruption branches remain explicitly unverified."
+        ]
+      }
+    }
+  ]
+}
