@@ -2,280 +2,315 @@
 
 **Yet Another Program for Parsing Interactive Game Nodes**
 
-YAPPING is an independent Yu-Gi-Oh combo-search project built on top of a
-maintained OCGCore adapter. Its focus is deterministic duel execution, exact
-legal-action decoding, and search over real game states. Reinforcement
-learning may later guide search, but it is not the current training target.
+YAPPING is an independent Yu-Gi-Oh! combo-search and duel-analysis project. It uses a pinned OCGCore build through a small native adapter to execute real Lua card effects, decode exact legal prompts, and search from real game states.
 
-YAPPING is unofficial and is not affiliated with or endorsed by Konami,
-Shueisha, or the maintainers of the referenced simulator projects.
+Current focus:
 
-## Architecture
+- deterministic duel execution;
+- exact legal-action decoding;
+- replay-based search and minimax;
+- interruption and hidden-hand analysis;
+- declarative archetype, deck, fixture, and scoring configuration.
 
-```text
-objective function
-       |
-bounded combo search
-       |
-YAPPING engine contract
-       |
-original native OCGCore adapter
-       |
-card database + Lua scripts
+Reinforcement learning is a later consumer of verified search data, not the current source of truth.
+
+YAPPING is unofficial and is not affiliated with or endorsed by Konami, Shueisha, or the maintainers of the referenced simulator projects.
+
+## How the system works
+
+```
+deck / archetype configuration
+        |
+combo fixture and interruption scenario
+        |
+legal-action decoder
+        |
+ReplayCursor or replay-from-seed oracle
+        |
+OCGCore + Lua scripts + cards.cdb
+        |
+location-aware evaluator
+        |
+minimax, hidden-world search, or consistency report
 ```
 
-The initial search replays every candidate sequence from the same seed. This
-is intentionally simple and deterministic. State cloning, parallel search,
-and learned heuristics come after engine correctness.
+The native engine knows game rules and legal actions. Archetype configuration supplies deck-specific data such as card lists, target predicates, interruption policies, fixture references, and objective weights. Search code should not contain branches such as "if this is Fallen" or "if this is Ecclesia."
 
-## Engine choice
+Two replay modes are kept permanently:
 
-The adapter targets these aligned revisions:
+- Oracle mode replays every path from the initial seed and remains the correctness reference.
+- Search mode uses ReplayCursor to reuse the current forward path and must match the oracle.
 
-- `Fluorohydride/ygopro-core`:
-  `db4fd16a99991802511b9a89e0025dd2f51f5e36`
-- `Fluorohydride/ygopro-scripts`:
-  `72a1be24bb5a4eab9af3a71e53561abcd467aff6`
+The oracle creates a fresh native duel and replays the complete action path for each candidate. ReplayCursor keeps one active duel aligned with the current depth-first search prefix, steps forward when descending, and reconstructs from the seed only after backtracking to a different branch. It is an optimization, not a native duel clone.
 
-The core is fetched during the native build and is not stored in this
-repository. Card scripts and `cards.cdb` are runtime inputs supplied by the
-user.
+## Repository structure
 
-## Continuous integration
-
-GitHub Actions builds the C++ adapter, checks out the pinned Lua scripts, and
-runs the portable test suite on every push and pull request. The full Albaz
-fixture remains conditionally skipped in public CI because `assets/cards.cdb`
-is intentionally untracked; provide that database through a private artifact
-or secret-backed download only if you want CI to run the full card fixture.
-
-## Native adapter
-
-`yapping._ocgcore.Duel` currently supports:
-
-- deterministic two-player duel creation and deck loading;
-- SQLite `cards.cdb` card-data callbacks;
-- global and per-card Lua script loading;
-- idle, chain, yes/no, option, position, zone, card, sum, and toggle decisions;
-- legal actions that retain player, card, location, sequence, and description;
-- field counts, card identities by zone, and a binary field-state key.
-
-The main integration fixture executes the complete deterministic line in
-[`combos/albaz_swordsoul_full.yaml`](combos/albaz_swordsoul_full.yaml), including:
-
-```text
-Fallen of the White Dragon -> Titaniklad
-  -> two Synchro summons and two Fusion summons
-  -> ordered chain construction and reverse resolution
-  -> Dogmatika Ecclesia -> The Fallen & The Virtuous
-  -> Devours the Dogma -> Mercourier
-  -> Set Branded Retribution
-  -> both End Phase return effects
+```
+yapping/
+|-- cpp/
+|   +-- adapter.cpp                 Pybind11 OCGCore adapter
+|-- src/yapping/
+|   |-- archetype.py                Declarative archetype loader
+|   |-- card_rules.py               cards.cdb metadata and predicates
+|   |-- engine.py                   Generic engine protocol
+|   |-- evaluation.py               Location/state-aware evaluator
+|   |-- minimax.py                  Minimax and hidden-world search
+|   |-- search.py                   Search result and orchestration types
+|   |-- probability.py              Hypergeometric opening probabilities
+|   +-- env.py                      Gymnasium-compatible environment shell
+|-- configs/
+|   |-- archetypes/                 Complete archetype configurations
+|   |-- combos/                     Declarative combo/interruption fixtures
+|   +-- *.json                      Earlier matchup/search configurations
+|-- combos/
+|   +-- albaz_swordsoul_full.yaml   Canonical deterministic combo fixture
+|-- tools/
+|   |-- trace_*.py                  Prompt-by-prompt engine fixtures
+|   |-- search_*.py                 Search and minimax entry points
+|   |-- analyze_*.py                Interruption/consistency reports
+|   |-- run_*_fixture.py            Deterministic fixture runners
+|   |-- training_data.py             Oracle-data export and baseline evaluation
+|   +-- verify_replay_equivalence.py ReplayCursor/oracle comparison
+|-- tests/                          Unit and native integration tests
+|-- docs/                           Architecture and configuration docs
+|-- reports/                        Reproducible experiment outputs
+|-- assets/cards.cdb                Optional local card database
+|-- CMakeLists.txt                  Native build and pinned OCGCore setup
+|-- pyproject.toml                  Python package and test configuration
++-- DIRECTION.md                    Project direction and phase decisions
 ```
 
-Run `python tools/trace_albaz_combo.py` for a prompt-by-prompt trace. The full
-fixture test runs when `assets/cards.cdb` and the adjacent
-`fluorohydride-ygopro-scripts` checkout are available; otherwise it is skipped.
-Unsupported protocol messages raise an explicit error, and new prompt types are
-added only when canonical fixtures require them.
+## Engine and dependencies
 
-## Adversarial combo search
+The adapter targets:
 
-`python tools/analyze_ash.py` gives the opponent exactly one Ash Blossom,
-discovers every legal activation window in the canonical combo, replays each
-negation, and searches real legal continuations to the next turn. The current
-fixture exposes seven windows and identifies the Fallen of the White Dragon
-deck-summon trigger as the strongest choke point. Its best discovered recovery
-is to enter the End Phase, use Titaniklad to Special Summon Guiding Quem, send
-Blazing Cartesia, and return Cartesia to hand.
+- [Fluorohydride/ygopro-core](https://github.com/Fluorohydride/ygopro-core), pinned to db4fd16a99991802511b9a89e0025dd2f51f5e36;
+- [Fluorohydride/ygopro-scripts](https://github.com/Fluorohydride/ygopro-scripts), pinned to 72a1be24bb5a4eab9af3a71e53561abcd467aff6;
+- Lua 5.4.7, fetched by CMake;
+- SQLite for cards.cdb;
+- Python, pybind11, Gymnasium, NumPy, and pytest.
 
-`python tools/search_opening.py ash` runs alpha-beta minimax from the opening
-decision rather than fixing the combo prefix. On the canonical hand it visits
-965 replayed states, proves the search complete under the fixture's action
-abstraction, chooses Titaniklad as the Extra Deck send, and reaches a worst-case
-score of 8.75 after the opponent's optimal Ash timing.
+OCGCore is fetched during the native build and is not copied into this repository. Card scripts and cards.cdb are runtime inputs.
 
-The same command accepts `veiler`, `impermanence`, `droll`, `nibiru`, and
-`ghost_ogre` to search the opening decision against one known legal hand trap.
-Called by the Grave is intentionally not in this list; see its separate model
-below.
+Linux or WSL is the recommended development environment because the native build and optional fork-based replay experiments target Linux process semantics.
 
-For the one-card baseline, known Effect Veiler and Infinite Impermanence also
-complete from the opening (1,317 and 1,390 states respectively). Both optimally
-negate Fallen and leave the same 8.75 recovery line: Titaniklad supplies Guiding
-Quem, which sends and returns Blazing Cartesia.
+## Setup on Linux or WSL
 
-Known Droll & Lock Bird also completes from the opening in 8,696 states. Its
-15.75 worst-case line changes the route instead of merely recovering from a
-negated Fallen, demonstrating why each interruption needs its own search.
-
-Pass `--hand` followed by five card IDs or fixture aliases to search an exact
-dealt opening hand, for example `--hand fallen incredible_ecclesia
-celtic_guardian celtic_guardian celtic_guardian`. Those cards are removed from
-the deck before the deterministic deal, so deck searches correctly account for
-a card already being in hand.
-
-An opening report is optimal only when it says `complete: True`. At a node
-limit, its displayed value is explicitly a provisional heuristic score rather
-than a proven bound.
-Each opening report also prints the evaluator breakdown: board monsters,
-spell/traps, named follow-up in hand, and generic hand advantage.
-
-`python tools/analyze_monster_negation.py veiler` and the corresponding
-`impermanence` command enumerate both legal timing windows and legal monster
-targets. The native adapter decodes zone choices from the selecting player's
-perspective, so player 1 can legally activate Infinite Impermanence from hand.
-
-Called by the Grave is modeled separately as an already Set card. It is not a
-turn-one hand trap: an opponent who starts with it in hand cannot Set and
-activate it during the combo player's first turn. Its fixture therefore models
-a turn-two or pre-established-backrow scenario and does not use a hand-opening
-probability in its report.
-
-The initial evaluator is deliberately visible in `tools/analyze_ash.py`. It
-weights live interaction such as Mirrorjade and Branded Retribution, reusable
-engines such as Guiding Quem and Cartesia, follow-up in hand, and generic card
-advantage. The opponent minimizes this end-board score; the combo player
-maximizes it. These weights are a testable baseline, not learned truth.
-
-### Current interruption coverage
-
-| Interaction | Opening minimax | Fixture coverage |
-| --- | --- | --- |
-| Ash Blossom | Complete (965 states) | Timing and recovery report |
-| Effect Veiler | Complete (1,317 states) | Timing and target report |
-| Infinite Impermanence | Complete (1,390 states) | Timing and target report |
-| Droll & Lock Bird | Complete (8,696 states) | Timing and recovery report |
-| Ghost Ogre | Complete (22,756 states) | Legal timing/recovery fixture |
-| Nibiru | Complete (10,975 states) | Legal multi-tribute timing/recovery fixture |
-| Called by the Grave | Not a turn-one hand-trap model | Pre-set backrow fixture |
-
-“Provisional” means the node limit evaluated nonterminal leaves with the
-heuristic; it is deliberately not presented as an optimal score.
-
-The canonical hidden-hand experiments also complete for Ash (4,298 states),
-Veiler (4,043), Infinite Impermanence (4,075), and Droll (4,851). Each forces
-the combo player to choose before seeing whether the interruption exists.
-
-## Two-layer optimization model
-
-**Inner problem:** Given an exact opening hand and legal opponent responses,
-which line survives the worst interruption? Deterministic replay and minimax
-solve this tactical problem.
-
-**Outer problem:** Across all likely opening hands, how consistently can the
-deck reach a valuable board, recover through disruption, and avoid bricks or
-excessive garnets? Hypergeometric probabilities, hand enumeration, and later
-sampling aggregate the inner solver's results into deck-level analysis.
-
-YAPPING models three adversarial experiments:
-
-- **Known interruption:** optimize against one named card for diagnosis.
-- **Guaranteed hidden interruption:** choose one pre-reveal action whose worst
-  outcome is strongest across a set of possible hidden cards.
-- **Probabilistic hidden hand:** choose one pre-reveal action with the highest
-  probability-weighted outcome from an opponent deck model.
-
-`python tools/search_hidden_ash.py ash` now connects this model to full opening
-branching for Ash versus no Ash; replace `ash` with any known hand-trap name to
-run the same experiment. It intersects player-0 actions across both worlds,
-retains both worlds after an indistinguishable opponent pass, and splits them
-only when the interruption is publicly activated. Its belief-state alpha-beta
-search completes the canonical Ash/no-Ash fixture in 4,298 state visits with
-the same 8.75 worst-case score as the known-Ash search. It still reports
-`complete: false` if a future hand exceeds the configured state budget.
-The canonical Veiler/no-Veiler experiment also completes (4,043 states, 8.75
-worst-case score).
-
-Like known-interruption search, hidden-hand-trap search accepts `--hand` plus
-five card IDs, so its pre-reveal decision can be optimized from an exact
-opening hand rather than only the one-card baseline.
-
-For larger hidden-world sets, `python tools/search_sampled_hidden.py ash`
-uses sampled determinization instead of enumerating every opponent policy
-product. It reports the random seed, sample count, estimated action score,
-standard error, 95% interval, and whether every sampled sub-search completed.
-This is an estimate, not a guarantee; `search_hidden_ash.py` remains the exact
-two-world maximin mode. The outer consistency report is available with
-`python tools/analyze_consistency.py --hands 20` and preserves each hand's
-hypergeometric weight and complete/provisional status.
-
-The learned-model stage starts with oracle data rather than the Gymnasium
-environment: `python tools/training_data.py export artifacts/training.jsonl`
-writes state keys, legal actions, oracle actions, values, and completion flags.
-`python tools/training_data.py evaluate artifacts/training.jsonl` evaluates the
-reproducible lookup baseline. Node-limited examples remain provisional and
-must not be treated as solved labels.
-
-`python tools/compare_hidden.py ash` compares the sampled expected-value result
-with exact hidden maximin on the same input. The reported gap is an information
-modeling diagnostic: sampled determinization may use the sampled world after
-the first action, while hidden maximin retains uncertainty. The exact result
-is labeled as a worst-case guarantee; the sampled result includes its seed,
-standard error, confidence interval, and completion flag.
-
-## Roadmap
-
-1. Add matchup-specific evaluators and compare results with expert lines.
-2. Evaluate deck consistency by weighting the best adversarial line from each
-   sampled or enumerated opening hand, including bricks and garnets.
-3. Use Monte Carlo Tree Search when unknown hands and interruption
-   probabilities make exhaustive branching too large.
-4. Train policy/value models only after deterministic search can generate and
-   verify trustworthy state, legal-action, and outcome data.
-
-## Development
+Install native prerequisites:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[test]'
-pytest
+sudo apt-get update
+sudo apt-get install -y cmake ninja-build libsqlite3-dev
 ```
-# Validation results
 
-The search has two replay modes: the default `ReplayCursor` search mode and
-the slower replay-from-seed oracle mode. Use
-`python tools/verify_replay_equivalence.py ghost_ogre` to compare their
-decoded score, action line, completion flag, endboard, and score breakdown.
-The production-depth Ghost Ogre A/B matched byte-for-byte; the cursor took
-about 48 seconds versus about 245 seconds for the oracle at 22,756 nodes.
+Clone the pinned script repository beside YAPPING:
 
-Sampled hidden search uses the configured hypergeometric prior. With the
-Albaz config, Ash's probability in a 40-card opponent deck is 0.3375506.
-An eight-sample Ash comparison at 5,000 nodes found exact hidden-world
-maximin 8.75 (complete) versus sampled determinization mean 12.375
-(incomplete), with a 95% interval of [9.69, 15.06]. Treat this as a
-provisional strategy-fusion measurement until the sampled worlds complete.
+```bash
+cd ~/projects/yugioh
+git clone https://github.com/Fluorohydride/ygopro-scripts.git fluorohydride-ygopro-scripts
+git -C fluorohydride-ygopro-scripts checkout 72a1be24bb5a4eab9af3a71e53561abcd467aff6
+cd yapping
+```
 
-The first 50-hand Ash consistency report is saved at
-`reports/consistency-ash-50.json`. It used 5,000 nodes and depth 180 per
-hand: weighted score 4.03965, brick fraction 0.58, complete fraction 0.88,
-and 6 provisional hands.
-# Aluber interruption matrix
+Create the environment and install the package:
 
-The one-card Aluber fixture can be run against all configured interruptions
-with `python tools/run_aluber_interruptions.py`. The reproducible output is
-stored in `reports/aluber-interruptions.json`.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e '.[test]'
+```
 
-Under the current fixture hand and legal timing windows:
+The editable install builds the native yapping._ocgcore extension. Full card-effect fixtures also need a compatible assets/cards.cdb, intentionally untracked from the public repository.
 
-- Ash Blossom, Effect Veiler, and Infinite Impermanence negate Aluber's
-  search, leaving Aluber on the field.
-- Droll & Lock Bird blocks the later Dogma follow-up search after the line
-  reaches Granguignol and Albion.
-- Nibiru has no legal activation in this line and the full board completes.
-- Ghost Ogre activates, but the full board still completes.
+## Providing cards.cdb
 
-These are deterministic engine results, not estimated matchup probabilities.
-# Fallen + Ecclesia recovery fixture
+cards.cdb is the SQLite card database used by the adapter for names, races, levels, ATK/DEF, and other card metadata. It is intentionally ignored by Git and should be obtained from a compatible EDOPro/YGOPro installation or database distribution.
 
-The two-card fixture uses Fallen of the White Dragon plus Incredible Ecclesia
-from the configured 47-card deck. It can be run with
-`python tools/run_fallen_ecclesia_fixture.py`; results are stored in
-`reports/fallen-ecclesia-two-card.json`.
+Option 1: copy it from an existing EDOPro installation:
 
-With no interruption, the original line completes. When Ash Blossom, Effect
-Veiler, or Infinite Impermanence negates Fallen's field effect, the engine
-preserves the Normal Summon, summons Incredible Ecclesia from hand, and the
-line still completes with the expected board and Branded Retribution set.
+```bash
+mkdir -p assets
+cp /path/to/EDOPro/cards.cdb assets/cards.cdb
+```
+
+Option 2: download an EDOPro-compatible database from [Project Ignis BabelCDB](https://github.com/ProjectIgnis/BabelCDB), then copy the selected cards.cdb into assets/cards.cdb. Choose the database that matches the card-script revision you are testing; a newer database can change names or card metadata.
+
+Check the file:
+
+```bash
+sha256sum assets/cards.cdb
+PYTHONPATH=src python -m pytest -q tests/test_card_rules.py
+```
+
+The database used for the validated Branded fixtures has SHA-256:
+
+```text
+c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f
+```
+
+A different compatible database may still work, but exact experiment results should record its checksum.
+
+## Running tests
+
+```bash
+PYTHONPATH=src python -m pytest -q
+```
+
+Tests requiring cards.cdb or the adjacent Lua scripts skip when those runtime assets are unavailable. The portable suite remains runnable in clean CI.
+
+Useful native traces:
+
+```bash
+PYTHONPATH=src python tools/trace_albaz_combo.py
+PYTHONPATH=src python tools/trace_high_spirits.py
+```
+
+## Representative fixtures
+
+The deterministic fixtures are small, inspectable engine tests:
+
+- The full Fallen line validates chained effects, Synchro/Fusion materials, End Phase triggers, and ordered chain resolution.
+- The Fallen + Incredible Ecclesia recovery fixture validates that Ash Blossom, Effect Veiler, or Infinite Impermanence can negate Fallen while the Normal Summon remains available, allowing Ecclesia to continue the line.
+- The High Spirits fixture validates database-backed target predicates and the uninterrupted continuation through Quem, Kitt, and Three Champions.
+
+Run the two-card recovery fixture with:
+
+```bash
+python tools/run_fallen_ecclesia_fixture.py
+```
+
+A fixture is a correctness and regression case. It is not itself a learned policy; search must still enumerate legal alternatives and score the resulting states.
+
+## Archetype configuration
+
+A new archetype should be represented by configuration rather than a new engine implementation. The Branded example is configs/archetypes/branded.json.
+
+It contains:
+
+- main_deck and extra_deck: repeated card IDs encode quantities;
+- interruption_specs: opponent card IDs and activation policies;
+- fixtures: combo/scenario files to validate;
+- target_predicates: constraints such as level, race, Fusion type, and ATK/DEF;
+- card_weights: card-specific values supplied to the evaluator;
+- objectives: weights for generic goals such as follow-up and disruption survival.
+
+Load it from Python:
+
+```python
+from yapping import load_archetype
+
+archetype = load_archetype("configs/archetypes/branded.json")
+print(archetype.deck_counts)
+print(archetype.interruptions["ash"])
+```
+
+The High Spirits fixture uses a declarative target predicate:
+
+```python
+from yapping.card_rules import CardDatabase
+
+predicate = archetype.target_predicates["high_spirits"]
+targets = CardDatabase("assets/cards.cdb").matching_targets(
+    revealed_card=95515789,
+    extra_deck=list(archetype.extra_deck),
+    predicate=predicate,
+)
+```
+
+The evaluator receives card identity, current zone, and game-state facts:
+
+```python
+from yapping import EndboardEvaluator, EvaluationState
+
+evaluator = EndboardEvaluator(archetype.card_weights, archetype.objectives)
+state = EvaluationState(
+    zones={"monster": (...), "spell_trap": (...), "hand": (...), "grave": (...)},
+    facts={"opponent_interrupted": True},
+)
+score = evaluator.score(state)
+```
+
+See docs/ARCHETYPE_CONFIG.md for the plug-in contract.
+
+## Search and analysis commands
+
+Known-interruption opening search:
+
+```bash
+python tools/search_opening.py ash
+python tools/search_opening.py veiler
+python tools/search_opening.py impermanence
+python tools/search_opening.py droll
+python tools/search_opening.py nibiru
+python tools/search_opening.py ghost_ogre
+```
+
+Search an exact five-card hand:
+
+```bash
+python tools/search_opening.py ash --hand fallen incredible_ecclesia celtic_guardian celtic_guardian celtic_guardian
+```
+
+Other analysis modes:
+
+```bash
+python tools/analyze_ash.py
+python tools/analyze_monster_negation.py veiler
+python tools/analyze_monster_negation.py impermanence
+python tools/search_hidden_ash.py ash
+python tools/search_sampled_hidden.py ash
+python tools/analyze_consistency.py --hands 20
+python tools/compare_hidden.py ash
+python tools/verify_replay_equivalence.py ghost_ogre
+```
+
+Output distinguishes proven searches from provisional node-limited evaluations. A score is not presented as optimal unless the search reports completion.
+
+## What is being optimized?
+
+YAPPING separates tactical line selection from deck-level consistency.
+
+Inner problem: given an exact opening hand and opponent responses, choose the best legal line under the selected objective.
+
+Outer problem: across likely opening hands, measure how often the deck reaches a valuable board, survives disruption, bricks, or consumes too many garnets.
+
+Current methods:
+
+- deterministic replay for correctness;
+- minimax for known interruptions;
+- exact belief-state search for small hidden-world sets;
+- sampled determinization for larger hidden-world estimates;
+- hypergeometric weighting for opening-hand consistency;
+- oracle-labelled data for later policy/value models.
+
+Monte Carlo Tree Search and learned policy/value models remain future stages. They should be evaluated against the deterministic oracle.
+
+## Current limitations
+
+- cards.cdb and Lua scripts are external runtime assets;
+- full native fixture tests skip when those assets are absent;
+- search budgets can produce provisional rather than proven values;
+- sampled determinization can suffer from strategy fusion;
+- card weights are an explicit baseline, not universal truth;
+- core-level duel serialization is out of scope; replay remains the correctness primitive.
+
+## Development and documentation
+
+- [DIRECTION.md](DIRECTION.md): phase plan and architectural decisions;
+- [docs/ARCHETYPE_CONFIG.md](docs/ARCHETYPE_CONFIG.md): adding another archetype;
+- [WRITEUP.md](WRITEUP.md): technical project writeup;
+- [WRITEUP-ENUMERABLE-UNKNOWNS.md](WRITEUP-ENUMERABLE-UNKNOWNS.md): hidden-information methodology;
+- [LINKEDIN_POST.md](LINKEDIN_POST.md): public-facing project angle;
+- [X-THREAD.md](X-THREAD.md): shorter project narrative.
+
+CI builds the native adapter and runs the portable test suite on pushes and pull requests. Before opening a pull request:
+
+```bash
+python -m pytest -q
+git diff --check
+```
+
+## License and attribution
+
+YAPPING is an independent project. The OCGCore adapter, card scripts, card database, and referenced simulator projects retain their respective licenses and attribution requirements. Review upstream licenses before redistributing runtime assets.

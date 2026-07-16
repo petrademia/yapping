@@ -19,7 +19,11 @@ file(GLOB LUA_SOURCES CONFIGURE_DEPENDS "${lua_SOURCE_DIR}/src/*.c")
 list(REMOVE_ITEM LUA_SOURCES "${lua_SOURCE_DIR}/src/lua.c" "${lua_SOURCE_DIR}/src/luac.c")
 add_library(yapping_lua STATIC ${LUA_SOURCES})
 target_include_directories(yapping_lua PUBLIC "${lua_SOURCE_DIR}/src")
-target_compile_definitions(yapping_lua PRIVATE LUA_USE_LINUX)
+if(APPLE)
+  target_compile_definitions(yapping_lua PRIVATE LUA_USE_MACOSX)
+elseif(UNIX)
+  target_compile_definitions(yapping_lua PRIVATE LUA_USE_LINUX)
+endif()
 
 FetchContent_Declare(
   ocgcore
