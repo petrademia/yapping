@@ -73,10 +73,10 @@ class DuelAdapter {
       : database_path_(std::move(database)), script_dir_(std::move(scripts)) {
     if (active_adapter) throw std::runtime_error("only one OCGCore adapter may be active");
     if (sqlite3_open_v2(database_path_.c_str(), &database_, SQLITE_OPEN_READONLY, nullptr) != SQLITE_OK)
-      throw std::runtime_error("cannot open card database: " + database_path_);
+      throw std::runtime_error("cannot open card database: " + database_path_ + ": " + sqlite3_errmsg(database_));
     const char* sql = "SELECT alias,setcode,type,atk,def,level,race,attribute FROM datas WHERE id=?";
     if (sqlite3_prepare_v2(database_, sql, -1, &card_statement_, nullptr) != SQLITE_OK)
-      throw std::runtime_error("cannot prepare card query");
+      throw std::runtime_error("cannot prepare card query for " + database_path_ + ": " + sqlite3_errmsg(database_));
     active_adapter = this;
     set_script_reader(&read_script_callback);
     set_card_reader(&read_card_callback);
