@@ -3,6 +3,7 @@ from pathlib import Path
 
 from trace_albaz_combo import new_duel, BLAZING_CARTESIA
 
+from yapping import load_archetype
 from yapping.card_rules import CardDatabase
 
 ROOT = Path(__file__).parents[1]
@@ -20,12 +21,12 @@ def choose(duel, decision, kind, card=None):
     raise RuntimeError(f"missing {kind} {card}: {decision['actions']}")
 
 def main():
-    config = json.loads((ROOT / "configs/branded_albaz_v1.json").read_text())
+    archetype = load_archetype(ROOT / "configs/archetypes/branded.json")
     hand = [HIGH_SPIRITS, BLAZING_CARTESIA, BRANDED_RED, BRANDED_FUSION, FORBIDDEN_CROWN]
     duel, decision = new_duel(
         opening_hand=hand,
-        main_deck=config["main_deck"],
-        extra_deck=config["extra_deck"],
+        main_deck=list(archetype.main_deck),
+        extra_deck=list(archetype.extra_deck),
     )
     decision = choose(duel, decision, "chain", HIGH_SPIRITS)
     decision = choose(duel, decision, "place")
@@ -106,8 +107,8 @@ def main():
     decision = choose(duel, decision, "pass")
     decision = choose(duel, decision, "select_card", 95515789)
     print("THREE CHAMPIONS ADDS CARTESIA", decision["actions"])
-    targets = CardDatabase(ROOT / "assets/cards.cdb").high_spirits_targets(
-        BLAZING_CARTESIA, config["extra_deck"]
+    targets = CardDatabase(ROOT / "assets/cards.cdb").matching_targets(
+        BLAZING_CARTESIA, list(archetype.extra_deck), archetype.target_predicates["high_spirits"]
     )
     if not any(target.name == "Granguignol the Dusk Dragon" for target in targets):
         raise RuntimeError("Granguignol was not a legal Spellcaster target")

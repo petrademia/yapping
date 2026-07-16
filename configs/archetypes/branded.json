@@ -1,0 +1,146 @@
+{
+  "name": "branded_albaz_v1",
+  "main_deck": [
+    73819701,
+    73819701,
+    68468459,
+    45883110,
+    55273560,
+    55273560,
+    95515789,
+    95515789,
+    19304410,
+    45484331,
+    60303688,
+    33854624,
+    19096726,
+    82489470,
+    84192580,
+    84192580,
+    84192580,
+    42141493,
+    42141493,
+    14558127,
+    14558127,
+    59438930,
+    59438930,
+    23434538,
+    94145021,
+    1984618,
+    1984618,
+    1984618,
+    30271097,
+    30271097,
+    30271097,
+    29948294,
+    29948294,
+    29948294,
+    44362883,
+    82738008,
+    17751597,
+    75500286,
+    25311006,
+    10045474,
+    10045474,
+    10045474,
+    98829635,
+    98829635,
+    62962630,
+    62962630,
+    62962630
+  ],
+  "extra_deck": [
+    76666602,
+    76666602,
+    44146295,
+    24915933,
+    72272462,
+    72578374,
+    70534340,
+    1906812,
+    51409648,
+    3410461,
+    41373230,
+    87746184,
+    78397661,
+    78397661,
+    74405783
+  ],
+  "interruption_specs": {
+    "ash": {
+      "card_id": 14558127,
+      "policy": "activate_at_first_legal_search"
+    },
+    "veiler": {
+      "card_id": 97268402,
+      "policy": "activate_on_monster_effect"
+    },
+    "impermanence": {
+      "card_id": 10045474,
+      "policy": "activate_on_monster_effect"
+    },
+    "droll": {
+      "card_id": 94145021,
+      "policy": "activate_after_first_search"
+    },
+    "nibiru": {
+      "card_id": 27204311,
+      "policy": "activate_at_first_legal_summon"
+    },
+    "ghost_ogre": {
+      "card_id": 59438930,
+      "policy": "activate_on_effect_resolution"
+    }
+  },
+  "fixtures": [
+    {
+      "id": "mdm-one-card-fallen",
+      "path": "../combos/master_duel_meta_branded.json"
+    },
+    {
+      "id": "mdm-high-spirits",
+      "path": "../combos/master_duel_meta_high_spirits.json"
+    },
+    {
+      "id": "mdm-walbaz",
+      "path": "../combos/master_duel_meta_walbaz.json"
+    }
+  ],
+  "target_predicates": {
+    "high_spirits": {
+      "level": 8,
+      "extra_deck_type": "fusion",
+      "same_race_as": "revealed_hand_card",
+      "attack_or_defense": 2500
+    }
+  },
+  "card_weights": {
+    "17751597": 5,
+    "19096726": 1,
+    "24915933": 8,
+    "29948294": 2,
+    "30271097": 2,
+    "41373230": 3,
+    "44146295": 10,
+    "45883110": 4,
+    "55273560": 3,
+    "60303688": 2,
+    "62962630": 2,
+    "73819701": 3,
+    "74405783": 2,
+    "78397661": 2,
+    "87746184": 5
+  },
+  "objectives": {
+    "endboard_value": 1,
+    "disruption_survived": 1,
+    "follow_up": 1,
+    "card_advantage": 1,
+    "garnet_penalty": 1
+  },
+  "metadata": {
+    "format": "Master Duel",
+    "engine": "OCGCore",
+    "deck_size": 47
+  }
+}

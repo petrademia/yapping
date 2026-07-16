@@ -1,0 +1,48 @@
+{
+  "fixture": "mdm-high-spirits-spellcaster-discard",
+  "opening_hand": [
+    "Branded in High Spirits",
+    "Blazing Cartesia, the Virtuous",
+    "any discard"
+  ],
+  "opening_hand_ids": [29948294, 95515789, "any_discard"],
+  "scenarios": [
+    {
+      "card": "Ash Blossom",
+      "card_id": 14558127,
+      "policy": "activate_at_first_legal_search",
+      "status": "configured"
+    },
+    {
+      "card": "Droll & Lock Bird",
+      "card_id": 94145021,
+      "policy": "activate_after_first_search",
+      "status": "configured"
+    },
+    {
+      "card": "Effect Veiler",
+      "card_id": 97268402,
+      "policy": "activate_on_Fallen_or_Ecclesia",
+      "status": "configured"
+    },
+    {
+      "card": "Infinite Impermanence",
+      "card_id": 10045474,
+      "policy": "activate_on_Fallen_or_Ecclesia",
+      "status": "configured"
+    }
+  ],
+  "policy_semantics": {
+    "activate_at_first_legal_search": "Choose the earliest legal chain window that can negate a search.",
+    "activate_after_first_search": "Wait until the first search resolves, then activate if legal.",
+    "activate_on_Fallen_or_Ecclesia": "Choose a legal Fallen or Ecclesia monster-effect window; search evaluates both targets."
+  },
+  "validation": {
+    "status": "scenario_matrix_configured",
+    "execution": "pending",
+    "notes": [
+      "The engine must still verify that each policy has a legal timing window in the exact replay.",
+      "A configured interruption is not evidence that the opponent actually activated it."
+    ]
+  }
+}

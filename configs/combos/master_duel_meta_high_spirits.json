@@ -39,6 +39,7 @@
         "Incredible Ecclesia, the Virtuous",
         "Aluber the Jester of Despia"
       ],
+      "interruption_matrix": "configs/combos/high_spirits_interruptions.json",
       "interruption_branches": {
         "ash": { "status": "unverified", "expected": "High Spirits or subsequent search may be negated" },
         "droll": { "status": "unverified", "expected": "Search/follow-up branch is restricted" },

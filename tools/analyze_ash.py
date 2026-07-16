@@ -22,7 +22,7 @@ from trace_albaz_combo import (
     new_duel,
     fixture_deck,
 )
-from yapping import opening_probability
+from yapping import EndboardEvaluator, EvaluationState, opening_probability
 
 
 HAND, MZONE, SZONE, GRAVE, REMOVED = 2, 4, 8, 16, 32
@@ -176,7 +176,7 @@ def endboard_score(snapshot, weights=None):
     return sum(score_breakdown(snapshot, weights).values())
 
 
-def evaluation_context(snapshot):
+def evaluation_context(snapshot, weights=None):
     """Expose state facts for future calibrated card/location scoring."""
     actions = snapshot.decision["actions"]
     activated = {action["card"] for action in actions
@@ -190,19 +190,15 @@ def evaluation_context(snapshot):
         "opponent_interrupted": any(action.startswith("chain:")
                                      for action in snapshot.actions),
         "searchable_or_recoverable": [card for card in snapshot.zones["hand"]
-                                       if card in CARD_WEIGHTS],
+                                       if card in (CARD_WEIGHTS if weights is None else weights)],
     }
 
 
 def score_breakdown(snapshot, weights=None):
-    zones = snapshot.zones
     weights = CARD_WEIGHTS if weights is None else weights
-    return {
-        "generic_hand": snapshot.counts["hand0"] * 0.25,
-        "monsters": sum(weights.get(card, 0.5) for card in zones["monster"]),
-        "spell_traps": sum(weights.get(card, 0.5) for card in zones["spell_trap"]),
-        "named_hand_followup": sum(weights.get(card, 0) for card in zones["hand"]),
-    }
+    evaluator = EndboardEvaluator(weights)
+    state = EvaluationState(snapshot.zones, evaluation_context(snapshot, weights))
+    return evaluator.breakdown(state)
 
 
 def legal_indices(snapshot):

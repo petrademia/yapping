@@ -1,9 +1,10 @@
-"""Card-database-backed legality rules for combo fixtures."""
+"""Card-database-backed declarative legality rules for combo fixtures."""
 from dataclasses import dataclass
 import sqlite3
 from pathlib import Path
 
 TYPE_FUSION = 0x40
+
 
 @dataclass(frozen=True)
 class CardRecord:
@@ -15,6 +16,7 @@ class CardRecord:
     level: int
     attack: int
     defense: int
+
 
 class CardDatabase:
     def __init__(self, path: str | Path):
@@ -34,14 +36,35 @@ class CardDatabase:
             self._cache[card_id] = CardRecord(*row)
         return self._cache[card_id]
 
-    def high_spirits_targets(self, revealed_card: int, extra_deck: list[int]) -> list[CardRecord]:
-        """Return legal Level 8 Fusion targets for Branded in High Spirits."""
+    def matching_targets(
+        self,
+        revealed_card: int,
+        extra_deck: list[int],
+        predicate: dict[str, int | str],
+    ) -> list[CardRecord]:
+        """Return Extra Deck cards matching a declarative target predicate."""
         revealed = self.card(revealed_card)
         return [
             candidate for card_id in extra_deck
             for candidate in [self.card(card_id)]
-            if candidate.type & TYPE_FUSION
-            and candidate.level == 8
-            and candidate.race == revealed.race
-            and (candidate.attack == 2500 or candidate.defense == 2500)
+            if (predicate.get("extra_deck_type") != "fusion" or candidate.type & TYPE_FUSION)
+            and (not predicate.get("level") or candidate.level == int(predicate["level"]))
+            and (
+                predicate.get("same_race_as") != "revealed_hand_card"
+                or candidate.race == revealed.race
+            )
+            and (
+                not predicate.get("attack_or_defense")
+                or candidate.attack == int(predicate["attack_or_defense"])
+                or candidate.defense == int(predicate["attack_or_defense"])
+            )
         ]
+
+    def high_spirits_targets(self, revealed_card: int, extra_deck: list[int]) -> list[CardRecord]:
+        """Backward-compatible Branded fixture helper."""
+        return self.matching_targets(revealed_card, extra_deck, {
+            "extra_deck_type": "fusion",
+            "level": 8,
+            "same_race_as": "revealed_hand_card",
+            "attack_or_defense": 2500,
+        })
