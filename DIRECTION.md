@@ -103,10 +103,24 @@ drift.
 
 ## Phase 5 - learned models
 
-Unchanged from the README roadmap: policy/value training starts only after
-phases 1-4 can generate and verify trustworthy state, legal-action, and
-outcome data at scale. The gymnasium env (`env.py`) stays dormant until
-then.
+The OCGCore-backed search remains the correctness oracle. It determines legal
+actions, resolves card effects, and labels resulting states and endboards.
+
+The first learned system should be supervised policy/value imitation trained
+on those oracle-labelled recovery states:
+
+- the policy predicts the oracle's preferred legal action;
+- the value model predicts the oracle/search evaluation of the state;
+- the action mask remains authoritative and learned policies may only select
+  actions currently legal in OCGCore.
+
+This is not reinforcement learning by itself: the model learns from fixed
+oracle labels rather than discovering behavior through reward-driven
+exploration. The Gymnasium environment (`env.py`) should wrap the real
+OCGCore engine for rollout and evaluation only after phases 1-4 produce
+trustworthy data at scale. Constrained or offline RL may follow once the
+imitation baseline is reliable, but it must not replace OCGCore legality or
+the exact search oracle.
 
 ## Non-goals for now
 
