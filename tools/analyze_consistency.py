@@ -129,6 +129,41 @@ def attach_baseline_deltas(reports):
             )
 
 
+def add_extender_marginals(reports, config, max_nodes, max_depth):
+    """Measure configured extenders by replacing one copy with filler."""
+    extenders = [int(card) for card in config.get("extenders", [])]
+    filler = int(config.get("counterfactual_filler", 91152256))
+    if not extenders:
+        return
+    adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    for report in reports.values():
+        for row in report["hands"]:
+            row["extender_marginals"] = {}
+            for extender in extenders:
+                if extender not in row["hand"]:
+                    continue
+                counterfactual = list(row["hand"])
+                counterfactual[counterfactual.index(extender)] = filler
+                with contextlib.redirect_stdout(io.StringIO()):
+                    result, final = search(
+                        row["interruption"], max_nodes=max_nodes,
+                        max_depth=max_depth, opening_hand=counterfactual,
+                        config=config, adapter=adapter,
+                    )
+                counter_categories = score_categories(final, config=config)
+                row["extender_marginals"][str(extender)] = {
+                    "score_delta": row["score"] - result.score,
+                    "counterfactual_score": result.score,
+                    "counterfactual_complete": result.complete,
+                    "category_deltas": {
+                        category: row["categories"][category] - counter_categories[category]
+                        for category in ("board_value", "interaction_value",
+                                          "follow_up_value", "survival_value")
+                    },
+                }
+    del adapter
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default=None)
@@ -138,6 +173,7 @@ if __name__ == "__main__":
     parser.add_argument("--max-nodes", type=int, default=100)
     parser.add_argument("--max-depth", type=int, default=40)
     parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--extenders", action="store_true")
     args = parser.parse_args()
     config = load_config(args.config)
     hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
@@ -167,6 +203,10 @@ if __name__ == "__main__":
                                     args.max_nodes, args.max_depth)
             reports[interruption] = {"summary": summary, "hands": rows}
     attach_baseline_deltas(reports)
+    if args.extenders:
+        if args.workers > 1:
+            raise ValueError("--extenders currently requires --workers 1")
+        add_extender_marginals(reports, config, args.max_nodes, args.max_depth)
     complete = all(
         row["complete"]
         for report in reports.values()
