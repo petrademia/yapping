@@ -112,8 +112,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     config = load_config(args.config)
     hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
-    interruptions = (list(config["interruptions"])
-                     if args.interruption == "all" else [args.interruption])
+    requested = (list(config["interruptions"])
+                 if args.interruption == "all" else [args.interruption])
+    # Keep the uninterrupted ceiling paired with every interruption scenario.
+    interruptions = ["none"] + [name for name in requested if name != "none"]
     reports = {}
     if args.workers > 1:
         rows = analyze_parallel(config, hands, interruptions, args.max_nodes,
