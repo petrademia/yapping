@@ -52,6 +52,35 @@ def classify(hand, config):
     }
 
 
+def summarize(rows):
+    total_weight = sum(row["probability"] for row in rows) or 1
+    categories = ("board_value", "interaction_value", "follow_up_value", "survival_value")
+    summary = {
+        "hands": len(rows),
+        "weighted_score": sum(row["score"] * row["probability"] for row in rows) / total_weight,
+        "weighted_categories": {
+            category: sum(row["categories"][category] * row["probability"] for row in rows) / total_weight
+            for category in categories
+        },
+        "complete_fraction": sum(row["complete"] for row in rows) / len(rows) if rows else 0,
+        "brick_fraction": sum(row["classification"]["brick"] for row in rows) / len(rows) if rows else 0,
+        "provisional_hands": sum(not row["complete"] for row in rows),
+    }
+    paired = [row for row in rows if "score_loss" in row]
+    if paired:
+        paired_weight = sum(row["probability"] for row in paired) or 1
+        summary["paired_hands"] = len(paired)
+        summary["weighted_score_loss"] = sum(
+            row["score_loss"] * row["probability"] for row in paired
+        ) / paired_weight
+        summary["weighted_category_loss"] = {
+            category: sum(row["category_deltas"][category] * row["probability"] for row in paired)
+            / paired_weight
+            for category in categories
+        }
+    return summary
+
+
 def analyze(config, hands, interruption, max_nodes, max_depth):
     rows = []
     for hand in hands:
@@ -75,14 +104,7 @@ def analyze(config, hands, interruption, max_nodes, max_depth):
             "visited_states": result.visited_states,
             "endboard": final.zones,
         })
-    total_weight = sum(row["probability"] for row in rows) or 1
-    return rows, {
-        "hands": len(rows),
-        "weighted_score": sum(row["score"] * row["probability"] for row in rows) / total_weight,
-        "complete_fraction": sum(row["complete"] for row in rows) / len(rows) if rows else 0,
-        "brick_fraction": sum(row["classification"]["brick"] for row in rows) / len(rows) if rows else 0,
-        "provisional_hands": sum(not row["complete"] for row in rows),
-    }
+    return rows, summarize(rows)
 
 
 def analyze_job(job):
@@ -122,11 +144,7 @@ def attach_baseline_deltas(reports):
             }
         if report["hands"]:
             paired = [row for row in report["hands"] if "score_loss" in row]
-            report["summary"]["paired_hands"] = len(paired)
-            report["summary"]["weighted_score_loss"] = (
-                sum(row["score_loss"] * row["probability"] for row in paired)
-                / (sum(row["probability"] for row in paired) or 1)
-            )
+            report["summary"].update(summarize(report["hands"]))
 
 
 def add_extender_marginals(reports, config, max_nodes, max_depth):
@@ -164,6 +182,25 @@ def add_extender_marginals(reports, config, max_nodes, max_depth):
     del adapter
 
 
+def aggregate_extenders(reports):
+    for report in reports.values():
+        values = {}
+        for row in report["hands"]:
+            for card, result in row.get("extender_marginals", {}).items():
+                values.setdefault(card, []).append(result)
+        report["summary"]["extenders"] = {
+            card: {
+                "observations": len(results),
+                "mean_score_delta": sum(item["score_delta"] for item in results) / len(results),
+                "mean_category_deltas": {
+                    category: sum(item["category_deltas"][category] for item in results) / len(results)
+                    for category in ("board_value", "interaction_value", "follow_up_value", "survival_value")
+                },
+            }
+            for card, results in values.items()
+        }
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default=None)
@@ -189,14 +226,9 @@ if __name__ == "__main__":
         for row in rows:
             grouped[row["interruption"]].append(row)
         for interruption, grouped_rows in grouped.items():
-            weight = sum(row["probability"] for row in grouped_rows) or 1
-            reports[interruption] = {"summary": {
-                "hands": len(grouped_rows),
-                "weighted_score": sum(row["score"] * row["probability"] for row in grouped_rows) / weight,
-                "complete_fraction": sum(row["complete"] for row in grouped_rows) / len(grouped_rows),
-                "brick_fraction": sum(row["classification"]["brick"] for row in grouped_rows) / len(grouped_rows),
-                "provisional_hands": sum(not row["complete"] for row in grouped_rows),
-            }, "hands": grouped_rows}
+            reports[interruption] = {
+                "summary": summarize(grouped_rows), "hands": grouped_rows,
+            }
     else:
         for interruption in interruptions:
             rows, summary = analyze(config, hands, interruption,
@@ -207,6 +239,7 @@ if __name__ == "__main__":
         if args.workers > 1:
             raise ValueError("--extenders currently requires --workers 1")
         add_extender_marginals(reports, config, args.max_nodes, args.max_depth)
+        aggregate_extenders(reports)
     complete = all(
         row["complete"]
         for report in reports.values()
