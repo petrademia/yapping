@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YAPPING / Resilience Workbench</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">YAPPING / ANALYSIS WORKBENCH</p>
+        <h1>Combo resilience, made inspectable.</h1>
+        <p class="lede">Compare the uninterrupted ceiling with interrupted recovery lines, then inspect the hand and the exact endboard behind every number.</p>
+      </div>
+      <label class="load-button">Load report <input id="report-input" type="file" accept="application/json,.json"></label>
+    </header>
+
+    <section class="status-row">
+      <div><span class="status-dot"></span><span id="status">Demo report loaded</span></div>
+      <code id="provenance">Select a JSON report to inspect its provenance</code>
+    </section>
+
+    <section class="hero-grid">
+      <article class="hero-card">
+        <p class="eyebrow">REFERENCE ARCHETYPE</p>
+        <h2 id="deck-name">Albaz</h2>
+        <p id="deck-summary">Opening-hand resilience overview</p>
+      </article>
+      <div id="scenario-summary" class="scenario-summary"></div>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel hand-panel">
+        <div class="panel-heading"><div><p class="eyebrow">OPENING HANDS</p><h2>Choose a hand</h2></div><span id="hand-count" class="count">0</span></div>
+        <div id="hand-list" class="hand-list"></div>
+      </aside>
+      <section class="panel detail-panel">
+        <div class="panel-heading"><div><p class="eyebrow">SELECTED HAND</p><h2 id="selected-hand">No hand selected</h2></div><span id="selected-status" class="pill">—</span></div>
+        <div id="metric-grid" class="metric-grid"></div>
+        <div id="scenario-detail" class="scenario-detail"></div>
+      </section>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
