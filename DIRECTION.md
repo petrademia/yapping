@@ -7,6 +7,31 @@ architecture (see [README.md](README.md)). It sequences the work, states why
 each phase comes before the next, and gives each phase a concrete exit
 criterion.
 
+## Product definition
+
+YAPPING's product is a matchup-aware combo resilience analyzer:
+
+> Given an opening hand and an opponent-interaction model, find and measure
+> the strongest legal line and the value it preserves after interruption.
+
+OCGCore regression fixtures are infrastructure and correctness gates. They
+verify that card effects, prompts, chains, and replay behave correctly, but
+they are not the final analysis product.
+
+The analysis has three nested questions:
+
+1. **Uninterrupted ceiling:** what is the strongest legal line from this hand
+   with no opponent interaction?
+2. **Recovery:** what is the strongest legal line after a known or hidden
+   interruption, including the use of extenders?
+3. **Deck resilience:** across opening-hand probabilities, how much endboard,
+   interaction, and follow-up value does the deck retain?
+
+The uninterrupted result is an upper-bound baseline, not the definition of a
+good deck. Reports should preserve score breakdowns and completeness flags so
+resilience can be compared without hiding the tradeoff between board strength,
+follow-up, and interaction.
+
 ## Design assessment (summary)
 
 The four-layer stack is sound and should be preserved:
