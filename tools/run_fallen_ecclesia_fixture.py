@@ -6,6 +6,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from yapping import report_provenance
 
 ROOT = Path(__file__).parents[1]
 SCENARIOS = (None, "ash", "veiler", "impermanence")
@@ -36,5 +37,15 @@ def run(interruption):
 
 
 if __name__ == "__main__":
-    print(json.dumps({"scenarios": [run(scenario) for scenario in SCENARIOS]},
+    scenarios = [run(scenario) for scenario in SCENARIOS]
+    print(json.dumps({
+        "provenance": report_provenance(
+            database=ROOT / "assets/cards.cdb",
+            scripts=ROOT.parent / "fluorohydride-ygopro-scripts",
+            max_nodes=None, max_depth=None,
+            complete=all(row["complete"] for row in scenarios),
+            revision_root=ROOT,
+        ),
+        "scenarios": scenarios,
+    },
                      indent=2, sort_keys=True))

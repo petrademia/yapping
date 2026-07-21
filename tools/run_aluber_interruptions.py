@@ -5,6 +5,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from yapping import report_provenance
 
 
 ROOT = Path(__file__).parents[1]
@@ -20,7 +21,16 @@ def main():
             capture_output=True, text=True, check=True,
         )
         reports.append(json.loads(result.stdout))
-    print(json.dumps({"scenarios": reports}, indent=2, sort_keys=True))
+    print(json.dumps({
+        "provenance": report_provenance(
+            database=ROOT / "assets/cards.cdb",
+            scripts=ROOT.parent / "fluorohydride-ygopro-scripts",
+            max_nodes=None, max_depth=None,
+            complete=all(row["complete"] for row in reports),
+            revision_root=ROOT,
+        ),
+        "scenarios": reports,
+    }, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

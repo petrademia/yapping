@@ -23,6 +23,7 @@ from trace_albaz_combo import (
     fixture_deck,
 )
 from yapping import EndboardEvaluator, EvaluationState, opening_probability
+from matchup_config import load_config
 
 
 HAND, MZONE, SZONE, GRAVE, REMOVED = 2, 4, 8, 16, 32
@@ -137,7 +138,7 @@ def uninterrupted_prefix(interruption="ash"):
 
 def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
            ecclesia_copies=1, adapter=None, matchup=None):
-    main_deck = (matchup["main_deck"] if matchup else fixture_deck())
+    main_deck = list(matchup["main_deck"]) if matchup else fixture_deck()
     if ecclesia_copies > 1:
         main_deck[1:1 + ecclesia_copies - 1] = [INCREDIBLE_ECCLESIA] * (ecclesia_copies - 1)
     duel, decision = new_duel(opponent_card=opponent_card,
@@ -172,15 +173,17 @@ def action_name(action):
     return f"{action['kind']}:{card}" if card else action["kind"]
 
 
-def endboard_score(snapshot, weights=None):
-    return sum(score_breakdown(snapshot, weights).values())
+def endboard_score(snapshot, weights=None, config=None):
+    return sum(score_breakdown(snapshot, weights, config).values())
 
 
-def evaluation_context(snapshot, weights=None):
+def evaluation_context(snapshot, weights=None, config=None):
     """Expose state facts for future calibrated card/location scoring."""
     actions = snapshot.decision["actions"]
     activated = {action["card"] for action in actions
                  if action["kind"] in {"activate", "chain"}}
+    config = config or {}
+    searchable_weights = weights if weights is not None else config.get("weights", CARD_WEIGHTS)
     return {
         "normal_summon_available": any(action["kind"] == "summon"
                                        for action in actions),
@@ -190,18 +193,21 @@ def evaluation_context(snapshot, weights=None):
         "opponent_interrupted": any(action.startswith("chain:")
                                      for action in snapshot.actions),
         "searchable_or_recoverable": [card for card in snapshot.zones["hand"]
-                                       if card in (CARD_WEIGHTS if weights is None else weights)],
+                                       if card in searchable_weights],
     }
 
 
-def score_breakdown(snapshot, weights=None):
-    weights = CARD_WEIGHTS if weights is None else weights
+def score_breakdown(snapshot, weights=None, config=None):
+    config = config or {}
+    weights = config.get("weights", CARD_WEIGHTS) if weights is None else weights
     evaluator = EndboardEvaluator(weights)
-    state = EvaluationState(snapshot.zones, evaluation_context(snapshot, weights))
+    state = EvaluationState(snapshot.zones, evaluation_context(snapshot, weights, config))
     return evaluator.breakdown(state)
 
 
-def legal_indices(snapshot):
+def legal_indices(snapshot, config=None):
+    config = config or {}
+    skip_kinds = set(config.get("skip_kinds", ("shuffle", "battle_phase")))
     actions = snapshot.decision["actions"]
     if snapshot.decision["player"] == 1:
         return tuple(i for i, action in enumerate(actions) if action["kind"] == "pass")
@@ -210,42 +216,44 @@ def legal_indices(snapshot):
     result = []
     for index, action in enumerate(actions):
         signature = (action["kind"], action["card"], action["description"])
-        if action["kind"] in {"shuffle", "battle_phase"} or signature in seen:
+        if action["kind"] in skip_kinds or signature in seen:
             continue
         seen.add(signature)
         result.append(index)
     return tuple(result)
 
 
-def search_recovery(prefix, opponent_card=ASH_BLOSSOM, max_depth=80, max_nodes=1500):
+def search_recovery(prefix, opponent_card=ASH_BLOSSOM, max_depth=80,
+                    max_nodes=1500, config=None):
     frontier = [tuple()]
     seen = set()
     best = None
     while frontier and len(seen) < max_nodes:
         suffix = frontier.pop()
-        snapshot = replay(tuple(prefix) + suffix, opponent_card)
+        snapshot = replay(tuple(prefix) + suffix, opponent_card, matchup=config)
         if snapshot.key in seen:
             continue
         seen.add(snapshot.key)
-        terminal = snapshot.decision["turn"] >= 2
+        terminal = (config or {}).get("terminal_turn", 2) <= snapshot.decision["turn"]
         if terminal:
-            candidate = Recovery(endboard_score(snapshot), suffix, snapshot, len(seen), False)
+            candidate = Recovery(endboard_score(snapshot, config=config), suffix, snapshot, len(seen), False)
             if best is None or candidate.score > best.score:
                 best = candidate
             continue
         if len(suffix) < max_depth:
-            frontier.extend(suffix + (index,) for index in legal_indices(snapshot))
+            frontier.extend(suffix + (index,) for index in legal_indices(snapshot, config))
     if best is None:
-        snapshot = replay(prefix, opponent_card)
-        best = Recovery(endboard_score(snapshot), tuple(), snapshot, len(seen), False)
+        snapshot = replay(prefix, opponent_card, matchup=config)
+        best = Recovery(endboard_score(snapshot, config=config), tuple(), snapshot, len(seen), False)
     return Recovery(best.score, best.suffix, best.snapshot, len(seen), not frontier)
 
 
 def analyze():
+    config = load_config()
     rows = []
     for window in range(7):
         interruption = interrupted_prefix(window)
-        recovery = search_recovery(interruption["prefix"])
+        recovery = search_recovery(interruption["prefix"], config=config)
         rows.append((interruption, recovery))
 
     print("Ash Blossom adversarial analysis")
@@ -255,7 +263,7 @@ def analyze():
         print(f"{interruption['window']:>6}  {recovery.score:>5.2f}  "
               f"{states:>6}  {interruption['label']}")
     worst, recovery = min(rows, key=lambda row: row[1].score)
-    full_score = endboard_score(replay(uninterrupted_prefix()))
+    full_score = endboard_score(replay(uninterrupted_prefix(), matchup=config), config=config)
     ash_probability = opening_probability(40, 3, 5)
     expected_score = ((1 - ash_probability) * full_score
                       + ash_probability * recovery.score)
@@ -264,7 +272,7 @@ def analyze():
     actions = recovery.snapshot.actions[-len(recovery.suffix):] if recovery.suffix else ()
     print("Recovery actions: " + " -> ".join(actions))
     print("End board: " + json.dumps(recovery.snapshot.zones, sort_keys=True))
-    print("score breakdown: " + json.dumps(score_breakdown(recovery.snapshot), sort_keys=True))
+    print("score breakdown: " + json.dumps(score_breakdown(recovery.snapshot, config=config), sort_keys=True))
     print(f"\nOpen 3 Ash in 40 cards / 5-card hand: {ash_probability:.2%}")
     print(f"Uninterrupted score: {full_score:.2f}")
     print(f"Expected score versus Ash/no-Ash: {expected_score:.2f}")

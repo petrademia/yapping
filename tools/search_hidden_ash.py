@@ -1,11 +1,13 @@
 """Choose an opening action without revealing whether the opponent holds a hand trap."""
 
 import argparse
+import json
+from pathlib import Path
 
 from analyze_ash import endboard_score, replay
-from search_opening import CARDS, legal
+from search_opening import CARDS, legal, terminal
 from trace_albaz_combo import card_id
-from yapping import hidden_minimax_replay
+from yapping import hidden_minimax_replay, report_provenance
 from matchup_config import load_config
 
 
@@ -25,7 +27,7 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
         lambda node: legal(node, config),
         key,
         lambda node: endboard_score(node, config["weights"]),
-        lambda snapshot: snapshot.decision["turn"] >= 2,
+        lambda snapshot: terminal(snapshot, config),
         lambda snapshot: snapshot.decision["player"],
         tuple(cards),
         max_nodes=max_nodes,
@@ -38,6 +40,12 @@ def search(interruption="ash", max_nodes=10_000, max_depth=180, opening_hand=Non
     print(f"worst-case score: {result.score:.2f}")
     print(f"visited states: {result.visited_states}")
     print(f"complete: {result.complete}")
+    print("provenance: " + json.dumps(report_provenance(
+        database=config.get("database", "assets/cards.cdb"),
+        scripts=config.get("scripts", "../fluorohydride-ygopro-scripts"),
+        max_nodes=max_nodes, max_depth=max_depth, complete=result.complete,
+        revision_root=Path(__file__).parents[1],
+    ), sort_keys=True))
     return result
 
 

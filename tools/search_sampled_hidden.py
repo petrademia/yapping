@@ -8,11 +8,11 @@ import statistics
 
 from analyze_ash import ReplayCursor, endboard_score, replay
 from matchup_config import load_config
-from search_opening import legal
+from search_opening import legal, terminal
 from trace_albaz_combo import card_id
 from trace_albaz_combo import ROOT, SCRIPTS
 from yapping._ocgcore import Duel
-from yapping import minimax_replay, opening_probability
+from yapping import minimax_replay, opening_probability, report_provenance
 
 
 def action_key(snapshot, index):
@@ -58,7 +58,7 @@ def search(interruption="ash", opening_hand=None, samples=8, seed=7,
                     cursor(prefix + path),
                 lambda node: legal(node, config),
                 lambda node: endboard_score(node, config["weights"]),
-                lambda node: node.decision["turn"] >= 2,
+                lambda node: terminal(node, config),
                 lambda node: node.decision["player"],
                 max_depth=max_depth - 1, max_nodes=max_nodes,
             )
@@ -75,13 +75,20 @@ def search(interruption="ash", opening_hand=None, samples=8, seed=7,
     values = chosen["values"] if chosen else []
     stderr = (statistics.stdev(values) / len(values) ** 0.5
               if len(values) > 1 else 0.0)
-    return {"mode": "sampled_determinization", "interruption": interruption,
+    result = {"mode": "sampled_determinization", "interruption": interruption,
             "interruption_probability": p_interruption,
             "sample_count": samples, "seed": seed, "worlds": sampled,
             "chosen": chosen, "stderr": stderr,
             "confidence_95": [chosen["mean"] - 1.96 * stderr,
                               chosen["mean"] + 1.96 * stderr] if chosen else None,
             "all_candidates": reports}
+    result["provenance"] = report_provenance(
+        database=ROOT / "assets/cards.cdb", scripts=SCRIPTS,
+        max_nodes=max_nodes, max_depth=max_depth,
+        complete=all(row["complete"] for row in reports),
+        revision_root=ROOT,
+    )
+    return result
 
 
 if __name__ == "__main__":

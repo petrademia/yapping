@@ -49,6 +49,7 @@ def test_search_finds_best_combo():
     assert result.actions == (1, 1)
     assert result.score == 4
     assert result.visited_states == 6
+    assert result.complete and result.max_depth == 2
 
 
 def test_opening_probability():
@@ -80,6 +81,7 @@ def test_minimax_replay_chooses_strongest_worst_case():
     assert result.actions == (0, 0)
     assert result.score == 3
     assert result.complete
+    assert result.max_depth == 2 and result.max_nodes == 20
 
 
 def test_minimax_replay_reuses_exact_transposition():
@@ -126,3 +128,4 @@ def test_hidden_minimax_keeps_worlds_together_after_pass():
     )
     assert result.action == "safe"
     assert result.score == 5
+    assert result.visited_states <= 20

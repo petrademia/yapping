@@ -14,6 +14,7 @@ from matchup_config import load_config
 from search_opening import search
 from trace_albaz_combo import ROOT, SCRIPTS
 from yapping._ocgcore import Duel
+from yapping import report_provenance
 
 
 _worker_adapter = None
@@ -132,5 +133,18 @@ if __name__ == "__main__":
             rows, summary = analyze(config, hands, interruption,
                                     args.max_nodes, args.max_depth)
             reports[interruption] = {"summary": summary, "hands": rows}
-    print(json.dumps({"config": config["name"], "reports": reports},
+    complete = all(
+        row["complete"]
+        for report in reports.values()
+        for row in report["hands"]
+    )
+    print(json.dumps({
+        "config": config["name"],
+        "provenance": report_provenance(
+            database=ROOT / "assets/cards.cdb", scripts=SCRIPTS,
+            max_nodes=args.max_nodes, max_depth=args.max_depth,
+            complete=complete, revision_root=ROOT,
+        ),
+        "reports": reports,
+    },
                      indent=2, sort_keys=True))

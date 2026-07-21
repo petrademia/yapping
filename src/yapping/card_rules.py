@@ -24,6 +24,15 @@ class CardDatabase:
         self._connection.row_factory = sqlite3.Row
         self._cache: dict[int, CardRecord] = {}
 
+    def close(self) -> None:
+        self._connection.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
     def card(self, card_id: int) -> CardRecord:
         if card_id not in self._cache:
             row = self._connection.execute(

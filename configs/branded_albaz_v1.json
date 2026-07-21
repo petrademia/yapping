@@ -32,6 +32,10 @@
     "droll": 3, "nibiru": 3, "ghost_ogre": 3
   },
   "skip_kinds": ["battle_phase", "shuffle"],
+  "ignored_cards": [],
+  "opponent_action_kinds": ["pass"],
+  "terminal_turn": 2,
+  "recovery_activation": "activate:73819701",
   "move_priority": {
     "activate": 0, "yes": 0, "chain": 0,
     "special_summon": 1, "summon": 1, "select_card": 1,

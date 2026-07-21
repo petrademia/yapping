@@ -10,6 +10,8 @@ class SearchResult:
     score: float
     decision: Decision
     visited_states: int
+    complete: bool = True
+    max_depth: int = 0
 
 
 def search(
@@ -40,7 +42,7 @@ def search(
             continue
         seen.add(key)
 
-        candidate = SearchResult(actions, float(score(decision)), decision, len(seen))
+        candidate = SearchResult(actions, float(score(decision)), decision, len(seen), True, max_depth)
         if best is None or candidate.score > best.score:
             best = candidate
 
@@ -48,4 +50,4 @@ def search(
             frontier.extend(actions + (action,) for action in decision.legal_actions)
 
     assert best is not None
-    return SearchResult(best.actions, best.score, best.decision, len(seen))
+    return SearchResult(best.actions, best.score, best.decision, len(seen), True, max_depth)

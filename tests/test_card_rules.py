@@ -6,6 +6,7 @@ from yapping.card_rules import CardDatabase
 from yapping import load_archetype
 
 ROOT = Path(__file__).parents[1]
+CARDS = ROOT / "assets/cards.cdb"
 
 
 @pytest.mark.skipif(not (ROOT / "assets/cards.cdb").is_file(), reason="card database is not installed")
@@ -25,3 +26,9 @@ def test_card_database_identifies_high_spirits_races_and_targets():
     assert any(target.name == "Albion the Branded Dragon" for target in cards.matching_targets(68468459, list(archetype.extra_deck), predicate))
     assert any(target.name == "The Dragon that Devours the Dogma" for target in cards.matching_targets(19304410, list(archetype.extra_deck), predicate))
     assert any(target.name == "Rindbrumm the Striking Dragon" for target in cards.matching_targets(42141493, list(archetype.extra_deck), predicate))
+
+
+@pytest.mark.skipif(not CARDS.is_file(), reason="card database is not installed")
+def test_card_database_is_a_context_manager():
+    with CardDatabase(CARDS) as cards:
+        assert cards.card(95515789).id == 95515789

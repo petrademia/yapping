@@ -10,6 +10,8 @@ class MinimaxResult:
     score: float
     visited_states: int
     complete: bool
+    max_depth: int = 0
+    max_nodes: int = 0
 
 
 @dataclass(frozen=True)
@@ -21,6 +23,8 @@ class HiddenMinimaxResult:
     scenario_scores: Mapping[str, float]
     visited_states: int
     complete: bool
+    max_depth: int = 0
+    max_nodes: int = 0
 
 
 def minimax_replay(
@@ -94,7 +98,7 @@ def minimax_replay(
         )[2] == "exact"
 
     score, actions, complete, _ = visit(tuple(), 0, float("-inf"), float("inf"))
-    return MinimaxResult(actions, score, visited, complete)
+    return MinimaxResult(actions, score, visited, complete, max_depth, max_nodes)
 
 
 def hidden_minimax_replay(
@@ -135,7 +139,12 @@ def hidden_minimax_replay(
                 beta = min(beta, value)
             if beta <= alpha:
                 return value, action, True, False
-        visited += len(nodes)
+        world_cost = len(nodes)
+        if visited + world_cost > max_nodes:
+            visited = max_nodes
+            value = min(float(evaluate(node)) for node in nodes.values())
+            return value, None, False, False
+        visited += world_cost
         is_terminal = all(terminal(node) for node in nodes.values())
         if depth >= max_depth or visited >= max_nodes or is_terminal:
             value = min(float(evaluate(node)) for node in nodes.values())
@@ -208,4 +217,4 @@ def hidden_minimax_replay(
     value, action, complete, _ = visit(
         {scenario: tuple() for scenario in scenarios}, 0, float("-inf"), float("inf")
     )
-    return HiddenMinimaxResult(action, value, {}, visited, complete)
+    return HiddenMinimaxResult(action, value, {}, visited, complete, max_depth, max_nodes)
