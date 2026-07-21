@@ -100,6 +100,35 @@ def analyze_parallel(config, hands, interruptions, max_nodes, max_depth, workers
     return rows
 
 
+def attach_baseline_deltas(reports):
+    """Pair each interruption row with the result for the identical hand."""
+    baseline = {
+        tuple(row["hand"]): row
+        for row in reports.get("none", {}).get("hands", [])
+    }
+    for name, report in reports.items():
+        if name == "none":
+            continue
+        for row in report["hands"]:
+            reference = baseline.get(tuple(row["hand"]))
+            if reference is None:
+                continue
+            row["baseline_score"] = reference["score"]
+            row["score_loss"] = reference["score"] - row["score"]
+            row["category_deltas"] = {
+                category: reference["categories"][category] - row["categories"][category]
+                for category in reference["categories"]
+                if category != "total_score"
+            }
+        if report["hands"]:
+            paired = [row for row in report["hands"] if "score_loss" in row]
+            report["summary"]["paired_hands"] = len(paired)
+            report["summary"]["weighted_score_loss"] = (
+                sum(row["score_loss"] * row["probability"] for row in paired)
+                / (sum(row["probability"] for row in paired) or 1)
+            )
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default=None)
@@ -137,6 +166,7 @@ if __name__ == "__main__":
             rows, summary = analyze(config, hands, interruption,
                                     args.max_nodes, args.max_depth)
             reports[interruption] = {"summary": summary, "hands": rows}
+    attach_baseline_deltas(reports)
     complete = all(
         row["complete"]
         for report in reports.values()

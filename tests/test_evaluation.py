@@ -1,6 +1,16 @@
 from yapping import EndboardEvaluator, EvaluationState
 
 
+def test_baseline_delta_shape_is_additive():
+    baseline = {"board_value": 8.0, "interaction_value": 2.0,
+                "follow_up_value": 3.0, "survival_value": 1.0}
+    interrupted = {"board_value": 5.0, "interaction_value": 1.0,
+                   "follow_up_value": 2.0, "survival_value": 0.0}
+    delta = {key: baseline[key] - interrupted[key] for key in baseline}
+    assert delta == {"board_value": 3.0, "interaction_value": 1.0,
+                     "follow_up_value": 1.0, "survival_value": 1.0}
+
+
 def test_evaluator_scores_identity_by_location_and_state():
     evaluator = EndboardEvaluator(
         {10: 5.0, 20: 2.0},
