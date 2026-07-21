@@ -12,6 +12,8 @@ from matchup_config import load_config
 from search_opening import legal, search
 from trace_albaz_combo import ASH_BLOSSOM, ROOT, SCRIPTS
 from yapping._ocgcore import Duel
+from yapping import (ORACLE_SCHEMA_VERSION, report_provenance,
+                     snapshot_observation, validate_example)
 from yapping.models import TabularPolicyValue
 
 
@@ -27,15 +29,26 @@ def export(path, interruption="ash", max_nodes=100, max_depth=40, config=None):
     rows = []
     for depth, action in enumerate(result.actions):
         node = cursor(result.actions[:depth])
-        rows.append({
+        legal_indices = list(legal(node, config))
+        row = {
+            "schema_version": ORACLE_SCHEMA_VERSION,
             "state_key": node.key.hex(),
-            "legal_actions": list(legal(node, config)),
+            "observation": snapshot_observation(node, legal_indices),
+            "legal_actions": legal_indices,
             "oracle_action": action,
             "oracle_value": result.score,
             "complete": result.complete,
             "depth": depth,
             "interruption": interruption,
-        })
+            "search_limits": {"max_nodes": max_nodes, "max_depth": max_depth},
+            "provenance": report_provenance(
+                database=ROOT / "assets/cards.cdb", scripts=SCRIPTS,
+                max_nodes=max_nodes, max_depth=max_depth,
+                complete=result.complete, revision_root=ROOT,
+            ),
+        }
+        validate_example(row)
+        rows.append(row)
     output = Path(path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text("\n".join(json.dumps(row, sort_keys=True) for row in rows) + "\n")

@@ -1,5 +1,7 @@
 from collections import Counter, defaultdict
 
+from .learning import validate_example
+
 
 class TabularPolicyValue:
     """Small reproducible baseline for oracle-labelled state rows."""
@@ -10,6 +12,8 @@ class TabularPolicyValue:
 
     def fit(self, rows):
         for row in rows:
+            if "schema_version" in row:
+                validate_example(row)
             self.actions[row["state_key"]][row["oracle_action"]] += 1
             self.values[row["state_key"]].append(float(row["oracle_value"]))
         return self

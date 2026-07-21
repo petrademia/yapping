@@ -10,6 +10,7 @@ from yapping import (
     opening_probability,
     robust_choice,
     search,
+    validate_example,
 )
 
 
@@ -54,6 +55,23 @@ def test_search_finds_best_combo():
 
 def test_opening_probability():
     assert opening_probability(40, 3, 5) == pytest.approx(0.3375506073)
+
+
+def test_oracle_example_schema_is_versioned_and_validated():
+    row = {
+        "schema_version": 1,
+        "observation": {},
+        "state_key": "00",
+        "legal_actions": [0],
+        "oracle_action": 0,
+        "oracle_value": 1.0,
+        "complete": True,
+        "search_limits": {"max_nodes": 1, "max_depth": 1},
+        "provenance": {},
+    }
+    validate_example(row)
+    with pytest.raises(ValueError, match="missing fields"):
+        validate_example({"schema_version": 1})
 
 
 def test_hidden_interruption_choices_do_not_leak_information():
