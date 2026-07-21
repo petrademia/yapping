@@ -18,3 +18,10 @@ def test_evaluator_scores_identity_by_location_and_state():
         "grave_resources": 0.0,
         "survival": 3.0,
     }
+    assert evaluator.categories(state) == {
+        "board_value": 5.0,
+        "interaction_value": 2.0,
+        "follow_up_value": 5.25,
+        "survival_value": 3.0,
+        "total_score": 15.25,
+    }

@@ -205,6 +205,14 @@ def score_breakdown(snapshot, weights=None, config=None):
     return evaluator.breakdown(state)
 
 
+def score_categories(snapshot, weights=None, config=None):
+    config = config or {}
+    weights = config.get("weights", CARD_WEIGHTS) if weights is None else weights
+    evaluator = EndboardEvaluator(weights)
+    state = EvaluationState(snapshot.zones, evaluation_context(snapshot, weights, config))
+    return evaluator.categories(state)
+
+
 def legal_indices(snapshot, config=None):
     config = config or {}
     skip_kinds = set(config.get("skip_kinds", ("shuffle", "battle_phase")))

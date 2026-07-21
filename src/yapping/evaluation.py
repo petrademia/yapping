@@ -41,6 +41,22 @@ class EndboardEvaluator:
     def score(self, state: EvaluationState) -> float:
         return sum(self.breakdown(state).values())
 
+    def categories(self, state: EvaluationState) -> dict[str, float]:
+        """Expose report-level tradeoffs without hiding detailed components."""
+        details = self.breakdown(state)
+        categories = {
+            "board_value": details["monsters"],
+            "interaction_value": details["spell_traps"],
+            "follow_up_value": (
+                details["generic_hand"]
+                + details["named_hand_followup"]
+                + details["grave_resources"]
+            ),
+            "survival_value": details["survival"],
+        }
+        categories["total_score"] = sum(categories.values())
+        return categories
+
 
 def zones_from_iterables(zones: Mapping[str, Iterable[int]]) -> dict[str, tuple[int, ...]]:
     return {name: tuple(cards) for name, cards in zones.items()}

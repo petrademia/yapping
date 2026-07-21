@@ -11,6 +11,7 @@ import random
 from collections import Counter
 
 from matchup_config import load_config
+from analyze_ash import score_categories
 from search_opening import search
 from trace_albaz_combo import ROOT, SCRIPTS
 from yapping._ocgcore import Duel
@@ -69,6 +70,7 @@ def analyze(config, hands, interruption, max_nodes, max_depth):
             "interruption": interruption,
             "classification": classify(hand, config),
             "score": result.score,
+            "categories": score_categories(final, config=config),
             "complete": result.complete,
             "visited_states": result.visited_states,
             "endboard": final.zones,
