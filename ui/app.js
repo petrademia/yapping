@@ -8,9 +8,10 @@ const demo = {
 };
 
 let report = demo;
+let cardNames = {};
 const $ = (id) => document.getElementById(id);
 const fmt = (value) => typeof value === "number" ? value.toFixed(2) : "—";
-const formatCards = (hand) => hand.map((card) => `<span class="tag">${card}</span>`).join("");
+const formatCards = (hand) => hand.map((card) => `<span class="tag" title="${card}">${cardNames[card] || card}</span>`).join("");
 
 function scenarios() { return Object.entries(report.reports || {}); }
 function rows() {
@@ -47,7 +48,13 @@ function renderDetail(index = 0) {
   const extenders = Object.entries(row?.extender_marginals || {}).map(([card, value]) => `<div class="extender"><span>Card ${card}</span><strong>+${fmt(value.score_delta)}</strong></div>`).join("") || `<p>No extender counterfactuals in this report.</p>`;
   $("state-detail").innerHTML = `<article class="state-card"><h3>END BOARD / STATE</h3>${zones}</article><article class="state-card"><h3>ACTION TIMELINE</h3><div class="timeline">${timeline}</div></article><article class="state-card"><h3>EXTENDER MARGINAL VALUE</h3>${extenders}</article>`;
 }
-function render() { renderSummary(); renderHands(0); renderDetail(0); }
+async function resolveCardNames() {
+  const ids = new Set();
+  rows().forEach((item) => { item.hand.forEach((card) => ids.add(card)); Object.values(item.scenarios).forEach((scenario) => Object.values(scenario.endboard || {}).flat().forEach((card) => ids.add(card))); });
+  if (!ids.size) return;
+  try { const response = await fetch(`/api/card-names?ids=${[...ids].join("&ids=")}`); if (response.ok) cardNames = { ...cardNames, ...(await response.json()) }; } catch (_) { /* static file mode: IDs remain available */ }
+}
+async function render() { await resolveCardNames(); renderSummary(); renderHands(0); renderDetail(0); }
 $("report-input").addEventListener("change", (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { report = JSON.parse(reader.result); $("status").textContent = `Loaded ${file.name}`; render(); } catch { $("status").textContent = "Could not parse report"; } }; reader.readAsText(file); });
 $("run-button").addEventListener("click", async () => {
   const button = $("run-button"); button.disabled = true; $("status").textContent = "Running bounded exact analysis…";

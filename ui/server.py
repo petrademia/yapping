@@ -1,6 +1,7 @@
 """Local report viewer and bounded analysis bridge."""
 
 import json
+import sqlite3
 import subprocess
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -13,6 +14,9 @@ PYTHON = ROOT / ".venv/bin/python"
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        if self.path.startswith("/api/card-names"):
+            self.card_names()
+            return
         path = "/index.html" if self.path == "/" else self.path
         target = (UI / path.lstrip("/")).resolve()
         if UI not in target.parents or not target.is_file():
@@ -24,6 +28,19 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def card_names(self):
+        from urllib.parse import parse_qs, urlparse
+        ids = [int(value) for value in parse_qs(urlparse(self.path).query).get("ids", [])][:200]
+        if not ids:
+            self._json(200, {})
+            return
+        connection = sqlite3.connect(ROOT / "assets/cards.cdb")
+        rows = connection.execute(
+            "SELECT id, name FROM texts WHERE id IN (%s)" % ",".join("?" * len(ids)), ids
+        ).fetchall()
+        connection.close()
+        self._json(200, {str(card_id): name for card_id, name in rows})
 
     def do_POST(self):
         if self.path != "/api/analyze":
