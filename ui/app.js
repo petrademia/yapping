@@ -49,4 +49,14 @@ function renderDetail(index = 0) {
 }
 function render() { renderSummary(); renderHands(0); renderDetail(0); }
 $("report-input").addEventListener("change", (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { report = JSON.parse(reader.result); $("status").textContent = `Loaded ${file.name}`; render(); } catch { $("status").textContent = "Could not parse report"; } }; reader.readAsText(file); });
+$("run-button").addEventListener("click", async () => {
+  const button = $("run-button"); button.disabled = true; $("status").textContent = "Running bounded exact analysis…";
+  try {
+    const response = await fetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+      interruption: $("run-interruption").value, hands: Number($("run-hands").value), max_nodes: Number($("run-nodes").value), max_depth: Number($("run-depth").value), extenders: $("run-extenders").checked
+    }) });
+    const payload = await response.json(); if (!response.ok) throw new Error(payload.error || "analysis failed");
+    report = payload; $("status").textContent = "Fresh report loaded"; render();
+  } catch (error) { $("status").textContent = error.message; } finally { button.disabled = false; }
+});
 render();

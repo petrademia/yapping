@@ -22,6 +22,18 @@
       <code id="provenance">Select a JSON report to inspect its provenance</code>
     </section>
 
+    <section class="run-panel panel">
+      <div><p class="eyebrow">LOCAL ORACLE RUN</p><h2>Generate a fresh report</h2></div>
+      <div class="run-controls">
+        <label>Scenario <select id="run-interruption"><option value="ash">Ash</option><option value="all">All interruptions</option><option value="veiler">Veiler</option></select></label>
+        <label>Hands <input id="run-hands" type="number" min="1" max="100" value="4"></label>
+        <label>Nodes <input id="run-nodes" type="number" min="1" max="20000" value="100"></label>
+        <label>Depth <input id="run-depth" type="number" min="1" max="180" value="40"></label>
+        <label class="check"><input id="run-extenders" type="checkbox"> Extenders</label>
+        <button id="run-button" class="run-button">Run exact analysis</button>
+      </div>
+    </section>
+
     <section class="hero-grid">
       <article class="hero-card">
         <p class="eyebrow">REFERENCE ARCHETYPE</p>
