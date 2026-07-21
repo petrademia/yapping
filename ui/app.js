@@ -10,7 +10,7 @@ const demo = {
 let report = demo;
 const $ = (id) => document.getElementById(id);
 const fmt = (value) => typeof value === "number" ? value.toFixed(2) : "—";
-const cards = (hand) => hand.map((card) => `<span class="tag">${card}</span>`).join("");
+const formatCards = (hand) => hand.map((card) => `<span class="tag">${card}</span>`).join("");
 
 function scenarios() { return Object.entries(report.reports || {}); }
 function rows() {
@@ -30,15 +30,22 @@ function renderSummary() {
 }
 function renderHands(selected = 0) {
   const list = rows(); $("hand-count").textContent = list.length;
-  $("hand-list").innerHTML = list.map((item, index) => `<button class="hand-button ${index === selected ? "active" : ""}" data-index="${index}"><em>${fmt(item.scenarios.none?.score)}</em><strong>Hand ${index + 1}</strong><span>${cards(item.hand)}</span></button>`).join("");
+  $("hand-list").innerHTML = list.map((item, index) => `<button class="hand-button ${index === selected ? "active" : ""}" data-index="${index}"><em>${fmt(item.scenarios.none?.score)}</em><strong>Hand ${index + 1}</strong><span>${formatCards(item.hand)}</span></button>`).join("");
   document.querySelectorAll(".hand-button").forEach((button) => button.addEventListener("click", () => { renderHands(Number(button.dataset.index)); renderDetail(Number(button.dataset.index)); }));
 }
 function metric(label, value) { return `<div class="metric"><label>${label}</label><strong>${fmt(value)}</strong></div>`; }
 function renderDetail(index = 0) {
   const item = rows()[index]; if (!item) return;
-  $("selected-hand").innerHTML = cards(item.hand); const baseline = item.scenarios.none; $("selected-status").textContent = baseline?.complete ? "complete" : "provisional";
+  $("selected-hand").innerHTML = formatCards(item.hand); const baseline = item.scenarios.none; $("selected-status").textContent = baseline?.complete ? "complete" : "provisional";
   const categories = baseline?.categories || {}; $("metric-grid").innerHTML = metric("CEILING", baseline?.score) + metric("BOARD", categories.board_value) + metric("INTERACTION", categories.interaction_value) + metric("FOLLOW-UP", categories.follow_up_value);
   $("scenario-detail").innerHTML = Object.entries(item.scenarios).map(([name, row]) => { const loss = row.score_loss; const c = row.categories || {}; const total = c.total_score || row.score || 1; return `<article class="scenario-row"><div class="scenario-title"><strong>${name === "none" ? "Uninterrupted ceiling" : name}</strong><span class="${loss > 0 ? "loss" : "safe"}">${loss > 0 ? `−${fmt(loss)}` : fmt(row.score)}</span></div><div class="bar"><i class="board" style="width:${(c.board_value / total) * 100}%"></i><i class="interaction" style="width:${(c.interaction_value / total) * 100}%"></i><i class="followup" style="width:${(c.follow_up_value / total) * 100}%"></i><i class="survival" style="width:${(c.survival_value / total) * 100}%"></i></div><small>Score ${fmt(row.score)} · board ${fmt(c.board_value)} · interaction ${fmt(c.interaction_value)} · follow-up ${fmt(c.follow_up_value)}</small></article>`; }).join("");
+  const row = item.scenarios.none || Object.values(item.scenarios)[0];
+  const endboard = row?.endboard || {};
+  const zones = Object.entries(endboard).filter(([, zoneCards]) => Array.isArray(zoneCards) && zoneCards.length).map(([zone, zoneCards]) => `<p><strong>${zone}</strong><br>${formatCards(zoneCards)}</p>`).join("") || `<p>No endboard data in this report.</p>`;
+  const history = row?.actions || row?.action_history || row?.observation?.action_history || [];
+  const timeline = history.length ? history.map((action, step) => `<span class="step">${step + 1}. ${action}</span>`).join("") : `<p>No action timeline in this report. Generate a trace-enriched report to inspect steps.</p>`;
+  const extenders = Object.entries(row?.extender_marginals || {}).map(([card, value]) => `<div class="extender"><span>Card ${card}</span><strong>+${fmt(value.score_delta)}</strong></div>`).join("") || `<p>No extender counterfactuals in this report.</p>`;
+  $("state-detail").innerHTML = `<article class="state-card"><h3>END BOARD / STATE</h3>${zones}</article><article class="state-card"><h3>ACTION TIMELINE</h3><div class="timeline">${timeline}</div></article><article class="state-card"><h3>EXTENDER MARGINAL VALUE</h3>${extenders}</article>`;
 }
 function render() { renderSummary(); renderHands(0); renderDetail(0); }
 $("report-input").addEventListener("change", (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { report = JSON.parse(reader.result); $("status").textContent = `Loaded ${file.name}`; render(); } catch { $("status").textContent = "Could not parse report"; } }; reader.readAsText(file); });
