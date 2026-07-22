@@ -8,6 +8,7 @@ from .archetype import Archetype, Fixture, Interruption, load_archetype
 from .evaluation import EndboardEvaluator, EvaluationState
 from .provenance import report_provenance
 from .learning import ORACLE_SCHEMA_VERSION, action_descriptor, snapshot_observation, validate_example
+from .variants import DeckVariant, SlotCandidate
 
 __all__ = [
     "Decision", "Engine", "HiddenMinimaxResult", "MinimaxResult", "RobustChoice", "SearchResult",
@@ -16,4 +17,5 @@ __all__ = [
     "EndboardEvaluator", "EvaluationState",
     "report_provenance",
     "ORACLE_SCHEMA_VERSION", "action_descriptor", "snapshot_observation", "validate_example",
+    "DeckVariant", "SlotCandidate",
 ]
