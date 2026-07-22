@@ -38,7 +38,10 @@ def train(episodes=100, seed=7, alpha=0.2, gamma=0.98,
     rng = random.Random(seed)
     history = []
     best = None
-    for episode in range(episodes):
+    episode = 0
+    try:
+      while episodes == 0 or episode < episodes:
+        episode += 1
         observation, _ = env.reset(seed=seed + episode)
         total = 0.0
         trajectory = []
@@ -73,27 +76,31 @@ def train(episodes=100, seed=7, alpha=0.2, gamma=0.98,
         success = set(info["target_endboard"]).issubset(board)
         if best is None or (success, total, -info["steps"]) > (
                 best["success"], best["reward"], -best["steps"]):
-            best = {"episode": episode + 1, "success": success, "reward": total,
+            best = {"episode": episode, "success": success, "reward": total,
                     "steps": info["steps"], "trajectory": trajectory,
                     "endboard": sorted(board)}
         history.append((total, success, info["steps"]))
         epsilon = max(epsilon_min, epsilon * epsilon_decay)
-        if (episode + 1) % max(1, episodes // 10) == 0:
+        interval = max(1, (episodes // 10) if episodes else 20)
+        if episode % interval == 0:
             window = history[-max(1, min(20, len(history))):]
             print(json.dumps({
-                "episode": episode + 1,
+                "episode": episode,
                 "epsilon": round(epsilon, 4),
                 "mean_reward": round(sum(item[0] for item in window) / len(window), 3),
                 "mean_steps": round(sum(item[2] for item in window) / len(window), 2),
                 "success_rate": round(sum(item[1] for item in window) / len(window), 3),
                 "states": len(q),
             }))
+    except KeyboardInterrupt:
+        print(json.dumps({"status": "stopped", "episode": episode}))
     return q, best
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--episodes", type=int, default=100)
+    parser.add_argument("--episodes", type=int, default=100,
+                        help="episode count; 0 runs until Ctrl-C")
     parser.add_argument("--seed", type=int, default=7)
     args = parser.parse_args()
     _, best = train(args.episodes, args.seed)
