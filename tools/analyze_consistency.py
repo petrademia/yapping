@@ -81,7 +81,7 @@ def summarize(rows):
     return summary
 
 
-def analyze(config, hands, interruption, max_nodes, max_depth):
+def analyze(config, hands, interruption, max_nodes, max_depth, controlled_player=0):
     rows = []
     for hand in hands:
         with contextlib.redirect_stdout(io.StringIO()):
@@ -91,12 +91,14 @@ def analyze(config, hands, interruption, max_nodes, max_depth):
                 max_depth=max_depth,
                 opening_hand=list(hand),
                 config=config, adapter=_worker_adapter,
+                controlled_player=controlled_player,
             )
         gc.collect()
         rows.append({
             "hand": list(hand),
             "probability": hand_probability(config["main_deck"], hand),
             "interruption": interruption,
+            "turn_order": "first" if controlled_player == 0 else "second",
             "classification": classify(hand, config),
             "score": result.score,
             "categories": score_categories(final, config=config),

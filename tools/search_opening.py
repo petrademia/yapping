@@ -64,7 +64,8 @@ def legal(snapshot, config):
             continue
         seen.add(signature)
         choices.append(index)
-    if snapshot.decision["player"] == 1:
+    controlled_player = config.get("controlled_player", 0)
+    if snapshot.decision["player"] != controlled_player:
         opponent_kinds = set(config.get("opponent_action_kinds", ("pass",)))
         return sorted(choices, key=lambda i: actions[i]["kind"] not in opponent_kinds)
     # Alpha-beta reaches a useful lower bound sooner when high-value legal
@@ -88,13 +89,15 @@ def terminal(snapshot, config):
 
 def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
            ecclesia_copies=1, recovery_only=False, config=None,
-           replay_mode="cursor", adapter=None):
+           replay_mode="cursor", adapter=None, controlled_player=0):
     config = config or load_config()
+    config = {**config, "controlled_player": controlled_player}
     card = config["interruptions"].get(interruption)
     adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, config)
+    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, config,
+                          controlled_player)
     replay_fn = cursor if replay_mode == "cursor" else lambda path: replay(
-        path, card, opening_hand, ecclesia_copies, adapter, config)
+        path, card, opening_hand, ecclesia_copies, adapter, config, controlled_player)
     result = minimax_replay(
         replay_fn,
         lambda snapshot: legal(snapshot, config),
@@ -112,6 +115,7 @@ def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=Non
     print(f"Ecclesia copies: {ecclesia_copies}")
     print(f"recovery-only: {recovery_only}")
     print(f"replay-mode: {replay_mode}")
+    print(f"turn-order: {'first' if controlled_player == 0 else 'second'}")
     score_label = "score" if result.complete else "provisional score at search limit"
     print(f"{score_label}: {result.score:.2f}")
     print(f"visited states: {result.visited_states}")

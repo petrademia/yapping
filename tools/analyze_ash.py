@@ -63,21 +63,23 @@ class ReplayCursor:
     """Reuse forward descent; reconstruct only after backtracking."""
 
     def __init__(self, opponent_card=ASH_BLOSSOM, opening_hand=None,
-                 ecclesia_copies=1, adapter=None, matchup=None):
+                 ecclesia_copies=1, adapter=None, matchup=None, controlled_player=0):
         self.opponent_card = opponent_card
         self.opening_hand = opening_hand
         self.ecclesia_copies = ecclesia_copies
         self.adapter = adapter
         self.matchup = matchup
+        self.controlled_player = controlled_player
         self.path = ()
         self.snapshot = replay((), opponent_card, opening_hand,
-                               ecclesia_copies, adapter, matchup)
+                               ecclesia_copies, adapter, matchup, controlled_player)
 
     def __call__(self, path):
         if not (len(path) >= len(self.path) and
                 path[:len(self.path)] == self.path):
             self.snapshot = replay((), self.opponent_card, self.opening_hand,
-                                   self.ecclesia_copies, self.adapter, self.matchup)
+                                   self.ecclesia_copies, self.adapter, self.matchup,
+                                   self.controlled_player)
             self.path = ()
         if path != self.path:
             chosen = list(self.snapshot.actions)
@@ -87,7 +89,7 @@ class ReplayCursor:
                 chosen.append(action_name(action))
                 decision = self.adapter.step(index)
             self.snapshot = snapshot_from_duel(self.adapter, decision,
-                                               tuple(chosen))
+                                               tuple(chosen), self.controlled_player)
             self.path = path
         return self.snapshot
 
@@ -137,7 +139,7 @@ def uninterrupted_prefix(interruption="ash"):
 
 
 def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
-           ecclesia_copies=1, adapter=None, matchup=None):
+           ecclesia_copies=1, adapter=None, matchup=None, controlled_player=0):
     main_deck = list(matchup["main_deck"]) if matchup else fixture_deck()
     if ecclesia_copies > 1:
         main_deck[1:1 + ecclesia_copies - 1] = [INCREDIBLE_ECCLESIA] * (ecclesia_copies - 1)
@@ -146,22 +148,22 @@ def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
                               opening_hand=opening_hand,
                               main_deck=main_deck,
                               extra_deck=matchup.get("extra_deck") if matchup else None,
-                              adapter=adapter)
+                              adapter=adapter, controlled_player=controlled_player)
     chosen = []
     for index in indices:
         action = decision["actions"][index]
         chosen.append(action_name(action))
         decision = duel.step(index)
-    return snapshot_from_duel(duel, decision, tuple(chosen))
+    return snapshot_from_duel(duel, decision, tuple(chosen), controlled_player)
 
 
-def snapshot_from_duel(duel, decision, chosen):
+def snapshot_from_duel(duel, decision, chosen, controlled_player=0):
     zones = {
-        "hand": duel.cards(0, HAND),
-        "monster": duel.cards(0, MZONE),
-        "spell_trap": duel.cards(0, SZONE),
-        "grave": duel.cards(0, GRAVE),
-        "banished": duel.cards(0, REMOVED),
+        "hand": duel.cards(controlled_player, HAND),
+        "monster": duel.cards(controlled_player, MZONE),
+        "spell_trap": duel.cards(controlled_player, SZONE),
+        "grave": duel.cards(controlled_player, GRAVE),
+        "banished": duel.cards(controlled_player, REMOVED),
     }
     action_key = repr((decision["player"], decision["turn"], decision["actions"])).encode()
     return Snapshot(decision, duel.counts(), zones, bytes(duel.state_key()) + action_key,

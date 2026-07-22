@@ -213,7 +213,7 @@ def fixture_deck():
 
 def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
              opening_hand=None, main_deck=None, extra_deck=None,
-             opponent_deck=None, adapter=None):
+             opponent_deck=None, adapter=None, controlled_player=0):
     deck = list(fixture_deck() if main_deck is None else main_deck)
     if len(deck) < 40:
         raise ValueError("main_deck must contain at least 40 cards")
@@ -240,8 +240,14 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
     opponent = ([opponent_card] + filler[1:]
                 if opponent_card and not opponent_set else filler)
     duel = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    decision = duel.reset(deck, opponent, extra, seed=11,
-                          set1=[opponent_card] if opponent_set and opponent_card else [])
+    if controlled_player not in (0, 1):
+        raise ValueError("controlled_player must be 0 or 1")
+    if controlled_player == 0:
+        decision = duel.reset(deck, opponent, extra, seed=11,
+                              set1=[opponent_card] if opponent_set and opponent_card else [])
+    else:
+        decision = duel.reset(opponent, deck, [], extra, seed=11,
+                              set0=[opponent_card] if opponent_set and opponent_card else [])
     return duel, decision
 
 

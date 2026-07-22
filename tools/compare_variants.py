@@ -14,30 +14,35 @@ def parse_candidate(value):
     return SlotCandidate(int(card), role, label[0] if label else "")
 
 
-def compare(config, candidates, remove_card, hands, interruption, max_nodes, max_depth):
+def compare(config, candidates, remove_card, hands, interruption, max_nodes, max_depth,
+            turn_orders=(0, 1)):
     base = DeckVariant.from_config(config)
     variants = [(base.name, base)] + [
         (variant.name, variant) for variant in base.variants(candidates, remove_card)
     ]
-    reports = {}
-    for name, variant in variants:
-        variant_config = copy.deepcopy(config)
-        variant_config["name"] = name
-        variant_config["main_deck"] = list(variant.main_deck)
-        rows, summary = analyze(variant_config, hands, interruption, max_nodes, max_depth)
-        reports[name] = {"summary": summary, "hands": rows}
-    baseline = reports[base.name]["summary"]
-    for name, report in reports.items():
-        report["delta_vs_baseline"] = {
-            "weighted_score": report["summary"]["weighted_score"] - baseline["weighted_score"],
-            "weighted_categories": {
-                category: report["summary"]["weighted_categories"][category]
-                - baseline["weighted_categories"][category]
-                for category in baseline["weighted_categories"]
-            },
-            "brick_fraction": report["summary"]["brick_fraction"] - baseline["brick_fraction"],
-        }
-    return reports
+    all_reports = {}
+    for controlled_player in turn_orders:
+        reports = {}
+        for name, variant in variants:
+            variant_config = copy.deepcopy(config)
+            variant_config["name"] = name
+            variant_config["main_deck"] = list(variant.main_deck)
+            rows, summary = analyze(variant_config, hands, interruption, max_nodes,
+                                    max_depth, controlled_player)
+            reports[name] = {"summary": summary, "hands": rows}
+        baseline = reports[base.name]["summary"]
+        for name, report in reports.items():
+            report["delta_vs_baseline"] = {
+                "weighted_score": report["summary"]["weighted_score"] - baseline["weighted_score"],
+                "weighted_categories": {
+                    category: report["summary"]["weighted_categories"][category]
+                    - baseline["weighted_categories"][category]
+                    for category in baseline["weighted_categories"]
+                },
+                "brick_fraction": report["summary"]["brick_fraction"] - baseline["brick_fraction"],
+            }
+        all_reports["first" if controlled_player == 0 else "second"] = reports
+    return all_reports
 
 
 if __name__ == "__main__":
@@ -51,13 +56,15 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--max-nodes", type=int, default=100)
     parser.add_argument("--max-depth", type=int, default=40)
+    parser.add_argument("--turn-order", choices=["first", "second", "both"], default="both")
     args = parser.parse_args()
     config = load_config(args.config)
     hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
     init_worker()
+    turn_orders = {"first": (0,), "second": (1,), "both": (0, 1)}[args.turn_order]
     result = compare(config, [parse_candidate(value) for value in args.candidate],
                      args.replace, hands, args.interruption,
-                     args.max_nodes, args.max_depth)
+                     args.max_nodes, args.max_depth, turn_orders)
     print(json.dumps({"config": config["name"], "interruption": args.interruption,
                       "hands": [list(hand) for hand in hands], "reports": result},
                      indent=2, sort_keys=True))
