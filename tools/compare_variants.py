@@ -6,7 +6,7 @@ import json
 
 from analyze_consistency import analyze, init_worker, sample_hands
 from matchup_config import load_config, scenarios
-from yapping import DeckVariant, SlotCandidate
+from yapping import DeckVariant, SlotCandidate, load_archetype, summarize_compendium
 
 
 def parse_candidate(value):
@@ -106,6 +106,8 @@ if __name__ == "__main__":
     parser.add_argument("--max-depth", type=int, default=40)
     parser.add_argument("--turn-order", choices=["first", "second", "both"], default="both")
     parser.add_argument("--weighted", action="store_true")
+    parser.add_argument("--archetype", default=None,
+                        help="verified archetype JSON used to annotate candidates")
     args = parser.parse_args()
     config = load_config(args.config)
     hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
@@ -120,6 +122,9 @@ if __name__ == "__main__":
     else:
         result = compare(config, candidates, args.replace, hands, args.interruption,
                          args.max_nodes, args.max_depth, turn_orders)
-    print(json.dumps({"config": config["name"], "interruption": args.interruption,
-                      "hands": [list(hand) for hand in hands], "reports": result},
+    output = {"config": config["name"], "interruption": args.interruption,
+              "hands": [list(hand) for hand in hands], "reports": result}
+    if args.archetype:
+        output["compendium"] = summarize_compendium(load_archetype(args.archetype), candidates)
+    print(json.dumps(output,
                      indent=2, sort_keys=True))

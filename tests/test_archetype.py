@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from yapping import load_archetype
+from yapping import load_archetype, summarize_compendium
+from yapping.variants import SlotCandidate
 
 ROOT = Path(__file__).parents[1]
 
@@ -17,3 +18,10 @@ def test_branded_config_is_the_generic_archetype_boundary():
     assert archetype.target_predicates["high_spirits"]["same_race_as"] == "revealed_hand_card"
     assert {fixture.id for fixture in archetype.fixtures} == {"mdm-one-card-fallen", "mdm-high-spirits", "mdm-walbaz"}
     assert all(fixture.path.is_file() for fixture in archetype.fixtures)
+
+
+def test_compendium_marks_known_candidate_cards():
+    archetype = load_archetype(ROOT / "configs/archetypes/branded.json")
+    report = summarize_compendium(archetype, [SlotCandidate(44146295, "board_breaker", "Mirrorjade")])
+    assert report["verified_fixtures"] == 3
+    assert report["candidates"]["44146295"]["known_to_compendium"] is True

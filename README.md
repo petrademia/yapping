@@ -192,6 +192,19 @@ A fixture is a correctness and regression case. It is not itself a learned polic
 
 ## Archetype configuration
 
+Variant comparison can optionally reuse a verified archetype compendium when
+annotating candidates:
+
+```sh
+PYTHONPATH=tools:src .venv/bin/python tools/compare_variants.py \
+  --config configs/albaz.json --replace 91152256 \
+  --candidate 44146295:board_breaker:Mirrorjade \
+  --archetype configs/archetypes/branded.json
+```
+
+The report records which fixtures are available and whether each candidate is
+already covered by the archetype's verified deck, weights, or fixture data.
+
 A new archetype should be represented by configuration rather than a new engine implementation. The Branded example is configs/archetypes/branded.json.
 
 It contains:
