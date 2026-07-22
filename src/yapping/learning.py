@@ -14,12 +14,14 @@ def action_descriptor(action: Mapping[str, Any]) -> dict[str, Any]:
 def snapshot_observation(snapshot: Any, legal_indices: list[int]) -> dict[str, Any]:
     """Return a stable, JSON-compatible observation for a replay snapshot."""
     actions = snapshot.decision["actions"]
+    legal_set = set(legal_indices)
     return {
         "schema": "yapping.observation.v1",
         "zones": {name: list(cards) for name, cards in snapshot.zones.items()},
         "player": snapshot.decision["player"],
         "turn": snapshot.decision["turn"],
         "legal_action_indices": list(legal_indices),
+        "action_mask": [1 if index in legal_set else 0 for index in range(len(actions))],
         "legal_actions": [action_descriptor(actions[index]) for index in legal_indices],
         "action_history": list(snapshot.actions),
     }
