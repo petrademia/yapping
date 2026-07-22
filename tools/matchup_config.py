@@ -5,6 +5,23 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 
 
+def scenarios(config, requested=None):
+    """Return named interruption/opponent worlds with normalized weights."""
+    declared = config.get("matchup_scenarios")
+    if declared:
+        result = [dict(item) for item in declared]
+    else:
+        names = requested or ["none"]
+        result = [{"name": name, "interruption": name, "weight": 1.0}
+                  for name in names]
+    total = sum(float(item.get("weight", 1.0)) for item in result) or 1.0
+    for item in result:
+        item["weight"] = float(item.get("weight", 1.0)) / total
+        item.setdefault("name", item.get("interruption", "none"))
+        item.setdefault("interruption", "none")
+    return result
+
+
 def load_config(path=None):
     config_path = Path(path) if path else ROOT / "configs/albaz.json"
     config = json.loads(config_path.read_text())
