@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET="$ROOT/assets/cards.cdb"
-COMMIT="a4f8313a0c82b747ac5b3fb9e744fb7f5ed989e6"
+COMMIT="f3d9f81e619ec51427dd66d39e09b10f5ee2a41c"
 EXPECTED="c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f"
 URL="https://raw.githubusercontent.com/mycard/ygopro-database/$COMMIT/locales/en-US/cards.cdb"
 

@@ -140,7 +140,7 @@ Option 2: run the checked downloader from the repository root:
 ./tools/fetch_cards_db.sh
 ```
 
-The validated database comes from [mycard/ygopro-database](https://github.com/mycard/ygopro-database/blob/master/locales/en-US/cards.cdb), pinned by the downloader to commit a4f8313a0c82b747ac5b3fb9e744fb7f5ed989e6. The script verifies the SHA-256 before replacing the local file.
+The validated database comes from [mycard/ygopro-database](https://github.com/mycard/ygopro-database/blob/master/locales/en-US/cards.cdb), pinned by the downloader to commit f3d9f81e619ec51427dd66d39e09b10f5ee2a41c. The script verifies the SHA-256 before replacing the local file.
 
 [Project Ignis BabelCDB](https://github.com/ProjectIgnis/BabelCDB) is another EDOPro-compatible source, but its database may not be byte-identical to the MyCard database and should not be mixed when reproducing an existing result.
 
