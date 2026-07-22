@@ -65,6 +65,7 @@ def train(episodes=100, seed=7, alpha=0.2, gamma=0.98,
                 "epsilon": round(epsilon, 4),
                 "mean_reward": round(sum(item[0] for item in window) / len(window), 3),
                 "mean_steps": round(sum(item[2] for item in window) / len(window), 2),
+                "success_rate": round(sum(item[1] for item in window) / len(window), 3),
                 "states": len(q),
             }))
     return q
