@@ -34,6 +34,7 @@ def train(episodes=100, seed=7, alpha=0.2, gamma=0.98,
         config, database=ROOT / "assets/cards.cdb",
         scripts=ROOT.parent / "fluorohydride-ygopro-scripts", max_steps=80,
     )
+    names = card_names(ROOT / "assets/cards.cdb")
     q = {}
     rng = random.Random(seed)
     history = []
@@ -84,6 +85,9 @@ def train(episodes=100, seed=7, alpha=0.2, gamma=0.98,
         interval = max(1, (episodes // 10) if episodes else 20)
         if episode % interval == 0:
             window = history[-max(1, min(20, len(history))):]
+            target = set(config["target_endboard"])
+            best_board = set(best["endboard"])
+            target_cards = sorted(target & best_board)
             print(json.dumps({
                 "episode": episode,
                 "epsilon": round(epsilon, 4),
@@ -91,6 +95,14 @@ def train(episodes=100, seed=7, alpha=0.2, gamma=0.98,
                 "mean_steps": round(sum(item[2] for item in window) / len(window), 2),
                 "success_rate": round(sum(item[1] for item in window) / len(window), 3),
                 "states": len(q),
+                "best_episode": best["episode"],
+                "best_reward": round(best["reward"], 3),
+                "best_success": best["success"],
+                "best_steps": best["steps"],
+                "best_target_cards": [
+                    {"card_id": card_id, "card_name": names.get(card_id, str(card_id))}
+                    for card_id in target_cards
+                ],
             }))
     except KeyboardInterrupt:
         print(json.dumps({"status": "stopped", "episode": episode}))
