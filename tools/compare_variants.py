@@ -14,6 +14,21 @@ def parse_candidate(value):
     return SlotCandidate(int(card), role, label[0] if label else "")
 
 
+def rank_recommendations(reports):
+    return [
+        {
+            "variant": name,
+            "weighted_score": report["summary"]["weighted_score"],
+            "delta_vs_baseline": report.get("delta_vs_baseline", {}),
+            "brick_fraction": report["summary"].get("brick_fraction"),
+            "complete_fraction": report["summary"].get("complete_fraction"),
+        }
+        for name, report in sorted(
+            reports.items(), key=lambda item: item[1]["summary"]["weighted_score"], reverse=True
+        )
+    ]
+
+
 def compare(config, candidates, remove_card, hands, interruption, max_nodes, max_depth,
             turn_orders=(0, 1)):
     base = DeckVariant.from_config(config)
@@ -42,6 +57,7 @@ def compare(config, candidates, remove_card, hands, interruption, max_nodes, max
                 "brick_fraction": report["summary"]["brick_fraction"] - baseline["brick_fraction"],
             }
         all_reports["first" if controlled_player == 0 else "second"] = reports
+        all_reports["first" if controlled_player == 0 else "second"]["_recommendations"] = rank_recommendations(reports)
     return all_reports
 
 
@@ -90,6 +106,7 @@ def weighted_compare(config, candidates, remove_card, hands, max_nodes, max_dept
                 "weighted_score": report["summary"]["weighted_score"] - baseline.get("summary", {}).get("weighted_score", 0),
             }
         result["first" if controlled_player == 0 else "second"] = reports
+        result["first" if controlled_player == 0 else "second"]["_recommendations"] = rank_recommendations(reports)
     return result
 
 
