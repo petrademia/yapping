@@ -92,12 +92,13 @@ def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=Non
            replay_mode="cursor", adapter=None, controlled_player=0):
     config = config or load_config()
     config = {**config, "controlled_player": controlled_player}
+    matchup = config if config.get("opponent_deck") else None
     card = config["interruptions"].get(interruption)
     adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, config,
+    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, matchup,
                           controlled_player)
     replay_fn = cursor if replay_mode == "cursor" else lambda path: replay(
-        path, card, opening_hand, ecclesia_copies, adapter, config, controlled_player)
+        path, card, opening_hand, ecclesia_copies, adapter, matchup, controlled_player)
     result = minimax_replay(
         replay_fn,
         lambda snapshot: legal(snapshot, config),

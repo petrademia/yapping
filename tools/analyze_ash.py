@@ -148,6 +148,7 @@ def replay(indices, opponent_card=ASH_BLOSSOM, opening_hand=None,
                               opening_hand=opening_hand,
                               main_deck=main_deck,
                               extra_deck=matchup.get("extra_deck") if matchup else None,
+                              opponent_deck=matchup.get("opponent_deck") if matchup else None,
                               adapter=adapter, controlled_player=controlled_player)
     chosen = []
     for index in indices:

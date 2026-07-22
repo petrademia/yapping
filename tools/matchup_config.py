@@ -17,5 +17,14 @@ def load_config(path=None):
     if filler:
         deck.extend([filler["card"]] * filler["count"])
     config["main_deck"] = deck
+    opponent_deck = config.get("opponent_deck")
+    if isinstance(opponent_deck, str):
+        opponent_path = Path(opponent_deck)
+        if not opponent_path.is_absolute():
+            opponent_path = config_path.parent / opponent_path
+        loaded = json.loads(opponent_path.read_text())
+        config["opponent_deck"] = loaded.get("main_deck", loaded) if isinstance(loaded, dict) else loaded
+    if config.get("opponent_deck") is not None and len(config["opponent_deck"]) < 40:
+        raise ValueError("opponent_deck must contain at least 40 cards")
     config["weights"] = {int(card): value for card, value in config["weights"].items()}
     return config
