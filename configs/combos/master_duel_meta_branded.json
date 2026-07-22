@@ -5,6 +5,23 @@
                    "deck_type":  "Branded",
                    "retrieved":  "2026-07-16"
                },
+    "card_ids": {
+                 "Nadir Servant": 1984618,
+                 "Fallen of the White Dragon": 73819701,
+                 "Dogmatika Ecclesia, the Virtuous": 60303688,
+                 "Incredible Ecclesia, the Virtuous": 55273560,
+                 "Ecclesia and the Dark Dragon": 78397661,
+                 "Guiding Quem, the Virtuous": 45883110,
+                 "Blazing Cartesia, the Virtuous": 95515789,
+                 "The Dragon that Devours the Dogma": 76666602,
+                 "The Fallen & The Virtuous": 30271097,
+                 "Albion the Branded Dragon": 87746184,
+                 "Branded Retribution": 17751597,
+                 "Branded in Red": 82738008,
+                 "Titaniklad the Ash Dragon": 41373230,
+                 "Tri-Brigade Springans Kitt": 19304410,
+                 "The Three Champions of Swordsoul": 74405783
+               },
     "entries":  [
                     {
                         "id":  "mdm-nadir-fallen-titaniklad",
@@ -13,9 +30,11 @@
                         "starting_hand":  [
                                               "Nadir Servant"
                                           ],
+                        "starting_hand_ids":  [1984618],
                         "required_cards":  [
                                                "Dogmatika Ecclesia, the Virtuous"
                                            ],
+                        "required_card_ids":  [60303688],
                         "steps":  [
                                       {
                                           "card":  "Nadir Servant",
@@ -116,10 +135,12 @@
                         "starting_hand":  [
                                               "Fallen of the White Dragon"
                                           ],
+                        "starting_hand_ids":  [73819701],
                         "required_cards":  [
                                                "The Three Champions of Swordsoul",
-                                               "Tri-Brigade Springans Kitt"
-                                           ],
+                                                            "Tri-Brigade Springans Kitt"
+                                                       ],
+                        "required_card_ids":  [74405783, 19304410],
                         "plays_around":  [
                                              "Droll \u0026 Lock Bird"
                                          ],

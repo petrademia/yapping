@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from yapping import load_archetype, summarize_compendium
+from yapping import load_archetype, load_combo, summarize_compendium
 from yapping.variants import SlotCandidate
 
 ROOT = Path(__file__).parents[1]
@@ -25,3 +25,9 @@ def test_compendium_marks_known_candidate_cards():
     report = summarize_compendium(archetype, [SlotCandidate(44146295, "board_breaker", "Mirrorjade")])
     assert report["verified_fixtures"] == 3
     assert report["candidates"]["44146295"]["known_to_compendium"] is True
+
+
+def test_combo_catalog_resolves_against_card_database():
+    combo = load_combo(ROOT / "configs/combos/master_duel_meta_branded.json",
+                       ROOT / "assets/cards.cdb")
+    assert combo["card_ids"]["Fallen of the White Dragon"] == 73819701

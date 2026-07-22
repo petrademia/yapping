@@ -5,12 +5,20 @@
     "deck_type": "Branded",
     "retrieved": "2026-07-16"
   },
+  "card_ids": {
+    "Branded in High Spirits": 29948294,
+    "Blazing Cartesia, the Virtuous": 95515789,
+    "Guiding Quem, the Virtuous": 45883110,
+    "Incredible Ecclesia, the Virtuous": 55273560,
+    "Aluber the Jester of Despia": 62962630
+  },
   "entries": [
     {
       "id": "mdm-high-spirits-spellcaster-discard",
       "title": "High Spirits + Spellcaster + Any discard",
       "line_type": "extension",
       "starting_hand": ["Branded in High Spirits", "Spellcaster", "any discard"],
+      "starting_hand_ids": [29948294, "any_spellcaster", "any_discard"],
       "steps": [
         {
           "card": "Branded in High Spirits",

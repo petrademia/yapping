@@ -5,16 +5,22 @@
     "deck_type": "Branded",
     "retrieved": "2026-07-16"
   },
+  "card_ids": {
+    "Fallen of the White Dragon": 73819701,
+    "Droll & Lock Bird": 94145021
+  },
   "entries": [
     {
       "id": "mdm-fallen-white-dragon-droll-recovery",
       "title": "Fallen of the White Dragon — Droll recovery",
       "line_type": "recovery",
       "starting_hand": ["Fallen of the White Dragon"],
+      "starting_hand_ids": [73819701],
       "branches": [
         {
           "id": "droll",
           "opponent_interruption": "Droll & Lock Bird",
+          "opponent_interruption_id": 94145021,
           "interruption_timing": "after_first_search",
           "description": "Reduced line; no LIGHT/DARK Normal Summon",
           "validation": "unverified"
