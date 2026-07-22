@@ -1,240 +1,251 @@
 {
-    "source":  {
-                   "site":  "Master Duel Meta",
-                   "url":  "https://www.masterduelmeta.com/combo/6a1c1468b39696da94caab22?combosDeckType=631ac6d9e0507c998e6f2a34",
-                   "deck_type":  "Branded",
-                   "retrieved":  "2026-07-16"
-               },
-    "cards": [
-                 {"id": 1984618, "name": "Nadir Servant"},
-                 {"id": 73819701, "name": "Fallen of the White Dragon"},
-                 {"id": 60303688, "name": "Dogmatika Ecclesia, the Virtuous"},
-                 {"id": 55273560, "name": "Incredible Ecclesia, the Virtuous"},
-                 {"id": 78397661, "name": "Ecclesia and the Dark Dragon"},
-                 {"id": 45883110, "name": "Guiding Quem, the Virtuous"},
-                 {"id": 95515789, "name": "Blazing Cartesia, the Virtuous"},
-                 {"id": 76666602, "name": "The Dragon that Devours the Dogma"},
-                 {"id": 30271097, "name": "The Fallen & The Virtuous"},
-                 {"id": 87746184, "name": "Albion the Branded Dragon"},
-                 {"id": 17751597, "name": "Branded Retribution"},
-                 {"id": 82738008, "name": "Branded in Red"},
-                 {"id": 41373230, "name": "Titaniklad the Ash Dragon"},
-                 {"id": 19304410, "name": "Tri-Brigade Springans Kitt"},
-                 {"id": 74405783, "name": "The Three Champions of Swordsoul"}
-               ],
-    "entries":  [
-                    {
-                        "id":  "mdm-nadir-fallen-titaniklad",
-                        "title":  "Nadir Servant into Fallen of the White Dragon",
-                        "line_type":  "baseline",
-                        "starting_hand":  [1984618],
-                        "required_cards":  [60303688],
-                        "steps":  [
-                                      {
-                                          "card":  "Nadir Servant",
-                                          "action":  "send",
-                                          "from":  "extra",
-                                          "to":  "graveyard",
-                                          "target":  "Titaniklad the Ash Dragon"
-                                      },
-                                      {
-                                          "card":  "Nadir Servant",
-                                          "action":  "add",
-                                          "from":  "deck",
-                                          "to":  "hand",
-                                          "target":  "Fallen of the White Dragon"
-                                      },
-                                      {
-                                          "card":  "Fallen of the White Dragon",
-                                          "action":  "special_summon",
-                                          "from":  "hand",
-                                          "target":  "self"
-                                      },
-                                      {
-                                          "card":  "Fallen of the White Dragon",
-                                          "action":  "special_summon",
-                                          "from":  "deck",
-                                          "target":  "Incredible Ecclesia, the Virtuous",
-                                          "alternative":  "Dogmatika Ecclesia, the Virtuous"
-                                      },
-                                      {
-                                          "phase":  "end",
-                                          "card":  "Titaniklad the Ash Dragon",
-                                          "action":  "special_summon",
-                                          "from":  "deck",
-                                          "target":  "Guiding Quem, the Virtuous"
-                                      },
-                                      {
-                                          "card":  "Guiding Quem, the Virtuous",
-                                          "action":  "send",
-                                          "from":  "deck",
-                                          "to":  "graveyard",
-                                          "target":  "Blazing Cartesia, the Virtuous"
-                                      },
-                                      {
-                                          "card":  "The Dragon that Devours the Dogma",
-                                          "action":  "add",
-                                          "from":  "deck",
-                                          "to":  "hand",
-                                          "target":  "The Fallen \u0026 The Virtuous"
-                                      },
-                                      {
-                                          "card":  "The Fallen \u0026 The Virtuous",
-                                          "action":  "destroy",
-                                          "target":  "Albion the Branded Dragon"
-                                      },
-                                      {
-                                          "card":  "Albion the Branded Dragon",
-                                          "action":  "set",
-                                          "from":  "deck",
-                                          "target":  "Branded Retribution"
-                                      }
-                                  ],
-                        "endboard":  [
-                                         "Fallen of the White Dragon",
-                                         "Guiding Quem, the Virtuous",
-                                         "Blazing Cartesia, the Virtuous",
-                                         "The Fallen \u0026 The Virtuous",
-                                         "Branded Retribution",
-                                         "Incredible Ecclesia, the Virtuous"
-                                     ],
-                        "alternatives":  [
-                                             {
-                                                 "at_step":  4,
-                                                 "choices":  [
-                                                                 "Incredible Ecclesia, the Virtuous",
-                                                                 "Dogmatika Ecclesia, the Virtuous"
-                                                             ]
-                                             },
-                                             {
-                                                 "at_step":  8,
-                                                 "choices":  [
-                                                                 "The Fallen \u0026 The Virtuous",
-                                                                 "Branded in Red",
-                                                                 "Branded Retribution"
-                                                             ]
-                                             }
-                                         ],
-                        "validation":  {
-                                           "status":  "validated_via_existing_fixture",
-                                           "notes":  [
-                                                         "Dedicated page confirms exact source steps. Existing Lua fixture validates the no-interruption line and Ash, Veiler, and Imperm recovery branches with the documented endboard."
-                                                     ]
-                                       }
-                    },
-                    {
-                        "id":  "mdm-one-card-fallen",
-                        "title":  "1 Card Fallen of the White Dragon",
-                        "line_type":  "baseline",
-                        "starting_hand":  [73819701],
-                        "required_cards":  [74405783, 19304410],
-                        "plays_around":  [
-                                             "Droll \u0026 Lock Bird"
-                                         ],
-                        "steps":  [
-                                      {
-                                          "from":  "hand",
-                                          "card":  "Fallen of the White Dragon",
-                                          "send_from_extra":  "Albion the Branded Dragon",
-                                          "target":  "self",
-                                          "action":  "special_summon"
-                                      },
-                                      {
-                                          "from":  "deck",
-                                          "card":  "Fallen of the White Dragon",
-                                          "target":  "Incredible Ecclesia, the Virtuous",
-                                          "action":  "special_summon"
-                                      },
-                                      {
-                                          "materials":  [
-                                                            "Fallen of the White Dragon",
-                                                            "Incredible Ecclesia, the Virtuous"
-                                                        ],
-                                          "target":  "Ecclesia and the Dark Dragon",
-                                          "action":  "synchro_summon"
-                                      },
-                                      {
-                                          "from":  "deck",
-                                          "card":  "Ecclesia and the Dark Dragon",
-                                          "target":  "Guiding Quem, the Virtuous",
-                                          "action":  "special_summon"
-                                      },
-                                      {
-                                          "from":  "deck",
-                                          "card":  "Guiding Quem, the Virtuous",
-                                          "to":  "graveyard",
-                                          "target":  "Tri-Brigade Springans Kitt",
-                                          "action":  "send"
-                                      },
-                                      {
-                                          "from":  "graveyard",
-                                          "card":  "Tri-Brigade Springans Kitt",
-                                          "target":  "Fallen of the White Dragon",
-                                          "action":  "special_summon"
-                                      },
-                                      {
-                                          "materials":  [
-                                                            "Guiding Quem, the Virtuous",
-                                                            "Fallen of the White Dragon"
-                                                        ],
-                                          "target":  "The Three Champions of Swordsoul",
-                                          "action":  "synchro_summon"
-                                      },
-                                      {
-                                          "from":  "deck",
-                                          "card":  "The Three Champions of Swordsoul",
-                                          "to":  "hand",
-                                          "target":  "Blazing Cartesia, the Virtuous",
-                                          "action":  "add"
-                                      },
-                                      {
-                                          "from":  "hand",
-                                          "card":  "Blazing Cartesia, the Virtuous",
-                                          "target":  "self",
-                                          "action":  "special_summon"
-                                      },
-                                      {
-                                          "materials":  [
-                                                            "Blazing Cartesia, the Virtuous",
-                                                            "The Three Champions of Swordsoul"
-                                                        ],
-                                          "target":  "Granguignol the Dusk Dragon",
-                                          "action":  "fusion_summon"
-                                      },
-                                      {
-                                          "action":  "send",
-                                          "card":  "Granguignol the Dusk Dragon",
-                                          "to":  "graveyard",
-                                          "from":  "extra",
-                                          "optional_branch":  "Droll may prevent the search/follow-up branch",
-                                          "target":  "The Dragon that Devours the Dogma"
-                                      },
-                                      {
-                                          "phase":  "end",
-                                          "optional_branch":  "No Droll: Albion sets The Fallen \u0026 The Virtuous or Branded Retribution; Droll: reduced line",
-                                          "action":  "trigger_effects",
-                                          "available_effects":  [
-                                                             "Ecclesia and the Dark Dragon",
-                                                             "Incredible Ecclesia, the Virtuous",
-                                                             "Blazing Cartesia, the Virtuous",
-                                                             "The Dragon that Devours the Dogma"
-                                                         ],
-                                          "selection_policy":  "choose_only_if_legal",
-                                          "fallback":  "pass_or_continue_with_remaining_effects"
-                                      }
-                                  ],
-                        "endboard":  [
-                                         "Ecclesia and the Dark Dragon",
-                                         "The Fallen \u0026 The Virtuous",
-                                         "Rindbrumm the Striking Dragon",
-                                         "Granguignol the Dusk Dragon"
-                                     ],
-                        "validation":  {
-                                           "status":  "partial_validated",
-                                           "notes":  [
-                                                         "Dedicated page line replayed through OCGCore through Granguignol and its send effect. Lua confirms Cartesia plus Three Champions is a legal Granguignol fusion and exposes the expected End Phase chain options (Ecclesia and the Dark Dragon, The Fallen & The Virtuous, Blazing Cartesia, and Devours). Cartesia return is validated. Ecclesia and the Dark Dragon return is conditional on that card being banished; this exact line leaves it in the Graveyard, so the website endboard step is not unconditional. Target selection and Droll/no-Droll branches remain to be completed."
-                                                     ]
-                                       }
-                    }
-                ]
+  "source": {
+    "site": "Master Duel Meta",
+    "url": "https://www.masterduelmeta.com/combo/6a1c1468b39696da94caab22?combosDeckType=631ac6d9e0507c998e6f2a34",
+    "deck_type": "Branded",
+    "retrieved": "2026-07-16"
+  },
+  "cards": [
+    1984618,
+    17751597,
+    19304410,
+    24915933,
+    30271097,
+    41373230,
+    45883110,
+    51409648,
+    55273560,
+    60303688,
+    73819701,
+    74405783,
+    76666602,
+    78397661,
+    82738008,
+    87746184,
+    95515789
+  ],
+  "entries": [
+    {
+      "id": "mdm-nadir-fallen-titaniklad",
+      "title": "Nadir Servant into Fallen of the White Dragon",
+      "line_type": "baseline",
+      "starting_hand": [
+        1984618
+      ],
+      "required_cards": [
+        60303688
+      ],
+      "steps": [
+        {
+          "card": 1984618,
+          "action": "send",
+          "from": "extra",
+          "to": "graveyard",
+          "target": 41373230
+        },
+        {
+          "card": 1984618,
+          "action": "add",
+          "from": "deck",
+          "to": "hand",
+          "target": 73819701
+        },
+        {
+          "card": 73819701,
+          "action": "special_summon",
+          "from": "hand",
+          "target": "self"
+        },
+        {
+          "card": 73819701,
+          "action": "special_summon",
+          "from": "deck",
+          "target": 55273560,
+          "alternative": 60303688
+        },
+        {
+          "phase": "end",
+          "card": 41373230,
+          "action": "special_summon",
+          "from": "deck",
+          "target": 45883110
+        },
+        {
+          "card": 45883110,
+          "action": "send",
+          "from": "deck",
+          "to": "graveyard",
+          "target": 95515789
+        },
+        {
+          "card": 76666602,
+          "action": "add",
+          "from": "deck",
+          "to": "hand",
+          "target": 30271097
+        },
+        {
+          "card": 30271097,
+          "action": "destroy",
+          "target": 87746184
+        },
+        {
+          "card": 87746184,
+          "action": "set",
+          "from": "deck",
+          "target": 17751597
+        }
+      ],
+      "endboard": [
+        73819701,
+        45883110,
+        95515789,
+        30271097,
+        17751597,
+        55273560
+      ],
+      "alternatives": [
+        {
+          "at_step": 4,
+          "choices": [
+            55273560,
+            60303688
+          ]
+        },
+        {
+          "at_step": 8,
+          "choices": [
+            30271097,
+            82738008,
+            17751597
+          ]
+        }
+      ],
+      "validation": {
+        "status": "validated_via_existing_fixture",
+        "notes": [
+          "Dedicated page confirms exact source steps. Existing Lua fixture validates the no-interruption line and Ash, Veiler, and Imperm recovery branches with the documented endboard."
+        ]
+      }
+    },
+    {
+      "id": "mdm-one-card-fallen",
+      "title": "1 Card Fallen of the White Dragon",
+      "line_type": "baseline",
+      "starting_hand": [
+        73819701
+      ],
+      "required_cards": [
+        74405783,
+        19304410
+      ],
+      "plays_around": [
+        "Droll & Lock Bird"
+      ],
+      "steps": [
+        {
+          "from": "hand",
+          "card": 73819701,
+          "send_from_extra": "Albion the Branded Dragon",
+          "target": "self",
+          "action": "special_summon"
+        },
+        {
+          "from": "deck",
+          "card": 73819701,
+          "target": 55273560,
+          "action": "special_summon"
+        },
+        {
+          "materials": [
+            73819701,
+            55273560
+          ],
+          "target": 78397661,
+          "action": "synchro_summon"
+        },
+        {
+          "from": "deck",
+          "card": 78397661,
+          "target": 45883110,
+          "action": "special_summon"
+        },
+        {
+          "from": "deck",
+          "card": 45883110,
+          "to": "graveyard",
+          "target": 19304410,
+          "action": "send"
+        },
+        {
+          "from": "graveyard",
+          "card": 19304410,
+          "target": 73819701,
+          "action": "special_summon"
+        },
+        {
+          "materials": [
+            45883110,
+            73819701
+          ],
+          "target": 74405783,
+          "action": "synchro_summon"
+        },
+        {
+          "from": "deck",
+          "card": 74405783,
+          "to": "hand",
+          "target": 95515789,
+          "action": "add"
+        },
+        {
+          "from": "hand",
+          "card": 95515789,
+          "target": "self",
+          "action": "special_summon"
+        },
+        {
+          "materials": [
+            95515789,
+            74405783
+          ],
+          "target": 24915933,
+          "action": "fusion_summon"
+        },
+        {
+          "action": "send",
+          "card": 24915933,
+          "to": "graveyard",
+          "from": "extra",
+          "optional_branch": "Droll may prevent the search/follow-up branch",
+          "target": 76666602
+        },
+        {
+          "phase": "end",
+          "optional_branch": "No Droll: Albion sets The Fallen & The Virtuous or Branded Retribution; Droll: reduced line",
+          "action": "trigger_effects",
+          "available_effects": [
+            "Ecclesia and the Dark Dragon",
+            "Incredible Ecclesia, the Virtuous",
+            "Blazing Cartesia, the Virtuous",
+            "The Dragon that Devours the Dogma"
+          ],
+          "selection_policy": "choose_only_if_legal",
+          "fallback": "pass_or_continue_with_remaining_effects"
+        }
+      ],
+      "endboard": [
+        78397661,
+        30271097,
+        51409648,
+        24915933
+      ],
+      "validation": {
+        "status": "partial_validated",
+        "notes": [
+          "Dedicated page line replayed through OCGCore through Granguignol and its send effect. Lua confirms Cartesia plus Three Champions is a legal Granguignol fusion and exposes the expected End Phase chain options (Ecclesia and the Dark Dragon, The Fallen & The Virtuous, Blazing Cartesia, and Devours). Cartesia return is validated. Ecclesia and the Dark Dragon return is conditional on that card being banished; this exact line leaves it in the Graveyard, so the website endboard step is not unconditional. Target selection and Droll/no-Droll branches remain to be completed."
+        ]
+      }
+    }
+  ]
 }

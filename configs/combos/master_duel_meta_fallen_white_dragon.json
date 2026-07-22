@@ -6,15 +6,17 @@
     "retrieved": "2026-07-16"
   },
   "cards": [
-    {"id": 73819701, "name": "Fallen of the White Dragon"},
-    {"id": 94145021, "name": "Droll & Lock Bird"}
+    73819701,
+    94145021
   ],
   "entries": [
     {
       "id": "mdm-fallen-white-dragon-droll-recovery",
       "title": "Fallen of the White Dragon — Droll recovery",
       "line_type": "recovery",
-      "starting_hand": [73819701],
+      "starting_hand": [
+        73819701
+      ],
       "branches": [
         {
           "id": "droll",

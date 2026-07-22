@@ -8,8 +8,8 @@ def test_high_spirits_interruption_matrix_uses_known_policies_and_cards():
         ROOT / "configs/combos/high_spirits_interruptions.json"
 ).read_text())
     assert matrix["opening_hand"][:2] == [
-        "Branded in High Spirits",
-        "Blazing Cartesia, the Virtuous",
+        29948294,
+        95515789,
     ]
     assert {scenario["card_id"] for scenario in matrix["scenarios"]} == {
         14558127, 94145021, 97268402, 10045474,

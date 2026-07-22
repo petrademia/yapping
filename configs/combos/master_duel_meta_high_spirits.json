@@ -6,21 +6,25 @@
     "retrieved": "2026-07-16"
   },
   "cards": [
-    {"id": 29948294, "name": "Branded in High Spirits"},
-    {"id": 95515789, "name": "Blazing Cartesia, the Virtuous"},
-    {"id": 45883110, "name": "Guiding Quem, the Virtuous"},
-    {"id": 55273560, "name": "Incredible Ecclesia, the Virtuous"},
-    {"id": 62962630, "name": "Aluber the Jester of Despia"}
+    29948294,
+    45883110,
+    55273560,
+    62962630,
+    95515789
   ],
   "entries": [
     {
       "id": "mdm-high-spirits-spellcaster-discard",
       "title": "High Spirits + Spellcaster + Any discard",
       "line_type": "extension",
-      "starting_hand": [29948294, "any_spellcaster", "any_discard"],
+      "starting_hand": [
+        29948294,
+        "any_spellcaster",
+        "any_discard"
+      ],
       "steps": [
         {
-          "card": "Branded in High Spirits",
+          "card": 29948294,
           "action": "activate",
           "requires": {
             "revealed_hand_card_race": "SPELLCASTER",
@@ -42,18 +46,33 @@
         }
       ],
       "target_variants": [
-        "Blazing Cartesia, the Virtuous",
-        "Guiding Quem, the Virtuous",
-        "Incredible Ecclesia, the Virtuous",
-        "Aluber the Jester of Despia"
+        95515789,
+        45883110,
+        55273560,
+        62962630
       ],
       "interruption_matrix": "configs/combos/high_spirits_interruptions.json",
       "interruption_branches": {
-        "ash": { "status": "unverified", "expected": "High Spirits or subsequent search may be negated" },
-        "droll": { "status": "unverified", "expected": "Search/follow-up branch is restricted" },
-        "veiler": { "status": "unverified", "expected": "Evaluate Fallen/ Ecclesia field-effect timing" },
-        "impermanence": { "status": "unverified", "expected": "Evaluate Fallen/ Ecclesia field-effect timing" },
-        "nibiru": { "status": "unverified", "expected": "Evaluate summon-count stopping point" }
+        "ash": {
+          "status": "unverified",
+          "expected": "High Spirits or subsequent search may be negated"
+        },
+        "droll": {
+          "status": "unverified",
+          "expected": "Search/follow-up branch is restricted"
+        },
+        "veiler": {
+          "status": "unverified",
+          "expected": "Evaluate Fallen/ Ecclesia field-effect timing"
+        },
+        "impermanence": {
+          "status": "unverified",
+          "expected": "Evaluate Fallen/ Ecclesia field-effect timing"
+        },
+        "nibiru": {
+          "status": "unverified",
+          "expected": "Evaluate summon-count stopping point"
+        }
       },
       "validation": {
         "status": "partial_validated",

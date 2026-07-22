@@ -30,4 +30,4 @@ def test_compendium_marks_known_candidate_cards():
 def test_combo_catalog_resolves_against_card_database():
     combo = load_combo(ROOT / "configs/combos/master_duel_meta_branded.json",
                        ROOT / "assets/cards.cdb")
-    assert next(card for card in combo["cards"] if card["name"] == "Fallen of the White Dragon")["id"] == 73819701
+    assert 73819701 in combo["cards"]
