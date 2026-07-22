@@ -86,7 +86,9 @@ class BrandedEndboardReachEnv(gym.Env):
         if self._decision is None:
             return ()
         actions = self._decision["actions"]
-        return tuple(range(len(actions)))
+        # The benchmark is about combo construction, not battle resolution.
+        return tuple(index for index, action in enumerate(actions)
+                     if action["kind"] not in {"battle_phase", "shuffle"})
 
     def _cards(self, location):
         return self._adapter.cards(0, location)
