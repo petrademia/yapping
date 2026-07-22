@@ -2,7 +2,7 @@
 
 from typing import Any, Mapping
 
-ORACLE_SCHEMA_VERSION = 1
+ORACLE_SCHEMA_VERSION = 2
 
 
 def action_descriptor(action: Mapping[str, Any]) -> dict[str, Any]:
@@ -15,6 +15,7 @@ def snapshot_observation(snapshot: Any, legal_indices: list[int]) -> dict[str, A
     """Return a stable, JSON-compatible observation for a replay snapshot."""
     actions = snapshot.decision["actions"]
     return {
+        "schema": "yapping.observation.v1",
         "zones": {name: list(cards) for name, cards in snapshot.zones.items()},
         "player": snapshot.decision["player"],
         "turn": snapshot.decision["turn"],
@@ -27,7 +28,7 @@ def snapshot_observation(snapshot: Any, legal_indices: list[int]) -> dict[str, A
 def validate_example(row: Mapping[str, Any]) -> None:
     required = {
         "schema_version", "observation", "state_key", "legal_actions",
-        "oracle_action", "oracle_value", "complete", "search_limits",
+        "oracle_action", "oracle_value", "oracle_action_values", "complete", "search_limits",
         "provenance",
     }
     missing = required.difference(row)
@@ -35,3 +36,7 @@ def validate_example(row: Mapping[str, Any]) -> None:
         raise ValueError(f"oracle example missing fields: {sorted(missing)}")
     if row["schema_version"] != ORACLE_SCHEMA_VERSION:
         raise ValueError(f"unsupported oracle schema: {row['schema_version']}")
+    if not set(row["oracle_action_values"]).issubset(
+        {str(index) for index in row["legal_actions"]}
+    ):
+        raise ValueError("oracle action values contain an illegal action")

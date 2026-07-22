@@ -12,6 +12,7 @@ class MinimaxResult:
     complete: bool
     max_depth: int = 0
     max_nodes: int = 0
+    action_values: Mapping[int, float] = ()
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,7 @@ def minimax_replay(
     """Alpha-beta minimax for deterministic engines reconstructed by replay."""
     visited = 0
     cache = {}
+    root_action_values = {}
 
     def visit(path, depth, alpha, beta):
         nonlocal visited
@@ -73,6 +75,8 @@ def minimax_replay(
             score, suffix, child_complete, _ = visit(
                 path + (action,), depth + 1, alpha, beta
             )
+            if depth == 0:
+                root_action_values[action] = score
             complete &= child_complete
             if (maximize and score > best_score) or (not maximize and score < best_score):
                 best_score, best_path = score, (action,) + suffix
@@ -98,7 +102,8 @@ def minimax_replay(
         )[2] == "exact"
 
     score, actions, complete, _ = visit(tuple(), 0, float("-inf"), float("inf"))
-    return MinimaxResult(actions, score, visited, complete, max_depth, max_nodes)
+    return MinimaxResult(actions, score, visited, complete, max_depth, max_nodes,
+                         root_action_values)
 
 
 def hidden_minimax_replay(

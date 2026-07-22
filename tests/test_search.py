@@ -59,12 +59,13 @@ def test_opening_probability():
 
 def test_oracle_example_schema_is_versioned_and_validated():
     row = {
-        "schema_version": 1,
+        "schema_version": 2,
         "observation": {},
         "state_key": "00",
         "legal_actions": [0],
         "oracle_action": 0,
         "oracle_value": 1.0,
+        "oracle_action_values": {"0": 1.0},
         "complete": True,
         "search_limits": {"max_nodes": 1, "max_depth": 1},
         "provenance": {},
@@ -72,6 +73,23 @@ def test_oracle_example_schema_is_versioned_and_validated():
     validate_example(row)
     with pytest.raises(ValueError, match="missing fields"):
         validate_example({"schema_version": 1})
+
+
+def test_oracle_action_values_must_be_legal():
+    row = {
+        "schema_version": 2,
+        "observation": {},
+        "state_key": "00",
+        "legal_actions": [0],
+        "oracle_action": 0,
+        "oracle_value": 1.0,
+        "oracle_action_values": {"1": 2.0},
+        "complete": True,
+        "search_limits": {},
+        "provenance": {},
+    }
+    with pytest.raises(ValueError, match="illegal action"):
+        validate_example(row)
 
 
 def test_hidden_interruption_choices_do_not_leak_information():

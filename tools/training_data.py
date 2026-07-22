@@ -26,10 +26,20 @@ def export(path, interruption="ash", max_nodes=100, max_depth=40, config=None):
     adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     cursor = ReplayCursor(config["interruptions"][interruption], None, 1,
                           adapter, config)
+    # search leaves the cursor at its terminal path; restore the root before
+    # walking the labelled trajectory.
+    cursor(())
     rows = []
     for depth, action in enumerate(result.actions):
         node = cursor(result.actions[:depth])
         legal_indices = list(legal(node, config))
+        action_values = {
+            str(index): value for index, value in result.action_values.items()
+            if index in legal_indices
+        }
+        # The complete root action table is available from minimax. For later
+        # trajectory states, retain the oracle action's value explicitly.
+        action_values.setdefault(str(action), result.score)
         row = {
             "schema_version": ORACLE_SCHEMA_VERSION,
             "state_key": node.key.hex(),
@@ -37,6 +47,7 @@ def export(path, interruption="ash", max_nodes=100, max_depth=40, config=None):
             "legal_actions": legal_indices,
             "oracle_action": action,
             "oracle_value": result.score,
+            "oracle_action_values": action_values,
             "complete": result.complete,
             "depth": depth,
             "interruption": interruption,
