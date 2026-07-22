@@ -10,10 +10,10 @@ def load_combo(path: str | Path, database: str | Path | None = None) -> dict[str
     """Load a combo compendium and validate its numeric card catalog."""
     source = Path(path)
     data = json.loads(source.read_text(encoding="utf-8"))
-    catalog = {str(name): int(card_id) for name, card_id in data.get("card_ids", {}).items()
-               if isinstance(card_id, int)}
+    cards = data.get("cards", [])
+    catalog = {str(card["name"]): int(card["id"]) for card in cards}
     if not catalog:
-        raise ValueError(f"{source} has no numeric card_ids catalog")
+        raise ValueError(f"{source} has no numeric cards catalog")
     if database:
         connection = sqlite3.connect(database)
         try:
