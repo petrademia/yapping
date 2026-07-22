@@ -102,8 +102,8 @@
       "path": "../combos/master_duel_meta_high_spirits.json"
     },
     {
-      "id": "mdm-walbaz",
-      "path": "../combos/master_duel_meta_walbaz.json"
+      "id": "mdm-fallen-white-dragon-droll-recovery",
+      "path": "../combos/master_duel_meta_fallen_white_dragon.json"
     }
   ],
   "target_predicates": {

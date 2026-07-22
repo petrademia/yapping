@@ -7,19 +7,22 @@
   },
   "entries": [
     {
-      "id": "mdm-walbaz-through-droll",
-      "title": "Only Walbaz through Droll",
+      "id": "mdm-fallen-white-dragon-droll-recovery",
+      "title": "Fallen of the White Dragon — Droll recovery",
+      "line_type": "recovery",
       "starting_hand": ["Fallen of the White Dragon"],
       "branches": [
         {
           "id": "droll",
           "opponent_interruption": "Droll & Lock Bird",
+          "interruption_timing": "after_first_search",
           "description": "Reduced line; no LIGHT/DARK Normal Summon",
           "validation": "unverified"
         },
         {
           "id": "no-droll",
           "opponent_interruption": null,
+          "interruption_timing": null,
           "description": "Stronger optional line; requires a discard",
           "validation": "unverified"
         }

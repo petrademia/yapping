@@ -9,6 +9,7 @@
     {
       "id": "mdm-high-spirits-spellcaster-discard",
       "title": "High Spirits + Spellcaster + Any discard",
+      "line_type": "extension",
       "starting_hand": ["Branded in High Spirits", "Spellcaster", "any discard"],
       "steps": [
         {

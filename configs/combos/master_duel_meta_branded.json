@@ -9,6 +9,7 @@
                     {
                         "id":  "mdm-nadir-fallen-titaniklad",
                         "title":  "Nadir Servant into Fallen of the White Dragon",
+                        "line_type":  "baseline",
                         "starting_hand":  [
                                               "Nadir Servant"
                                           ],
@@ -111,6 +112,7 @@
                     {
                         "id":  "mdm-one-card-fallen",
                         "title":  "1 Card Fallen of the White Dragon",
+                        "line_type":  "baseline",
                         "starting_hand":  [
                                               "Fallen of the White Dragon"
                                           ],

@@ -16,7 +16,7 @@ def test_branded_config_is_the_generic_archetype_boundary():
     assert archetype.interruptions["ash"].card_id == 14558127
     assert archetype.interruptions["ash"].policy == "activate_at_first_legal_search"
     assert archetype.target_predicates["high_spirits"]["same_race_as"] == "revealed_hand_card"
-    assert {fixture.id for fixture in archetype.fixtures} == {"mdm-one-card-fallen", "mdm-high-spirits", "mdm-walbaz"}
+    assert {fixture.id for fixture in archetype.fixtures} == {"mdm-one-card-fallen", "mdm-high-spirits", "mdm-fallen-white-dragon-droll-recovery"}
     assert all(fixture.path.is_file() for fixture in archetype.fixtures)
 
 
