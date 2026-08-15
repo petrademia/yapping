@@ -32,6 +32,40 @@ good deck. Reports should preserve score breakdowns and completeness flags so
 resilience can be compared without hiding the tradeoff between board strength,
 follow-up, and interaction.
 
+## Capability ladder
+
+High-level maturity of YAPPING capabilities. Status reflects what the
+repository can do today, not aspirational marketing.
+
+| Level | Capability | Current status |
+| ----- | -------------------------------------------------------- | ---------------------------- |
+| 0 | Verify predefined combo lines | 🟢 Implemented |
+| 1 | Search alternative lines from a known hand | 🟢 Implemented |
+| 2 | Find recovery lines through configured interruptions | 🟢 Implemented |
+| 3 | Compare solver utility across opening hands | 🟡 In development |
+| 4 | Exact search over small hidden-information world sets | 🟢/🟡 Limited implementation |
+| 5 | Approximate larger hidden-information spaces by sampling | 🟡 Early implementation |
+| 6 | Generate oracle-labelled training data | 🟢 Infrastructure exists |
+| 7 | Learn policy/value models from oracle search | ⚪ Planned |
+| 8 | Use learned models to guide tree search | ⚪ Planned |
+| 9 | MCTS-based combo discovery | ⚪ Planned |
+| 10 | RL / iterative policy improvement | ⚪ Research direction |
+| 11 | Joint deck-composition + policy optimization | ⚪ Long-term research |
+| 12 | General expert Yu-Gi-Oh! agent | 🔴 Explicit non-goal for now |
+
+Legend: Implemented = usable and exercised by fixtures/tools;
+In development / Limited / Early = code exists but incomplete relative to the
+stated capability; Planned / Research / Non-goal = not a near-term deliverable.
+
+Levels 0-2 are the inner solver spine (fixtures, known-hand minimax, configured
+interruption recovery). Level 3 is the outer loop (consistency sampling,
+role-conditioned and quantified utility); it is not finished until full-deck
+coverage semantics and ratio sensitivity are solid. Levels 4-5 are hidden-
+information search. Levels 6-10 consume the deterministic oracle. Level 11 is
+Phase 3E / long-horizon research. Level 12 remains an explicit non-goal: the
+product is combo resilience and deck consistency analysis, not a general
+dueling agent.
+
 ## Design assessment (summary)
 
 The four-layer stack is sound and should be preserved:
@@ -43,7 +77,8 @@ The four-layer stack is sound and should be preserved:
 3. fixture tools (`tools/`) - evaluator weights, action abstraction, terminal
    predicates, currently Albaz-specific;
 4. two-layer model - inner per-hand minimax, outer deck-level aggregation
-   (only `opening_probability` exists today).
+   (opening-hand sampling, role features, and conditioned/quantified utility
+   summaries exist; full-deck exact consistency and deck optimization do not).
 
 Strengths to keep: honest `complete` flags, replay determinism as ground
 truth, public-action-key world grouping in hidden search.
@@ -128,10 +163,17 @@ results by hypergeometric probability; classify bricks/garnets (legacy) and
 role features. Report a consistency distribution, not a single number, and
 carry each hand's `complete` flag into the aggregate.
 
-`conditioned_hand_utility` summarizes `E[U | role composition]` over evaluated
-hands (including starter/extender joints and optional score-loss). Sampled
-unique-hand runs must report raw probability mass and must not claim full-deck
-coverage.
+`conditioned_hand_utility` and `quantified_hand_report` summarize
+`E[U | role composition]`, utility distributions, and threshold rates
+`Playable_T := U >= T` over evaluated hands. Sampled unique-hand runs report
+`evaluated_probability_mass` and must not claim full-deck coverage.
+
+**Terminology principle:** every analytical term maps to an observable
+quantity, explicit mathematical function, or configurable predicate. Keep
+hand features (role counts) distinct from solver outcomes (`U(H,I)`) and
+derived metrics (ceiling, interruption loss, floor over the configured
+interruption set). Bucket deltas are conditional associations; extender
+replacement remains the interventional/counterfactual analysis.
 
 ### Phase 3D — Card/ratio sensitivity
 

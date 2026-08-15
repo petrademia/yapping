@@ -23,12 +23,22 @@ from .roles import (
     roles_for,
 )
 from .consistency import (
+    HandCondition,
+    ceiling,
+    conditional_bucket_deltas,
     conditioned_hand_utility,
+    expected_utility,
+    floor_over_configured,
+    hand_feature_access_rates,
+    interruption_loss,
+    quantified_hand_report,
     role_density_opening_profile,
     summarize_by_predicate,
     summarize_joint_conditions,
     summarize_role_counts,
     summarize_rows,
+    utility_distribution,
+    weighted_quantile,
 )
 from .variants import DeckVariant, SlotCandidate
 
@@ -45,6 +55,9 @@ __all__ = [
     "DeckVariant", "SlotCandidate",
     "normalize_card_roles", "roles_for", "cards_with_role", "count_roles",
     "hand_features", "role_copies_in_deck",
-    "conditioned_hand_utility", "summarize_rows", "summarize_by_predicate",
+    "HandCondition", "conditioned_hand_utility", "summarize_rows", "summarize_by_predicate",
     "summarize_role_counts", "summarize_joint_conditions", "role_density_opening_profile",
+    "utility_distribution", "weighted_quantile", "quantified_hand_report",
+    "hand_feature_access_rates", "conditional_bucket_deltas",
+    "ceiling", "interruption_loss", "floor_over_configured", "expected_utility",
 ]

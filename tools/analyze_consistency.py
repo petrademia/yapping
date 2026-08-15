@@ -10,18 +10,19 @@ import multiprocessing as mp
 import random
 from collections import Counter
 
-from matchup_config import load_config
-from analyze_ash import score_categories
-from search_opening import search
-from trace_albaz_combo import ROOT, SCRIPTS
 from yapping._ocgcore import Duel
 from yapping import (
     conditioned_hand_utility,
     hand_features,
     normalize_card_roles,
+    quantified_hand_report,
     report_provenance,
     role_density_opening_profile,
 )
+from matchup_config import load_config, scenarios
+from analyze_ash import score_categories
+from search_opening import search
+from trace_albaz_combo import ROOT, SCRIPTS
 
 
 _worker_adapter = None
@@ -235,10 +236,20 @@ if __name__ == "__main__":
     parser.add_argument(
         "--conditioned",
         action="store_true",
-        help="add role-conditioned utility summaries (and role-density opening profile)",
+        help="add role-conditioned utility summaries, quantified outcomes, and role-density profile",
+    )
+    parser.add_argument(
+        "--thresholds",
+        default="5,10,15",
+        help="comma-separated utility thresholds T for Playable_T := U >= T",
     )
     args = parser.parse_args()
     config = load_config(args.config)
+    thresholds = tuple(
+        float(part.strip())
+        for part in args.thresholds.split(",")
+        if part.strip()
+    )
     hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
     requested = (list(config["interruptions"])
                  if args.interruption == "all" else [args.interruption])
@@ -267,12 +278,24 @@ if __name__ == "__main__":
         add_extender_marginals(reports, config, args.max_nodes, args.max_depth)
         aggregate_extenders(reports)
     conditioned = None
+    quantified = None
     role_density = None
     if args.conditioned:
         conditioned = {
             name: conditioned_hand_utility(report["hands"])
             for name, report in reports.items()
         }
+        interruption_weights = None
+        if config.get("matchup_scenarios"):
+            interruption_weights = {
+                world["interruption"]: float(world["weight"])
+                for world in scenarios(config)
+            }
+        quantified = quantified_hand_report(
+            reports,
+            thresholds=thresholds,
+            interruption_weights=interruption_weights,
+        )
         card_roles = normalize_card_roles(config.get("card_roles"))
         if card_roles:
             role_density = role_density_opening_profile(
@@ -294,6 +317,8 @@ if __name__ == "__main__":
     }
     if conditioned is not None:
         payload["conditioned"] = conditioned
+    if quantified is not None:
+        payload["quantified"] = quantified
     if role_density is not None:
         payload["role_density"] = role_density
     print(json.dumps(payload, indent=2, sort_keys=True))
