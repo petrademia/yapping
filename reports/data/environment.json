@@ -1,0 +1,10 @@
+{
+  "commit": "018d84d0c18a38603876b1e758b46dd267d92a66",
+  "commit_subject": "add search measurement baseline (#4)",
+  "platform": "Darwin 25.6.0 arm64",
+  "python": "3.14.6",
+  "cxx": "Apple clang 21.0.0",
+  "cards_cdb_sha256": "c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f",
+  "pytest": "97 passed",
+  "scripts_path": "fluorohydride-ygopro-scripts (adjacent)"
+}

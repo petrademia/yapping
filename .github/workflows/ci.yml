@@ -20,7 +20,7 @@ jobs:
       - name: Install pinned Lua card scripts
         run: |
           git clone https://github.com/Fluorohydride/ygopro-scripts.git ../fluorohydride-ygopro-scripts
-          git -C ../fluorohydride-ygopro-scripts checkout 72a1be24bb5a4eab9af3a71e53561abcd467aff6
+          git -C ../fluorohydride-ygopro-scripts checkout 090e881772f488e1256c456b827d5cbed4facf79
       - name: Build and test
         run: |
           python -m pip install --upgrade pip
