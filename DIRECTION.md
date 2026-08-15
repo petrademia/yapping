@@ -128,10 +128,17 @@ results by hypergeometric probability; classify bricks/garnets (legacy) and
 role features. Report a consistency distribution, not a single number, and
 carry each hand's `complete` flag into the aggregate.
 
-`conditioned_hand_utility` summarizes `E[U | role composition]` over evaluated
-hands (including starter/extender joints and optional score-loss). Sampled
-unique-hand runs must report raw probability mass and must not claim full-deck
-coverage.
+`conditioned_hand_utility` and `quantified_hand_report` summarize
+`E[U | role composition]`, utility distributions, and threshold rates
+`Playable_T := U >= T` over evaluated hands. Sampled unique-hand runs report
+`evaluated_probability_mass` and must not claim full-deck coverage.
+
+**Terminology principle:** every analytical term maps to an observable
+quantity, explicit mathematical function, or configurable predicate. Keep
+hand features (role counts) distinct from solver outcomes (`U(H,I)`) and
+derived metrics (ceiling, interruption loss, floor over the configured
+interruption set). Bucket deltas are conditional associations; extender
+replacement remains the interventional/counterfactual analysis.
 
 ### Phase 3D — Card/ratio sensitivity
 

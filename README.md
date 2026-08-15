@@ -283,15 +283,21 @@ python tools/search_hidden_ash.py ash
 python tools/search_sampled_hidden.py ash
 python tools/analyze_consistency.py --hands 20
 python tools/analyze_consistency.py --hands 20 --conditioned
+python tools/analyze_consistency.py --hands 20 --conditioned --thresholds 5,10,15
 python tools/compare_hidden.py ash
 python tools/verify_replay_equivalence.py ghost_ogre
 ```
 
-With `--conditioned`, the JSON report adds role-conditioned utility buckets
-(and a theoretical role-density opening profile when `card_roles` are set).
+With `--conditioned`, the JSON report adds:
+
+- role-conditioned utility buckets (`E[U | hand features]`)
+- a `quantified` block separating **hand features** from **solver outcomes**
+- threshold rates `Playable_T := U >= T` with `T` from `--thresholds` (default `5,10,15`)
+- a theoretical role-density opening profile when `card_roles` are set
+
 Example shape for extender counts among evaluated hands:
 
-| Extender count | probability mass (evaluated) | weighted utility |
+| Extender count | probability mass (evaluated) | normalized weighted utility |
 | --- | --- | --- |
 | 0 | sum of P(h) in bucket | E[U \| extender=0] |
 | 1 | … | E[U \| extender=1] |
@@ -303,8 +309,11 @@ extenders **given** a starter?”, not “what is the globally optimal number of
 extenders in the 40.” The latter needs changing the deck list and re-evaluating
 the induced hand distribution (Phase 3D/3E).
 
-Sampled unique hands report `raw_probability_mass` that typically is far below
-1.0; do not read bucket mass as a full-deck fraction.
+Roles are input hypotheses. Solver utility (and `U >= T`) is the outcome.
+`starter_access` is not playability. Sampled unique hands report
+`evaluated_probability_mass` that is typically far below 1.0; do not read
+`evaluated_sample_success_rate` as a full-deck fraction.
+
 
 Output distinguishes proven searches from provisional node-limited evaluations. A score is not presented as optimal unless the search reports completion.
 
