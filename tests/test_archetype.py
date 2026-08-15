@@ -1,9 +1,11 @@
 from pathlib import Path
+import pytest
 
 from yapping import load_archetype, load_combo, summarize_compendium
 from yapping.variants import SlotCandidate
 
 ROOT = Path(__file__).parents[1]
+CARDS = ROOT / "assets/cards.cdb"
 
 
 def test_branded_config_is_the_generic_archetype_boundary():
@@ -18,6 +20,8 @@ def test_branded_config_is_the_generic_archetype_boundary():
     assert archetype.target_predicates["high_spirits"]["same_race_as"] == "revealed_hand_card"
     assert {fixture.id for fixture in archetype.fixtures} == {"mdm-one-card-fallen", "mdm-high-spirits", "mdm-fallen-white-dragon-droll-recovery"}
     assert all(fixture.path.is_file() for fixture in archetype.fixtures)
+    assert archetype.roles_for(55273560) >= frozenset({"starter", "extender"})
+    assert 14558127 in archetype.cards_with_role("interaction")
 
 
 def test_compendium_marks_known_candidate_cards():
@@ -27,7 +31,8 @@ def test_compendium_marks_known_candidate_cards():
     assert report["candidates"]["44146295"]["known_to_compendium"] is True
 
 
+@pytest.mark.skipif(not CARDS.is_file(), reason="card database is not installed")
 def test_combo_catalog_resolves_against_card_database():
     combo = load_combo(ROOT / "configs/combos/master_duel_meta_branded.json",
-                       ROOT / "assets/cards.cdb")
+                       CARDS)
     assert 73819701 in combo["cards"]

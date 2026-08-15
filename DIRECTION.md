@@ -100,15 +100,56 @@ Roadmap item 2, and the distinctive deliverable: nothing else in the
 ecosystem produces "this deck reaches a ≥X board through the worst hand trap
 Y% of the time" from verified game states.
 
-- Enumerate or sample opening hands (reusing `--hand` plumbing).
-- Run the inner solver per hand against the configured interruption set.
-- Weight results by hypergeometric probability (`probability.py` grows
-  here); classify bricks and garnets explicitly.
-- Report a consistency distribution, not a single number, and carry each
-  hand's `complete` flag into the aggregate so provisional scores stay
-  labeled.
-- Exit: one command produces a deck-level report for the Albaz deck across
-  an enumerated or sampled hand space, with per-hand provenance.
+Phase 3 is one outer optimization problem layered into smaller foundations.
+These are not five independent mega-projects:
+
+### Phase 3A — Card-role model
+
+Multi-label card semantics (`starter`, `extender`, `interaction`, …) loaded
+from archetype/matchup config. A card may carry several roles at once; roles
+are data-driven strings so the vocabulary can grow without core rewrites.
+
+### Phase 3B — Hand-feature distribution
+
+Map concrete opening hands to role counts and related features
+(`P(starter ≥ 1)`, `P(extender = 2)`, overlaps). Prefer exact
+hypergeometric/combinatorial treatment for single-role counts; joint role
+events need careful enumeration because cards are drawn without replacement
+and one card can satisfy multiple roles.
+
+### Phase 3C — Deck consistency evaluation
+
+Enumerate or sample opening hands (reusing `--hand` plumbing). Run the
+inner solver per hand against the configured interruption set. Weight
+results by hypergeometric probability; classify bricks/garnets (legacy) and
+role features. Report a consistency distribution, not a single number, and
+carry each hand's `complete` flag into the aggregate.
+
+### Phase 3D — Card/ratio sensitivity
+
+Measure how utility changes when copy counts or role densities shift
+(counterfactuals such as extender replacement already exist; generalize).
+
+### Phase 3E — Deck composition optimization
+
+Eventually search deck lists under the outer objective, approximately:
+
+    D* = argmax_D E[ U(π*(H, I)) ]
+
+where `D` is deck composition, `H` is an opening hand drawn from `D`, `I` is
+an opponent interruption/scenario, `π*` is the best legal line from the
+inner solver, and `U` evaluates the resulting line/state.
+
+This optimizer does **not** exist yet. Maximizing a single density such as
+`P(extender ≥ 1)` is not the objective: marginal extender value can fall or
+turn negative when hands stack too many engine pieces, so the useful
+quantities often look like the full count distribution
+`P(extender = 0), P(extender = 1), P(extender = 2), P(extender ≥ 3)`
+conditioned on utility from the inner solver.
+
+Exit for the phase-3 spine: one command produces a deck-level report for the
+Albaz deck across an enumerated or sampled hand space, with per-hand
+provenance and role features available for later sensitivity work.
 
 ## Phase 4 - many-world hidden search
 

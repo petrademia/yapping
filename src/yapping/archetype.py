@@ -1,10 +1,12 @@
 """Declarative archetype data used by search and evaluation tools."""
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import json
 from pathlib import Path
 from typing import Any
+
+from .roles import CardRoles, cards_with_role, normalize_card_roles, roles_for
 
 
 @dataclass(frozen=True)
@@ -31,6 +33,7 @@ class Archetype:
     card_weights: dict[int, float]
     objectives: dict[str, float]
     metadata: dict[str, Any]
+    card_roles: CardRoles = field(default_factory=dict)
 
     @property
     def deck_counts(self) -> Counter[int]:
@@ -39,6 +42,12 @@ class Archetype:
     @property
     def extra_deck_counts(self) -> Counter[int]:
         return Counter(self.extra_deck)
+
+    def roles_for(self, card_id: int) -> frozenset[str]:
+        return roles_for(self.card_roles, card_id)
+
+    def cards_with_role(self, role: str) -> frozenset[int]:
+        return cards_with_role(self.card_roles, role)
 
 
 def load_archetype(path: str | Path) -> Archetype:
@@ -64,4 +73,5 @@ def load_archetype(path: str | Path) -> Archetype:
         card_weights={int(card): float(value) for card, value in data.get("card_weights", {}).items()},
         objectives={name: float(value) for name, value in data.get("objectives", {}).items()},
         metadata=dict(data.get("metadata", {})),
+        card_roles=normalize_card_roles(data.get("card_roles")),
     )
