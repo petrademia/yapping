@@ -85,7 +85,7 @@ yapping/
 The adapter targets:
 
 - [Fluorohydride/ygopro-core](https://github.com/Fluorohydride/ygopro-core), pinned to db4fd16a99991802511b9a89e0025dd2f51f5e36;
-- [Fluorohydride/ygopro-scripts](https://github.com/Fluorohydride/ygopro-scripts), pinned to 72a1be24bb5a4eab9af3a71e53561abcd467aff6;
+- [Fluorohydride/ygopro-scripts](https://github.com/Fluorohydride/ygopro-scripts), pinned to 090e881772f488e1256c456b827d5cbed4facf79;
 - Lua 5.4.7, fetched by CMake;
 - SQLite for cards.cdb;
 - Python, pybind11, Gymnasium, NumPy, and pytest.
@@ -108,7 +108,7 @@ Clone the pinned script repository beside YAPPING:
 ```bash
 cd ~/projects/yugioh
 git clone https://github.com/Fluorohydride/ygopro-scripts.git fluorohydride-ygopro-scripts
-git -C fluorohydride-ygopro-scripts checkout 72a1be24bb5a4eab9af3a71e53561abcd467aff6
+git -C fluorohydride-ygopro-scripts checkout 090e881772f488e1256c456b827d5cbed4facf79
 cd yapping
 ```
 
