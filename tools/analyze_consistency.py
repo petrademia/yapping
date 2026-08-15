@@ -51,7 +51,10 @@ def classify(hand, config):
         "brick": not bool(anchors.intersection(hand)),
         "garnets": sorted(garnets.intersection(hand)),
     }
-    card_roles = normalize_card_roles(config.get("card_roles"))
+    card_roles = config.get("_normalized_card_roles")
+    if card_roles is None:
+        card_roles = normalize_card_roles(config.get("card_roles"))
+        config["_normalized_card_roles"] = card_roles
     if card_roles:
         features = hand_features(hand, card_roles)
         result["role_counts"] = features["role_counts"]
