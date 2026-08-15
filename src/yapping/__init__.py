@@ -1,5 +1,11 @@
+from .minimax import (
+    HiddenMinimaxResult,
+    MinimaxResult,
+    SearchStats,
+    hidden_minimax_replay,
+    minimax_replay,
+)
 from .env import YgoEnv
-from .minimax import HiddenMinimaxResult, MinimaxResult, hidden_minimax_replay, minimax_replay
 from .probability import (
     opening_at_least_probability,
     opening_count_probability,
@@ -40,10 +46,19 @@ from .consistency import (
     utility_distribution,
     weighted_quantile,
 )
+from .benchmark import (
+    aggregate_budget_rows,
+    compute_quality_curve,
+    future_guided_comparison_template,
+    summarize_branching,
+    summarize_branching_by_depth,
+    summarize_search_stats,
+)
 from .variants import DeckVariant, SlotCandidate
 
 __all__ = [
-    "Decision", "Engine", "HiddenMinimaxResult", "MinimaxResult", "RobustChoice", "SearchResult",
+    "Decision", "Engine", "HiddenMinimaxResult", "MinimaxResult", "SearchStats",
+    "RobustChoice", "SearchResult",
     "YgoEnv", "expected_choice", "hidden_minimax_replay", "minimax_replay", "opening_probability",
     "opening_count_probability", "opening_at_least_probability",
     "robust_choice", "search", "Archetype", "Fixture", "Interruption", "load_archetype",
@@ -60,4 +75,6 @@ __all__ = [
     "utility_distribution", "weighted_quantile", "quantified_hand_report",
     "hand_feature_access_rates", "conditional_bucket_deltas",
     "ceiling", "interruption_loss", "floor_over_configured", "expected_utility",
+    "summarize_branching", "summarize_branching_by_depth", "summarize_search_stats",
+    "compute_quality_curve", "future_guided_comparison_template", "aggregate_budget_rows",
 ]

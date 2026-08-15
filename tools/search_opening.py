@@ -91,7 +91,8 @@ def terminal(snapshot, config):
 
 def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
                ecclesia_copies=1, recovery_only=False, config=None,
-               replay_mode="cursor", adapter=None, controlled_player=0):
+               replay_mode="cursor", adapter=None, controlled_player=0,
+               stats=None):
     config = config or load_config()
     config = {**config, "controlled_player": controlled_player}
     matchup = config if config.get("opponent_deck") else None
@@ -110,6 +111,7 @@ def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand
         lambda snapshot: snapshot.decision["player"],
         max_depth=max_depth,
         max_nodes=max_nodes,
+        stats=stats,
     )
     final = replay_fn(result.actions)
     return result, final, config

@@ -1,0 +1,28 @@
+{
+  "name": "albaz_search_baseline_v1",
+  "description": "Fixed scenarios for exact-search complexity and compute-quality curves. Later policy-guided runs must reuse the same scenario_id values.",
+  "matchup_config": "albaz.json",
+  "replay_mode": "cursor",
+  "max_depth": 180,
+  "node_budgets": [1000, 5000, 10000, 50000],
+  "scenarios": [
+    {
+      "scenario_id": "albaz_default_none",
+      "interruption": "none",
+      "opening_hand": null,
+      "ecclesia_copies": 1
+    },
+    {
+      "scenario_id": "albaz_default_ash",
+      "interruption": "ash",
+      "opening_hand": null,
+      "ecclesia_copies": 1
+    },
+    {
+      "scenario_id": "albaz_default_impermanence",
+      "interruption": "impermanence",
+      "opening_hand": null,
+      "ecclesia_copies": 1
+    }
+  ]
+}

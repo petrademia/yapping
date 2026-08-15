@@ -284,6 +284,7 @@ python tools/search_sampled_hidden.py ash
 python tools/analyze_consistency.py --hands 20
 python tools/analyze_consistency.py --hands 20 --conditioned
 python tools/analyze_consistency.py --hands 20 --conditioned --thresholds 5,10,15
+python tools/search_benchmark.py --budgets 1000,5000,10000
 python tools/compare_hidden.py ash
 python tools/verify_replay_equivalence.py ghost_ogre
 ```

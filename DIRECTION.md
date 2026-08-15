@@ -37,34 +37,66 @@ follow-up, and interaction.
 High-level maturity of YAPPING capabilities. Status reflects what the
 repository can do today, not aspirational marketing.
 
+**This ladder describes increasing autonomy, not a strict implementation
+sequence.** A higher level should be pursued only when experiments reveal a
+limitation that the next method is expected to address.
+
 | Level | Capability | Current status |
 | ----- | -------------------------------------------------------- | ---------------------------- |
 | 0 | Verify predefined combo lines | 🟢 Implemented |
 | 1 | Search alternative lines from a known hand | 🟢 Implemented |
 | 2 | Find recovery lines through configured interruptions | 🟢 Implemented |
-| 3 | Compare solver utility across opening hands | 🟡 In development |
+| 3 | Compare solver utility across opening hands | 🟡 Measurement baseline |
 | 4 | Exact search over small hidden-information world sets | 🟢/🟡 Limited implementation |
 | 5 | Approximate larger hidden-information spaces by sampling | 🟡 Early implementation |
 | 6 | Generate oracle-labelled training data | 🟢 Infrastructure exists |
 | 7 | Learn policy/value models from oracle search | ⚪ Planned |
 | 8 | Use learned models to guide tree search | ⚪ Planned |
-| 9 | MCTS-based combo discovery | ⚪ Planned |
-| 10 | RL / iterative policy improvement | ⚪ Research direction |
+| 9 | MCTS-based combo discovery | ⚪ Experiment only if justified |
+| 10 | RL / iterative policy improvement | ⚪ Experiment only if justified |
 | 11 | Joint deck-composition + policy optimization | ⚪ Long-term research |
 | 12 | General expert Yu-Gi-Oh! agent | 🔴 Explicit non-goal for now |
 
-Legend: Implemented = usable and exercised by fixtures/tools;
-In development / Limited / Early = code exists but incomplete relative to the
-stated capability; Planned / Research / Non-goal = not a near-term deliverable.
+Strategic banding:
 
-Levels 0-2 are the inner solver spine (fixtures, known-hand minimax, configured
-interruption recovery). Level 3 is the outer loop (consistency sampling,
-role-conditioned and quantified utility); it is not finished until full-deck
-coverage semantics and ratio sensitivity are solid. Levels 4-5 are hidden-
+- Levels 0–6: trustworthy experimental foundation
+- Levels 7–8: primary near-term learning/planning research
+- Levels 9–11: evidence-driven extensions after measured bottlenecks
+- Level 12: explicit non-goal
+
+Legend: Implemented = usable and exercised by fixtures/tools;
+In development / Limited / Early / Measurement baseline = code exists but
+incomplete relative to the stated capability; Planned / Research / Non-goal =
+not a near-term deliverable.
+
+Research workflow before advancing a method:
+
+    baseline → measure bottleneck → hypothesis → smallest method → compare → decide
+
+Do not introduce MCTS, RL, or neural guidance merely because it is more
+advanced. Levels 0-2 are the inner solver spine. Level 3 is the outer loop
+(consistency sampling, role-conditioned and quantified utility) plus search
+complexity benchmarks that later ML must beat. Levels 4-5 are hidden-
 information search. Levels 6-10 consume the deterministic oracle. Level 11 is
 Phase 3E / long-horizon research. Level 12 remains an explicit non-goal: the
 product is combo resilience and deck consistency analysis, not a general
 dueling agent.
+
+### Search measurement baseline
+
+`tools/search_benchmark.py` and `src/yapping/benchmark.py` record exact-search
+complexity on fixed scenarios: visited states, search-relevant branching,
+cutoffs, transposition hits/misses, runtime, completeness, and score across
+node budgets. Future policy-guided comparisons must reuse the same
+`scenario_id` values; `future_guided_comparison` fields stay null until Level 8.
+
+### Oracle data readiness (Level 6)
+
+`tools/training_data.py` can export versioned examples with state, legal
+actions, oracle action/value, completeness, and provenance. Known gaps: full
+per-state action-value tables exist mainly at the search root; deeper
+trajectory states currently pin the chosen action's value; there is not yet a
+multi-scenario export tied to the search benchmark suite.
 
 ## Design assessment (summary)
 
