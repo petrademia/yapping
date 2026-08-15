@@ -134,6 +134,8 @@ def minimax_replay(
     max_depth: int,
     max_nodes: int,
     stats: SearchStats | None = None,
+    goal_score: float | None = None,
+    on_leaf: Callable[[Any, tuple[int, ...], float], None] | None = None,
 ) -> MinimaxResult:
     """Alpha-beta minimax for deterministic engines reconstructed by replay."""
     visited = 0
@@ -159,6 +161,8 @@ def minimax_replay(
         is_terminal = terminal(node)
         if is_terminal or depth == max_depth or not actions or visited >= max_nodes:
             score = float(evaluate(node))
+            if on_leaf is not None:
+                on_leaf(node, path, score)
             if collector is not None:
                 collector.leaf_evaluations += 1
                 if is_terminal:
@@ -189,6 +193,8 @@ def minimax_replay(
                 alpha = max(alpha, best_score)
             else:
                 beta = min(beta, best_score)
+            if goal_score is not None and maximize and best_score >= goal_score:
+                return best_score, best_path, True, True
             if beta <= alpha:
                 if collector is not None:
                     collector.cutoffs += 1

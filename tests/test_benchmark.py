@@ -93,3 +93,68 @@ def test_minimax_search_stats_collect_branching_and_tt():
     assert summarize_branching(stats.branching_factors)["mean"] == 2.0
     assert stats.tt_hits + stats.tt_misses > 0
     assert stats.leaf_evaluations >= 1
+
+
+def _tiny_tree():
+    def replay(path):
+        depth = len(path)
+        return {"key": f"d{depth}:{path}", "depth": depth, "path": path}
+
+    def legal_actions(node):
+        return (0, 1) if node["depth"] < 2 else ()
+
+    def evaluate(node):
+        return float(sum(node["path"]) if node["path"] else 0)
+
+    def terminal(node):
+        return node["depth"] >= 2
+
+    def owner(_node):
+        return 0
+
+    return replay, legal_actions, evaluate, terminal, owner
+
+
+def test_minimax_omitting_goal_score_matches_baseline_visits():
+    replay, legal_actions, evaluate, terminal, owner = _tiny_tree()
+    baseline = minimax_replay(
+        replay, legal_actions, evaluate, terminal, owner,
+        max_depth=4, max_nodes=100,
+    )
+    again = minimax_replay(
+        replay, legal_actions, evaluate, terminal, owner,
+        max_depth=4, max_nodes=100, goal_score=None, on_leaf=None,
+    )
+    assert again.score == baseline.score
+    assert again.actions == baseline.actions
+    assert again.visited_states == baseline.visited_states
+    assert again.complete == baseline.complete
+
+
+def test_minimax_on_leaf_records_each_leaf():
+    replay, legal_actions, evaluate, terminal, owner = _tiny_tree()
+    leaves = []
+
+    def on_leaf(node, path, score):
+        leaves.append((path, score))
+
+    minimax_replay(
+        replay, legal_actions, evaluate, terminal, owner,
+        max_depth=4, max_nodes=100, on_leaf=on_leaf,
+    )
+    assert leaves
+    assert leaves[0] == ((0, 0), 0.0)
+
+
+def test_minimax_goal_score_stops_at_first_hit():
+    replay, legal_actions, evaluate, terminal, owner = _tiny_tree()
+    baseline = minimax_replay(
+        replay, legal_actions, evaluate, terminal, owner,
+        max_depth=4, max_nodes=100,
+    )
+    result = minimax_replay(
+        replay, legal_actions, evaluate, terminal, owner,
+        max_depth=4, max_nodes=100, goal_score=1.0,
+    )
+    assert result.score >= 1.0
+    assert result.visited_states < baseline.visited_states
