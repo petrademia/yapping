@@ -7,6 +7,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "tools"))
 from target_board import (  # noqa: E402
+    ProgressClock,
     build_report,
     coverage,
     parse_target,
@@ -124,3 +125,42 @@ def test_build_report_result_shape():
     assert report["missing"] == [{"zone": "spell_trap", "card": RETRIBUTION}]
     assert report["actions"] == ["activate:73819701"]
     assert report["visited_states"] == 12
+
+
+class FakeClock:
+    def __init__(self, times):
+        self.times = list(times)
+
+    def __call__(self):
+        return self.times.pop(0)
+
+
+def test_progress_clock_disabled_never_writes():
+    writes = []
+    clock = ProgressClock(0, writes.append, monotonic=FakeClock([0.0, 10.0]))
+    clock.note_leaf(1.0, {"event": "progress", "coverage": 1})
+    assert writes == []
+    assert clock.best[0] == 1.0
+
+
+def test_progress_clock_dumps_on_interval_even_without_improvement():
+    writes = []
+    times = FakeClock([0.0, 1.0, 5.0])
+    clock = ProgressClock(5, writes.append, monotonic=times)
+    clock.note_leaf(1.0, {"coverage": 1, "actions": ["a"]})
+    assert writes == []
+    clock.note_leaf(1.0, {"coverage": 1, "actions": ["a"]})
+    assert len(writes) == 1
+    assert writes[0]["event"] == "progress"
+    assert writes[0]["coverage"] == 1
+    assert writes[0]["elapsed_seconds"] == 5.0
+
+
+def test_progress_clock_keeps_higher_score():
+    writes = []
+    times = FakeClock([0.0, 1.0, 2.0])
+    clock = ProgressClock(5, writes.append, monotonic=times)
+    clock.note_leaf(1.0, {"coverage": 1})
+    clock.note_leaf(2.0, {"coverage": 2})
+    assert clock.best[0] == 2.0
+    assert clock.best[1]["coverage"] == 2

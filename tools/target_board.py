@@ -1,5 +1,7 @@
 """Required-piece endboard matching and report payloads for target-board search."""
 
+import time
+
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
@@ -89,3 +91,35 @@ def build_report(
         "max_nodes": int(max_nodes),
         "max_depth": int(max_depth),
     }
+
+
+class ProgressClock:
+    """Track the best leaf and emit it every interval_seconds (0 disables dumps)."""
+
+    def __init__(
+        self,
+        interval_seconds: float,
+        write: Callable[[dict], None],
+        monotonic: Callable[[], float] = time.monotonic,
+    ):
+        self.interval = float(interval_seconds)
+        self.write = write
+        self.monotonic = monotonic
+        self.started = monotonic()
+        self.next_dump = (
+            self.started + self.interval if self.interval > 0 else float("inf")
+        )
+        self.best: tuple[float, dict] | None = None
+
+    def note_leaf(self, score: float, payload: dict) -> None:
+        if self.best is None or score > self.best[0]:
+            self.best = (float(score), dict(payload))
+        now = self.monotonic()
+        if self.interval > 0 and now >= self.next_dump and self.best is not None:
+            elapsed = now - self.started
+            dump = dict(self.best[1])
+            dump["event"] = "progress"
+            dump["elapsed_seconds"] = elapsed
+            self.write(dump)
+            while self.next_dump <= now:
+                self.next_dump += self.interval
