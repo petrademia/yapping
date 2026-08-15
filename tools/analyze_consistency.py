@@ -7,7 +7,6 @@ import io
 import json
 import math
 import multiprocessing as mp
-import random
 from collections import Counter
 
 from yapping._ocgcore import Duel
@@ -19,6 +18,7 @@ from yapping import (
     report_provenance,
     role_density_opening_profile,
 )
+from yapping.hands import sample_unique_hands
 from matchup_config import load_config, scenarios
 from analyze_ash import score_categories
 from search_opening import search
@@ -41,13 +41,8 @@ def hand_probability(deck, hand, hand_size=5):
 
 
 def sample_hands(deck, amount, seed):
-    rng = random.Random(seed)
-    seen = set()
-    while len(seen) < amount:
-        hand = tuple(sorted(rng.sample(deck, 5)))
-        if hand not in seen:
-            seen.add(hand)
-            yield hand
+    """Unique opening hands; shared with multi-hand oracle export."""
+    yield from sample_unique_hands(deck, amount, seed)
 
 
 def classify(hand, config):

@@ -1,0 +1,1704 @@
+{
+  "audit": {
+    "complete_examples": 69,
+    "depth_distribution": {
+      "0": 6,
+      "1": 6,
+      "2": 6,
+      "3": 6,
+      "4": 6,
+      "5": 6,
+      "6": 6,
+      "7": 6,
+      "8": 6,
+      "9": 6,
+      "10": 3,
+      "11": 3,
+      "12": 3
+    },
+    "duplicate_state_rate": 0.17391304347826086,
+    "duplicate_state_rows": 12,
+    "examples_with_chosen_action_only_labels": 36,
+    "examples_with_full_action_value_labels": 60,
+    "hand_id_distribution_top": {
+      "1cdd4338c9fc0b88": 30,
+      "9794f130047951e0": 39
+    },
+    "incomplete_examples": 0,
+    "interruption_distribution": {
+      "ash": 23,
+      "impermanence": 23,
+      "none": 23
+    },
+    "leakage": {
+      "state_keys_shared_across_hands": 0,
+      "state_keys_shared_across_scenarios": 0,
+      "state_keys_shared_across_trajectories": 0
+    },
+    "multi_legal_chosen_only": 0,
+    "multi_legal_examples": 33,
+    "multi_legal_full_action_values": 24,
+    "multi_legal_percentage": 47.82608695652174,
+    "note": "Full action-value tables are expected mainly at depth 0 from minimax root_action_values; deeper states typically label only the chosen action. Behavior cloning needs (s, a*), not full Q.",
+    "opening_hand_distribution_top": {
+      "[10045474, 17751597, 45883110, 55273560, 62962630]": 30,
+      "[10045474, 19096726, 23434538, 82738008, 95515789]": 39
+    },
+    "oracle_action_kind_distribution": {
+      "end_phase": 6,
+      "pass": 39,
+      "place": 12,
+      "set": 12
+    },
+    "pass_percentage": 56.52173913043478,
+    "single_legal_examples": 36,
+    "states_per_hand": 28.5,
+    "total_examples": 69,
+    "unique_hand_ids": 2,
+    "unique_multi_legal_states": 27,
+    "unique_opening_hands": 2,
+    "unique_oracle_actions": 4,
+    "unique_state_keys": 57
+  },
+  "complete_examples": 69,
+  "complete_only": true,
+  "complete_search_rate": 0.125,
+  "complete_searches": 6,
+  "config": "branded_albaz_v1",
+  "examples_per_hand": 4.3125,
+  "exported_examples": 69,
+  "incomplete_examples": 3478,
+  "incomplete_output": "reports/data/oracle/branded_multi_hand_incomplete.jsonl",
+  "incomplete_searches": 42,
+  "interruptions": [
+    "none",
+    "ash",
+    "impermanence"
+  ],
+  "mean_runtime_per_hand": 305.9857898619998,
+  "mean_runtime_per_search": 101.99526328733327,
+  "output": "reports/data/oracle/branded_multi_hand.jsonl",
+  "requested_hands": 16,
+  "searched_hands": 16,
+  "searched_scenarios": 48,
+  "searches": [
+    {
+      "complete": false,
+      "hand_id": "2357f6e5c5ffb75c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        10045474,
+        14558127,
+        45484331,
+        45883110
+      ],
+      "runtime_seconds": 30.55847216699476,
+      "scenario_id": "none",
+      "score": 18.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "2357f6e5c5ffb75c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        10045474,
+        14558127,
+        45484331,
+        45883110
+      ],
+      "runtime_seconds": 29.88389520799683,
+      "scenario_id": "ash",
+      "score": 16.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "2357f6e5c5ffb75c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        10045474,
+        14558127,
+        45484331,
+        45883110
+      ],
+      "runtime_seconds": 33.85532104199956,
+      "scenario_id": "impermanence",
+      "score": 18.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "df1b73ea88389d0c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        23434538,
+        44362883,
+        55273560,
+        75500286,
+        95515789
+      ],
+      "runtime_seconds": 459.5610575410028,
+      "scenario_id": "none",
+      "score": 23.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "df1b73ea88389d0c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        23434538,
+        44362883,
+        55273560,
+        75500286,
+        95515789
+      ],
+      "runtime_seconds": 453.9683169580021,
+      "scenario_id": "ash",
+      "score": 14.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "df1b73ea88389d0c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        23434538,
+        44362883,
+        55273560,
+        75500286,
+        95515789
+      ],
+      "runtime_seconds": 432.5627850419987,
+      "scenario_id": "impermanence",
+      "score": 15.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "99bc74f6d6a054e8",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        29948294,
+        45883110,
+        55273560,
+        68468459,
+        82489470
+      ],
+      "runtime_seconds": 25.547205000002577,
+      "scenario_id": "none",
+      "score": 17.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "99bc74f6d6a054e8",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        29948294,
+        45883110,
+        55273560,
+        68468459,
+        82489470
+      ],
+      "runtime_seconds": 25.213948333002918,
+      "scenario_id": "ash",
+      "score": 14.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "99bc74f6d6a054e8",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        29948294,
+        45883110,
+        55273560,
+        68468459,
+        82489470
+      ],
+      "runtime_seconds": 23.298022374998254,
+      "scenario_id": "impermanence",
+      "score": 17.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "ac4f6f3829885ad1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        1984618,
+        55273560,
+        55273560,
+        84192580
+      ],
+      "runtime_seconds": 25.2451118329991,
+      "scenario_id": "none",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "ac4f6f3829885ad1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        1984618,
+        55273560,
+        55273560,
+        84192580
+      ],
+      "runtime_seconds": 28.058368416997837,
+      "scenario_id": "ash",
+      "score": 17.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "ac4f6f3829885ad1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        1984618,
+        55273560,
+        55273560,
+        84192580
+      ],
+      "runtime_seconds": 23.541715208993992,
+      "scenario_id": "impermanence",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "5d8c35476426a5f2",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        17751597,
+        45883110,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 22.844555750001746,
+      "scenario_id": "none",
+      "score": 23.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "5d8c35476426a5f2",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        17751597,
+        45883110,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 22.59528308299923,
+      "scenario_id": "ash",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "5d8c35476426a5f2",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        17751597,
+        45883110,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 22.901793875003932,
+      "scenario_id": "impermanence",
+      "score": 23.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "8b343660d0a094bf",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        75500286,
+        84192580
+      ],
+      "runtime_seconds": 28.306392874997982,
+      "scenario_id": "none",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "8b343660d0a094bf",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        75500286,
+        84192580
+      ],
+      "runtime_seconds": 28.556551250003395,
+      "scenario_id": "ash",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "8b343660d0a094bf",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        75500286,
+        84192580
+      ],
+      "runtime_seconds": 26.078012124999077,
+      "scenario_id": "impermanence",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "499db02faa051e7f",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        45883110,
+        68468459,
+        75500286,
+        84192580
+      ],
+      "runtime_seconds": 21.106949291999626,
+      "scenario_id": "none",
+      "score": 18.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "499db02faa051e7f",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        45883110,
+        68468459,
+        75500286,
+        84192580
+      ],
+      "runtime_seconds": 20.961945916998957,
+      "scenario_id": "ash",
+      "score": 18.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "499db02faa051e7f",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        45883110,
+        68468459,
+        75500286,
+        84192580
+      ],
+      "runtime_seconds": 20.81036487500387,
+      "scenario_id": "impermanence",
+      "score": 17.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "1ca463506a5a715b",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        19304410,
+        42141493,
+        45484331,
+        82738008
+      ],
+      "runtime_seconds": 35.434158791998925,
+      "scenario_id": "none",
+      "score": 19.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "1ca463506a5a715b",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        19304410,
+        42141493,
+        45484331,
+        82738008
+      ],
+      "runtime_seconds": 33.506906082999194,
+      "scenario_id": "ash",
+      "score": 13.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "1ca463506a5a715b",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        19304410,
+        42141493,
+        45484331,
+        82738008
+      ],
+      "runtime_seconds": 32.62156366700219,
+      "scenario_id": "impermanence",
+      "score": 19.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "b59a57a8e08d5dd5",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        17751597,
+        44362883,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 351.364791333006,
+      "scenario_id": "none",
+      "score": 18.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "b59a57a8e08d5dd5",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        17751597,
+        44362883,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 355.4025136249984,
+      "scenario_id": "ash",
+      "score": 12.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "b59a57a8e08d5dd5",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        17751597,
+        44362883,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 336.99828441700083,
+      "scenario_id": "impermanence",
+      "score": 15.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "c1b95e41661677a1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        75500286,
+        95515789,
+        98829635
+      ],
+      "runtime_seconds": 20.550438250000298,
+      "scenario_id": "none",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "c1b95e41661677a1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        75500286,
+        95515789,
+        98829635
+      ],
+      "runtime_seconds": 20.485949250003614,
+      "scenario_id": "ash",
+      "score": 13.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "c1b95e41661677a1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        75500286,
+        95515789,
+        98829635
+      ],
+      "runtime_seconds": 20.36663275000319,
+      "scenario_id": "impermanence",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": true,
+      "hand_id": "9794f130047951e0",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        19096726,
+        23434538,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 0.6505362499956391,
+      "scenario_id": "none",
+      "score": 2.75,
+      "visited_states": 197
+    },
+    {
+      "complete": true,
+      "hand_id": "9794f130047951e0",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        19096726,
+        23434538,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 0.7960943329962902,
+      "scenario_id": "ash",
+      "score": 2.75,
+      "visited_states": 238
+    },
+    {
+      "complete": true,
+      "hand_id": "9794f130047951e0",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        19096726,
+        23434538,
+        82738008,
+        95515789
+      ],
+      "runtime_seconds": 0.6874182920000749,
+      "scenario_id": "impermanence",
+      "score": 2.75,
+      "visited_states": 239
+    },
+    {
+      "complete": true,
+      "hand_id": "1cdd4338c9fc0b88",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        55273560,
+        62962630
+      ],
+      "runtime_seconds": 0.8331073750014184,
+      "scenario_id": "none",
+      "score": 15.25,
+      "visited_states": 274
+    },
+    {
+      "complete": true,
+      "hand_id": "1cdd4338c9fc0b88",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        55273560,
+        62962630
+      ],
+      "runtime_seconds": 0.8621792499980074,
+      "scenario_id": "ash",
+      "score": 15.25,
+      "visited_states": 289
+    },
+    {
+      "complete": true,
+      "hand_id": "1cdd4338c9fc0b88",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        55273560,
+        62962630
+      ],
+      "runtime_seconds": 1.1485132919988246,
+      "scenario_id": "impermanence",
+      "score": 15.25,
+      "visited_states": 372
+    },
+    {
+      "complete": false,
+      "hand_id": "891e55bb37829263",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        29948294,
+        44362883,
+        82489470,
+        98829635
+      ],
+      "runtime_seconds": 228.10605791700073,
+      "scenario_id": "none",
+      "score": 18.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "891e55bb37829263",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        29948294,
+        44362883,
+        82489470,
+        98829635
+      ],
+      "runtime_seconds": 222.93976479100093,
+      "scenario_id": "ash",
+      "score": 18.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "891e55bb37829263",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        29948294,
+        44362883,
+        82489470,
+        98829635
+      ],
+      "runtime_seconds": 239.24799437500042,
+      "scenario_id": "impermanence",
+      "score": 16.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "6ca09dc43212081c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        14558127,
+        23434538,
+        30271097,
+        75500286
+      ],
+      "runtime_seconds": 41.58063879099791,
+      "scenario_id": "none",
+      "score": 15.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "6ca09dc43212081c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        14558127,
+        23434538,
+        30271097,
+        75500286
+      ],
+      "runtime_seconds": 40.5944778339981,
+      "scenario_id": "ash",
+      "score": 9.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "6ca09dc43212081c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        14558127,
+        23434538,
+        30271097,
+        75500286
+      ],
+      "runtime_seconds": 44.85852479200548,
+      "scenario_id": "impermanence",
+      "score": 9.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "774813b4cf1d787a",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        55273560,
+        62962630,
+        84192580
+      ],
+      "runtime_seconds": 23.35556120899855,
+      "scenario_id": "none",
+      "score": 23.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "774813b4cf1d787a",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        55273560,
+        62962630,
+        84192580
+      ],
+      "runtime_seconds": 22.62847883300128,
+      "scenario_id": "ash",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "774813b4cf1d787a",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        55273560,
+        62962630,
+        84192580
+      ],
+      "runtime_seconds": 25.88516174999677,
+      "scenario_id": "impermanence",
+      "score": 20.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "7d513c6eb0788e75",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        29948294,
+        29948294,
+        59438930,
+        62962630
+      ],
+      "runtime_seconds": 297.83426541600056,
+      "scenario_id": "none",
+      "score": 17.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "7d513c6eb0788e75",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        29948294,
+        29948294,
+        59438930,
+        62962630
+      ],
+      "runtime_seconds": 293.4594797910031,
+      "scenario_id": "ash",
+      "score": 14.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "hand_id": "7d513c6eb0788e75",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        29948294,
+        29948294,
+        59438930,
+        62962630
+      ],
+      "runtime_seconds": 312.2399653750035,
+      "scenario_id": "impermanence",
+      "score": 10.0,
+      "visited_states": 10000
+    }
+  ],
+  "seed": 7,
+  "skips": [
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 58,
+      "hand_id": "2357f6e5c5ffb75c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        10045474,
+        14558127,
+        45484331,
+        45883110
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 30.55847216699476,
+      "scenario_id": "none",
+      "score": 18.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 56,
+      "hand_id": "2357f6e5c5ffb75c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        10045474,
+        14558127,
+        45484331,
+        45883110
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 29.88389520799683,
+      "scenario_id": "ash",
+      "score": 16.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 63,
+      "hand_id": "2357f6e5c5ffb75c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        10045474,
+        14558127,
+        45484331,
+        45883110
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 33.85532104199956,
+      "scenario_id": "impermanence",
+      "score": 18.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 115,
+      "hand_id": "df1b73ea88389d0c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        23434538,
+        44362883,
+        55273560,
+        75500286,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 459.5610575410028,
+      "scenario_id": "none",
+      "score": 23.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 91,
+      "hand_id": "df1b73ea88389d0c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        23434538,
+        44362883,
+        55273560,
+        75500286,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 453.9683169580021,
+      "scenario_id": "ash",
+      "score": 14.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 130,
+      "hand_id": "df1b73ea88389d0c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        23434538,
+        44362883,
+        55273560,
+        75500286,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 432.5627850419987,
+      "scenario_id": "impermanence",
+      "score": 15.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 91,
+      "hand_id": "99bc74f6d6a054e8",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        29948294,
+        45883110,
+        55273560,
+        68468459,
+        82489470
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 25.547205000002577,
+      "scenario_id": "none",
+      "score": 17.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 86,
+      "hand_id": "99bc74f6d6a054e8",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        29948294,
+        45883110,
+        55273560,
+        68468459,
+        82489470
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 25.213948333002918,
+      "scenario_id": "ash",
+      "score": 14.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 92,
+      "hand_id": "99bc74f6d6a054e8",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        29948294,
+        45883110,
+        55273560,
+        68468459,
+        82489470
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 23.298022374998254,
+      "scenario_id": "impermanence",
+      "score": 17.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 62,
+      "hand_id": "ac4f6f3829885ad1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        1984618,
+        55273560,
+        55273560,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 25.2451118329991,
+      "scenario_id": "none",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 46,
+      "hand_id": "ac4f6f3829885ad1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        1984618,
+        55273560,
+        55273560,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 28.058368416997837,
+      "scenario_id": "ash",
+      "score": 17.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 63,
+      "hand_id": "ac4f6f3829885ad1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        1984618,
+        55273560,
+        55273560,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 23.541715208993992,
+      "scenario_id": "impermanence",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 84,
+      "hand_id": "5d8c35476426a5f2",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        17751597,
+        45883110,
+        82738008,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 22.844555750001746,
+      "scenario_id": "none",
+      "score": 23.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 66,
+      "hand_id": "5d8c35476426a5f2",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        17751597,
+        45883110,
+        82738008,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 22.59528308299923,
+      "scenario_id": "ash",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 89,
+      "hand_id": "5d8c35476426a5f2",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        17751597,
+        45883110,
+        82738008,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 22.901793875003932,
+      "scenario_id": "impermanence",
+      "score": 23.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 100,
+      "hand_id": "8b343660d0a094bf",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        75500286,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 28.306392874997982,
+      "scenario_id": "none",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 100,
+      "hand_id": "8b343660d0a094bf",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        75500286,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 28.556551250003395,
+      "scenario_id": "ash",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 101,
+      "hand_id": "8b343660d0a094bf",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        10045474,
+        17751597,
+        45883110,
+        75500286,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 26.078012124999077,
+      "scenario_id": "impermanence",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 70,
+      "hand_id": "499db02faa051e7f",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        45883110,
+        68468459,
+        75500286,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 21.106949291999626,
+      "scenario_id": "none",
+      "score": 18.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 70,
+      "hand_id": "499db02faa051e7f",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        45883110,
+        68468459,
+        75500286,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 20.961945916998957,
+      "scenario_id": "ash",
+      "score": 18.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 91,
+      "hand_id": "499db02faa051e7f",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        45883110,
+        68468459,
+        75500286,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 20.81036487500387,
+      "scenario_id": "impermanence",
+      "score": 17.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 81,
+      "hand_id": "1ca463506a5a715b",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        19304410,
+        42141493,
+        45484331,
+        82738008
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 35.434158791998925,
+      "scenario_id": "none",
+      "score": 19.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 79,
+      "hand_id": "1ca463506a5a715b",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        19304410,
+        42141493,
+        45484331,
+        82738008
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 33.506906082999194,
+      "scenario_id": "ash",
+      "score": 13.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 82,
+      "hand_id": "1ca463506a5a715b",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        19304410,
+        42141493,
+        45484331,
+        82738008
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 32.62156366700219,
+      "scenario_id": "impermanence",
+      "score": 19.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 66,
+      "hand_id": "b59a57a8e08d5dd5",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        17751597,
+        44362883,
+        82738008,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 351.364791333006,
+      "scenario_id": "none",
+      "score": 18.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 57,
+      "hand_id": "b59a57a8e08d5dd5",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        17751597,
+        44362883,
+        82738008,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 355.4025136249984,
+      "scenario_id": "ash",
+      "score": 12.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 63,
+      "hand_id": "b59a57a8e08d5dd5",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        17751597,
+        44362883,
+        82738008,
+        95515789
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 336.99828441700083,
+      "scenario_id": "impermanence",
+      "score": 15.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 48,
+      "hand_id": "c1b95e41661677a1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        75500286,
+        95515789,
+        98829635
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 20.550438250000298,
+      "scenario_id": "none",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 33,
+      "hand_id": "c1b95e41661677a1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        75500286,
+        95515789,
+        98829635
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 20.485949250003614,
+      "scenario_id": "ash",
+      "score": 13.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 49,
+      "hand_id": "c1b95e41661677a1",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        75500286,
+        95515789,
+        98829635
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 20.36663275000319,
+      "scenario_id": "impermanence",
+      "score": 19.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 75,
+      "hand_id": "891e55bb37829263",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        29948294,
+        44362883,
+        82489470,
+        98829635
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 228.10605791700073,
+      "scenario_id": "none",
+      "score": 18.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 74,
+      "hand_id": "891e55bb37829263",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        29948294,
+        44362883,
+        82489470,
+        98829635
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 222.93976479100093,
+      "scenario_id": "ash",
+      "score": 18.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 99,
+      "hand_id": "891e55bb37829263",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        1984618,
+        29948294,
+        44362883,
+        82489470,
+        98829635
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 239.24799437500042,
+      "scenario_id": "impermanence",
+      "score": 16.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 180,
+      "hand_id": "6ca09dc43212081c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        14558127,
+        23434538,
+        30271097,
+        75500286
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 41.58063879099791,
+      "scenario_id": "none",
+      "score": 15.0,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 180,
+      "hand_id": "6ca09dc43212081c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        14558127,
+        23434538,
+        30271097,
+        75500286
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 40.5944778339981,
+      "scenario_id": "ash",
+      "score": 9.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 180,
+      "hand_id": "6ca09dc43212081c",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        14558127,
+        23434538,
+        30271097,
+        75500286
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 44.85852479200548,
+      "scenario_id": "impermanence",
+      "score": 9.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 100,
+      "hand_id": "774813b4cf1d787a",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        55273560,
+        62962630,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 23.35556120899855,
+      "scenario_id": "none",
+      "score": 23.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 74,
+      "hand_id": "774813b4cf1d787a",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        55273560,
+        62962630,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 22.62847883300128,
+      "scenario_id": "ash",
+      "score": 19.25,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 94,
+      "hand_id": "774813b4cf1d787a",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        17751597,
+        33854624,
+        55273560,
+        62962630,
+        84192580
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 25.88516174999677,
+      "scenario_id": "impermanence",
+      "score": 20.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 89,
+      "hand_id": "7d513c6eb0788e75",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        29948294,
+        29948294,
+        59438930,
+        62962630
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 297.83426541600056,
+      "scenario_id": "none",
+      "score": 17.75,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 37,
+      "hand_id": "7d513c6eb0788e75",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        29948294,
+        29948294,
+        59438930,
+        62962630
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 293.4594797910031,
+      "scenario_id": "ash",
+      "score": 14.5,
+      "visited_states": 10000
+    },
+    {
+      "complete": false,
+      "examples_omitted_from_complete_set": 14,
+      "hand_id": "7d513c6eb0788e75",
+      "max_depth": 180,
+      "max_nodes": 10000,
+      "opening_hand": [
+        14558127,
+        29948294,
+        29948294,
+        59438930,
+        62962630
+      ],
+      "reason": "incomplete_search",
+      "runtime_seconds": 312.2399653750035,
+      "scenario_id": "impermanence",
+      "score": 10.0,
+      "visited_states": 10000
+    }
+  ],
+  "total_runtime_seconds": 4895.772637791997
+}

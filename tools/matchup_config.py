@@ -22,6 +22,33 @@ def scenarios(config, requested=None):
     return result
 
 
+def experiment_matchup(config, opening_hand=None):
+    """Choose configured-deck construction vs deterministic fixture construction.
+
+    Fixture duel construction remains the default for regression searches that
+    omit an opening hand and do not opt into configured-deck mode. When an
+    opening hand is supplied (consistency / multi-hand oracle), the configured
+    ``main_deck`` must drive OCGCore construction so sampled cards cannot fail
+    merely because they are absent from ``fixture_deck()``.
+
+    Explicit flags:
+      - ``use_fixture_deck``: force fixture construction
+      - ``use_configured_deck``: force configured ``main_deck`` / extra / opponent
+    """
+    if not config:
+        return None
+    if config.get("use_fixture_deck"):
+        return None
+    if config.get("use_configured_deck"):
+        return config
+    if opening_hand is not None and "main_deck" in config:
+        return config
+    # Legacy path: matchups that already embed an opponent deck list.
+    if config.get("opponent_deck") is not None and "main_deck" in config:
+        return config
+    return None
+
+
 def load_config(path=None):
     config_path = Path(path) if path else ROOT / "configs/albaz.json"
     config = json.loads(config_path.read_text())
