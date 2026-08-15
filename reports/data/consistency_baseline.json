@@ -1,0 +1,5520 @@
+{
+  "conditioned": {
+    "ash": {
+      "by_role": {
+        "brick": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 2.5135947338294216,
+            "paired_hands": 13,
+            "paired_probability_mass": 0.538961532382585,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.08299942759015455,
+              "follow_up_value": 2.430595306239267,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.3491700057240984,
+              "follow_up_value": 0.08872352604464796,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.5135947338294216,
+            "weighted_score_loss": 0.4378935317687464
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 6.935714285714286,
+            "paired_hands": 3,
+            "paired_probability_mass": 0.053988705304494775,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 6.935714285714286,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.0,
+              "follow_up_value": 0.0,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 6.935714285714286,
+            "weighted_score_loss": 0.0
+          },
+          ">=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "extender": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 9,
+            "hands": 9,
+            "mass_share_of_evaluated": 0.7476586888657649,
+            "normalized_weighted_score": 2.5669798190675017,
+            "paired_hands": 9,
+            "paired_probability_mass": 0.4433243972717657,
+            "probability_mass": 0.4433243972717657,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.09394572025052192,
+              "follow_up_value": 2.4730340988169797,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.3757828810020877,
+              "follow_up_value": 0.09394572025052192,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.5669798190675017,
+            "weighted_score_loss": 0.4697286012526096
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 7,
+            "hands": 7,
+            "mass_share_of_evaluated": 0.2523413111342352,
+            "normalized_weighted_score": 3.9510309278350517,
+            "paired_hands": 7,
+            "paired_probability_mass": 0.1496258404153141,
+            "probability_mass": 0.1496258404153141,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.020618556701030927,
+              "follow_up_value": 3.9304123711340204,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.14432989690721648,
+              "follow_up_value": 0.041237113402061855,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 3.9510309278350517,
+            "weighted_score_loss": 0.18556701030927836
+          },
+          "=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          ">=3": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "interaction": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 16,
+            "hands": 16,
+            "mass_share_of_evaluated": 1.0,
+            "normalized_weighted_score": 2.9162330905306972,
+            "paired_hands": 16,
+            "paired_probability_mass": 0.5929502376870798,
+            "probability_mass": 0.5929502376870798,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.07544224765868887,
+              "follow_up_value": 2.8407908428720083,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.3173777315296566,
+              "follow_up_value": 0.08064516129032259,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.9162330905306972,
+            "weighted_score_loss": 0.3980228928199792
+          },
+          "=1": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          "=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          ">=3": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "recovery": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 2.8255580995993133,
+            "paired_hands": 13,
+            "paired_probability_mass": 0.538961532382585,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.08299942759015455,
+              "follow_up_value": 2.7425586720091584,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.3491700057240984,
+              "follow_up_value": 0.08872352604464796,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.8255580995993133,
+            "weighted_score_loss": 0.4378935317687464
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 3.8214285714285716,
+            "paired_hands": 3,
+            "paired_probability_mass": 0.053988705304494775,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 3.8214285714285716,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.0,
+              "follow_up_value": 0.0,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 3.8214285714285716,
+            "weighted_score_loss": 0.0
+          },
+          ">=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "starter": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 2.8255580995993133,
+            "paired_hands": 13,
+            "paired_probability_mass": 0.538961532382585,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.08299942759015455,
+              "follow_up_value": 2.7425586720091584,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.3491700057240984,
+              "follow_up_value": 0.08872352604464796,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.8255580995993133,
+            "weighted_score_loss": 0.4378935317687464
+          },
+          ">=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 3.8214285714285716,
+            "paired_hands": 3,
+            "paired_probability_mass": 0.053988705304494775,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 3.8214285714285716,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.0,
+              "follow_up_value": 0.0,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 3.8214285714285716,
+            "weighted_score_loss": 0.0
+          }
+        }
+      },
+      "conditional_bucket_deltas": {
+        "kind": "conditional_association",
+        "note": "Adjacent joint-bucket score differences are observational. Use extender counterfactual replacement for interventional card contribution.",
+        "starter_extender": {
+          "starter>=1,extender=1_minus_starter>=1,extender=0": {
+            "from": "starter>=1,extender=0",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender=1"
+          },
+          "starter>=1,extender=2_minus_starter>=1,extender=1": {
+            "from": "starter>=1,extender=1",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender=2"
+          },
+          "starter>=1,extender>=3_minus_starter>=1,extender=2": {
+            "from": "starter>=1,extender=2",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender>=3"
+          }
+        }
+      },
+      "joint": {
+        "starter>=1,extender=0": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        },
+        "starter>=1,extender=1": {
+          "complete_fraction": 1.0,
+          "evaluated_hands": 3,
+          "hands": 3,
+          "mass_share_of_evaluated": 0.09105098855359,
+          "normalized_weighted_score": 3.8214285714285716,
+          "paired_hands": 3,
+          "paired_probability_mass": 0.053988705304494775,
+          "probability_mass": 0.053988705304494775,
+          "provisional_hands": 0,
+          "weighted_categories": {
+            "board_value": 0.0,
+            "follow_up_value": 3.8214285714285716,
+            "interaction_value": 0.0,
+            "survival_value": 0.0
+          },
+          "weighted_category_loss": {
+            "board_value": 0.0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0.0,
+            "survival_value": 0.0
+          },
+          "weighted_score": 3.8214285714285716,
+          "weighted_score_loss": 0.0
+        },
+        "starter>=1,extender=2": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        },
+        "starter>=1,extender>=3": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        }
+      },
+      "sampling": {
+        "covers_full_deck_distribution": false,
+        "evaluated_hands": 16,
+        "evaluated_probability_mass": 0.5929502376870798,
+        "mode": "unique_hands_sample",
+        "note": "evaluated_probability_mass sums hypergeometric P(h) over evaluated unique hands only. It is not a full-deck fraction. normalized_weighted_score / evaluated_sample_* rates renormalize within evaluated mass. Do not read those rates as exact deck-wide percentages unless coverage is independently complete.",
+        "raw_probability_mass": 0.5929502376870798
+      }
+    },
+    "impermanence": {
+      "by_role": {
+        "brick": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 2.5422152261018884,
+            "paired_hands": 13,
+            "paired_probability_mass": 0.538961532382585,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.07727532913566112,
+              "follow_up_value": 2.4649398969662277,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.35489410417859185,
+              "follow_up_value": 0.05437893531768746,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.5422152261018884,
+            "weighted_score_loss": 0.40927303949627936
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 6.935714285714286,
+            "paired_hands": 3,
+            "paired_probability_mass": 0.053988705304494775,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 6.935714285714286,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.0,
+              "follow_up_value": 0.0,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 6.935714285714286,
+            "weighted_score_loss": 0.0
+          },
+          ">=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "extender": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 9,
+            "hands": 9,
+            "mass_share_of_evaluated": 0.7476586888657649,
+            "normalized_weighted_score": 2.5669798190675017,
+            "paired_hands": 9,
+            "paired_probability_mass": 0.4433243972717657,
+            "probability_mass": 0.4433243972717657,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.09394572025052192,
+              "follow_up_value": 2.4730340988169797,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.3757828810020877,
+              "follow_up_value": 0.09394572025052192,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.5669798190675017,
+            "weighted_score_loss": 0.4697286012526096
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 7,
+            "hands": 7,
+            "mass_share_of_evaluated": 0.2523413111342352,
+            "normalized_weighted_score": 4.054123711340206,
+            "paired_hands": 7,
+            "paired_probability_mass": 0.1496258404153141,
+            "probability_mass": 0.1496258404153141,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 4.054123711340206,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.16494845360824742,
+              "follow_up_value": -0.08247422680412371,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 4.054123711340206,
+            "weighted_score_loss": 0.08247422680412371
+          },
+          "=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          ">=3": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "interaction": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 16,
+            "hands": 16,
+            "mass_share_of_evaluated": 1.0,
+            "normalized_weighted_score": 2.9422476586888657,
+            "paired_hands": 16,
+            "paired_probability_mass": 0.5929502376870798,
+            "probability_mass": 0.5929502376870798,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.07023933402705515,
+              "follow_up_value": 2.872008324661811,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.32258064516129037,
+              "follow_up_value": 0.049427679500520294,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.9422476586888657,
+            "weighted_score_loss": 0.37200832466181066
+          },
+          "=1": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          "=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          ">=3": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "recovery": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 2.8541785918717797,
+            "paired_hands": 13,
+            "paired_probability_mass": 0.538961532382585,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.07727532913566112,
+              "follow_up_value": 2.776903262736119,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.35489410417859185,
+              "follow_up_value": 0.05437893531768746,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.8541785918717797,
+            "weighted_score_loss": 0.40927303949627936
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 3.8214285714285716,
+            "paired_hands": 3,
+            "paired_probability_mass": 0.053988705304494775,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 3.8214285714285716,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.0,
+              "follow_up_value": 0.0,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 3.8214285714285716,
+            "weighted_score_loss": 0.0
+          },
+          ">=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "starter": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 2.8541785918717797,
+            "paired_hands": 13,
+            "paired_probability_mass": 0.538961532382585,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.07727532913566112,
+              "follow_up_value": 2.776903262736119,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.35489410417859185,
+              "follow_up_value": 0.05437893531768746,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.8541785918717797,
+            "weighted_score_loss": 0.40927303949627936
+          },
+          ">=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 3.8214285714285716,
+            "paired_hands": 3,
+            "paired_probability_mass": 0.053988705304494775,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 3.8214285714285716,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.0,
+              "follow_up_value": 0.0,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 3.8214285714285716,
+            "weighted_score_loss": 0.0
+          }
+        }
+      },
+      "conditional_bucket_deltas": {
+        "kind": "conditional_association",
+        "note": "Adjacent joint-bucket score differences are observational. Use extender counterfactual replacement for interventional card contribution.",
+        "starter_extender": {
+          "starter>=1,extender=1_minus_starter>=1,extender=0": {
+            "from": "starter>=1,extender=0",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender=1"
+          },
+          "starter>=1,extender=2_minus_starter>=1,extender=1": {
+            "from": "starter>=1,extender=1",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender=2"
+          },
+          "starter>=1,extender>=3_minus_starter>=1,extender=2": {
+            "from": "starter>=1,extender=2",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender>=3"
+          }
+        }
+      },
+      "joint": {
+        "starter>=1,extender=0": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        },
+        "starter>=1,extender=1": {
+          "complete_fraction": 1.0,
+          "evaluated_hands": 3,
+          "hands": 3,
+          "mass_share_of_evaluated": 0.09105098855359,
+          "normalized_weighted_score": 3.8214285714285716,
+          "paired_hands": 3,
+          "paired_probability_mass": 0.053988705304494775,
+          "probability_mass": 0.053988705304494775,
+          "provisional_hands": 0,
+          "weighted_categories": {
+            "board_value": 0.0,
+            "follow_up_value": 3.8214285714285716,
+            "interaction_value": 0.0,
+            "survival_value": 0.0
+          },
+          "weighted_category_loss": {
+            "board_value": 0.0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0.0,
+            "survival_value": 0.0
+          },
+          "weighted_score": 3.8214285714285716,
+          "weighted_score_loss": 0.0
+        },
+        "starter>=1,extender=2": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        },
+        "starter>=1,extender>=3": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        }
+      },
+      "sampling": {
+        "covers_full_deck_distribution": false,
+        "evaluated_hands": 16,
+        "evaluated_probability_mass": 0.5929502376870798,
+        "mode": "unique_hands_sample",
+        "note": "evaluated_probability_mass sums hypergeometric P(h) over evaluated unique hands only. It is not a full-deck fraction. normalized_weighted_score / evaluated_sample_* rates renormalize within evaluated mass. Do not read those rates as exact deck-wide percentages unless coverage is independently complete.",
+        "raw_probability_mass": 0.5929502376870798
+      }
+    },
+    "none": {
+      "by_role": {
+        "brick": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 2.951488265598168,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.43216943331425295,
+              "follow_up_value": 2.5193188322839153,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 2.951488265598168,
+            "weighted_score_loss": null
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 6.935714285714286,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 6.935714285714286,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 6.935714285714286,
+            "weighted_score_loss": null
+          },
+          ">=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "extender": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 9,
+            "hands": 9,
+            "mass_share_of_evaluated": 0.7476586888657649,
+            "normalized_weighted_score": 3.036708420320111,
+            "probability_mass": 0.4433243972717657,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.4697286012526096,
+              "follow_up_value": 2.5669798190675017,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 3.036708420320111,
+            "weighted_score_loss": null
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 7,
+            "hands": 7,
+            "mass_share_of_evaluated": 0.2523413111342352,
+            "normalized_weighted_score": 4.13659793814433,
+            "probability_mass": 0.1496258404153141,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.16494845360824742,
+              "follow_up_value": 3.9716494845360826,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 4.13659793814433,
+            "weighted_score_loss": null
+          },
+          "=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          ">=3": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "interaction": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 16,
+            "hands": 16,
+            "mass_share_of_evaluated": 1.0,
+            "normalized_weighted_score": 3.314255983350676,
+            "probability_mass": 0.5929502376870798,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.39281997918834544,
+              "follow_up_value": 2.9214360041623313,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 3.314255983350676,
+            "weighted_score_loss": null
+          },
+          "=1": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          "=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          },
+          ">=3": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "recovery": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 3.263451631368059,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.43216943331425295,
+              "follow_up_value": 2.8312821980538065,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 3.263451631368059,
+            "weighted_score_loss": null
+          },
+          "=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 3.8214285714285716,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 3.8214285714285716,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 3.8214285714285716,
+            "weighted_score_loss": null
+          },
+          ">=2": {
+            "complete_fraction": null,
+            "evaluated_hands": 0,
+            "hands": 0,
+            "mass_share_of_evaluated": 0.0,
+            "normalized_weighted_score": null,
+            "probability_mass": 0.0,
+            "provisional_hands": 0,
+            "weighted_categories": null,
+            "weighted_category_loss": null,
+            "weighted_score": null,
+            "weighted_score_loss": null
+          }
+        },
+        "starter": {
+          "=0": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 13,
+            "hands": 13,
+            "mass_share_of_evaluated": 0.90894901144641,
+            "normalized_weighted_score": 3.263451631368059,
+            "probability_mass": 0.538961532382585,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.43216943331425295,
+              "follow_up_value": 2.8312821980538065,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 3.263451631368059,
+            "weighted_score_loss": null
+          },
+          ">=1": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 3,
+            "hands": 3,
+            "mass_share_of_evaluated": 0.09105098855359,
+            "normalized_weighted_score": 3.8214285714285716,
+            "probability_mass": 0.053988705304494775,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.0,
+              "follow_up_value": 3.8214285714285716,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 3.8214285714285716,
+            "weighted_score_loss": null
+          }
+        }
+      },
+      "conditional_bucket_deltas": {
+        "kind": "conditional_association",
+        "note": "Adjacent joint-bucket score differences are observational. Use extender counterfactual replacement for interventional card contribution.",
+        "starter_extender": {
+          "starter>=1,extender=1_minus_starter>=1,extender=0": {
+            "from": "starter>=1,extender=0",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender=1"
+          },
+          "starter>=1,extender=2_minus_starter>=1,extender=1": {
+            "from": "starter>=1,extender=1",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender=2"
+          },
+          "starter>=1,extender>=3_minus_starter>=1,extender=2": {
+            "from": "starter>=1,extender=2",
+            "kind": "conditional_association",
+            "normalized_weighted_score_delta": null,
+            "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+            "to": "starter>=1,extender>=3"
+          }
+        }
+      },
+      "joint": {
+        "starter>=1,extender=0": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        },
+        "starter>=1,extender=1": {
+          "complete_fraction": 1.0,
+          "evaluated_hands": 3,
+          "hands": 3,
+          "mass_share_of_evaluated": 0.09105098855359,
+          "normalized_weighted_score": 3.8214285714285716,
+          "probability_mass": 0.053988705304494775,
+          "provisional_hands": 0,
+          "weighted_categories": {
+            "board_value": 0.0,
+            "follow_up_value": 3.8214285714285716,
+            "interaction_value": 0.0,
+            "survival_value": 0.0
+          },
+          "weighted_category_loss": null,
+          "weighted_score": 3.8214285714285716,
+          "weighted_score_loss": null
+        },
+        "starter>=1,extender=2": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        },
+        "starter>=1,extender>=3": {
+          "complete_fraction": null,
+          "evaluated_hands": 0,
+          "hands": 0,
+          "mass_share_of_evaluated": 0.0,
+          "normalized_weighted_score": null,
+          "probability_mass": 0.0,
+          "provisional_hands": 0,
+          "weighted_categories": null,
+          "weighted_category_loss": null,
+          "weighted_score": null,
+          "weighted_score_loss": null
+        }
+      },
+      "sampling": {
+        "covers_full_deck_distribution": false,
+        "evaluated_hands": 16,
+        "evaluated_probability_mass": 0.5929502376870798,
+        "mode": "unique_hands_sample",
+        "note": "evaluated_probability_mass sums hypergeometric P(h) over evaluated unique hands only. It is not a full-deck fraction. normalized_weighted_score / evaluated_sample_* rates renormalize within evaluated mass. Do not read those rates as exact deck-wide percentages unless coverage is independently complete.",
+        "raw_probability_mass": 0.5929502376870798
+      }
+    }
+  },
+  "config": "albaz",
+  "experiment": {
+    "hands": 16,
+    "interruptions": [
+      "none",
+      "ash",
+      "impermanence"
+    ],
+    "max_depth": 180,
+    "max_nodes": 20000,
+    "note": "Unique-hand sample; evaluated_probability_mass is not full-deck coverage. Interruptions limited for wall-time practicality.",
+    "seed": 7
+  },
+  "provenance": {
+    "complete": true,
+    "database_sha256": "c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f",
+    "scripts_revision": "090e881772f488e1256c456b827d5cbed4facf79",
+    "search_limits": {
+      "max_depth": 180,
+      "max_nodes": 20000
+    },
+    "yapping_revision": "fe85906588f4aeabf4098c8b09790f4da6eb52ef"
+  },
+  "quantified": {
+    "hand_features": {
+      "evaluated_probability_mass": 0.5929502376870798,
+      "layer": "hand_features",
+      "note": "These rates describe role composition among evaluated hands. They are not playability or success rates.",
+      "rates": {
+        "brick_free": {
+          "evaluated_sample_rate": 0.90894901144641,
+          "predicate": "brick_count = 0",
+          "probability_mass": 0.538961532382585
+        },
+        "extender_access": {
+          "evaluated_sample_rate": 0.2523413111342352,
+          "predicate": "extender_count >= 1",
+          "probability_mass": 0.1496258404153141
+        },
+        "interaction_access": {
+          "evaluated_sample_rate": 0.0,
+          "predicate": "interaction_count >= 1",
+          "probability_mass": 0
+        },
+        "recovery_access": {
+          "evaluated_sample_rate": 0.09105098855359,
+          "predicate": "recovery_count >= 1",
+          "probability_mass": 0.053988705304494775
+        },
+        "starter_access": {
+          "evaluated_sample_rate": 0.09105098855359,
+          "predicate": "starter_count >= 1",
+          "probability_mass": 0.053988705304494775
+        }
+      }
+    },
+    "sampling": {
+      "covers_full_deck_distribution": false,
+      "evaluated_hands": 16,
+      "evaluated_probability_mass": 0.5929502376870798,
+      "mode": "unique_hands_sample",
+      "note": "evaluated_probability_mass sums hypergeometric P(h) over evaluated unique hands only. It is not a full-deck fraction. normalized_weighted_score / evaluated_sample_* rates renormalize within evaluated mass. Do not read those rates as exact deck-wide percentages unless coverage is independently complete.",
+      "raw_probability_mass": 0.5929502376870798
+    },
+    "solver_outcomes": {
+      "by_interruption": {
+        "ash": {
+          "conditioned": {
+            "by_role": {
+              "brick": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 2.5135947338294216,
+                  "paired_hands": 13,
+                  "paired_probability_mass": 0.538961532382585,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.08299942759015455,
+                    "follow_up_value": 2.430595306239267,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.3491700057240984,
+                    "follow_up_value": 0.08872352604464796,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.5135947338294216,
+                  "weighted_score_loss": 0.4378935317687464
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 6.935714285714286,
+                  "paired_hands": 3,
+                  "paired_probability_mass": 0.053988705304494775,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 6.935714285714286,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.0,
+                    "follow_up_value": 0.0,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 6.935714285714286,
+                  "weighted_score_loss": 0.0
+                },
+                ">=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "extender": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 9,
+                  "hands": 9,
+                  "mass_share_of_evaluated": 0.7476586888657649,
+                  "normalized_weighted_score": 2.5669798190675017,
+                  "paired_hands": 9,
+                  "paired_probability_mass": 0.4433243972717657,
+                  "probability_mass": 0.4433243972717657,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.09394572025052192,
+                    "follow_up_value": 2.4730340988169797,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.3757828810020877,
+                    "follow_up_value": 0.09394572025052192,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.5669798190675017,
+                  "weighted_score_loss": 0.4697286012526096
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 7,
+                  "hands": 7,
+                  "mass_share_of_evaluated": 0.2523413111342352,
+                  "normalized_weighted_score": 3.9510309278350517,
+                  "paired_hands": 7,
+                  "paired_probability_mass": 0.1496258404153141,
+                  "probability_mass": 0.1496258404153141,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.020618556701030927,
+                    "follow_up_value": 3.9304123711340204,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.14432989690721648,
+                    "follow_up_value": 0.041237113402061855,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 3.9510309278350517,
+                  "weighted_score_loss": 0.18556701030927836
+                },
+                "=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                ">=3": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "interaction": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 16,
+                  "hands": 16,
+                  "mass_share_of_evaluated": 1.0,
+                  "normalized_weighted_score": 2.9162330905306972,
+                  "paired_hands": 16,
+                  "paired_probability_mass": 0.5929502376870798,
+                  "probability_mass": 0.5929502376870798,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.07544224765868887,
+                    "follow_up_value": 2.8407908428720083,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.3173777315296566,
+                    "follow_up_value": 0.08064516129032259,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.9162330905306972,
+                  "weighted_score_loss": 0.3980228928199792
+                },
+                "=1": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                "=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                ">=3": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "recovery": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 2.8255580995993133,
+                  "paired_hands": 13,
+                  "paired_probability_mass": 0.538961532382585,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.08299942759015455,
+                    "follow_up_value": 2.7425586720091584,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.3491700057240984,
+                    "follow_up_value": 0.08872352604464796,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.8255580995993133,
+                  "weighted_score_loss": 0.4378935317687464
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 3.8214285714285716,
+                  "paired_hands": 3,
+                  "paired_probability_mass": 0.053988705304494775,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 3.8214285714285716,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.0,
+                    "follow_up_value": 0.0,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 3.8214285714285716,
+                  "weighted_score_loss": 0.0
+                },
+                ">=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "starter": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 2.8255580995993133,
+                  "paired_hands": 13,
+                  "paired_probability_mass": 0.538961532382585,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.08299942759015455,
+                    "follow_up_value": 2.7425586720091584,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.3491700057240984,
+                    "follow_up_value": 0.08872352604464796,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.8255580995993133,
+                  "weighted_score_loss": 0.4378935317687464
+                },
+                ">=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 3.8214285714285716,
+                  "paired_hands": 3,
+                  "paired_probability_mass": 0.053988705304494775,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 3.8214285714285716,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.0,
+                    "follow_up_value": 0.0,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 3.8214285714285716,
+                  "weighted_score_loss": 0.0
+                }
+              }
+            },
+            "conditional_bucket_deltas": {
+              "kind": "conditional_association",
+              "note": "Adjacent joint-bucket score differences are observational. Use extender counterfactual replacement for interventional card contribution.",
+              "starter_extender": {
+                "starter>=1,extender=1_minus_starter>=1,extender=0": {
+                  "from": "starter>=1,extender=0",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender=1"
+                },
+                "starter>=1,extender=2_minus_starter>=1,extender=1": {
+                  "from": "starter>=1,extender=1",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender=2"
+                },
+                "starter>=1,extender>=3_minus_starter>=1,extender=2": {
+                  "from": "starter>=1,extender=2",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender>=3"
+                }
+              }
+            },
+            "joint": {
+              "starter>=1,extender=0": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              },
+              "starter>=1,extender=1": {
+                "complete_fraction": 1.0,
+                "evaluated_hands": 3,
+                "hands": 3,
+                "mass_share_of_evaluated": 0.09105098855359,
+                "normalized_weighted_score": 3.8214285714285716,
+                "paired_hands": 3,
+                "paired_probability_mass": 0.053988705304494775,
+                "probability_mass": 0.053988705304494775,
+                "provisional_hands": 0,
+                "weighted_categories": {
+                  "board_value": 0.0,
+                  "follow_up_value": 3.8214285714285716,
+                  "interaction_value": 0.0,
+                  "survival_value": 0.0
+                },
+                "weighted_category_loss": {
+                  "board_value": 0.0,
+                  "follow_up_value": 0.0,
+                  "interaction_value": 0.0,
+                  "survival_value": 0.0
+                },
+                "weighted_score": 3.8214285714285716,
+                "weighted_score_loss": 0.0
+              },
+              "starter>=1,extender=2": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              },
+              "starter>=1,extender>=3": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              }
+            },
+            "sampling": {
+              "covers_full_deck_distribution": false,
+              "evaluated_hands": 16,
+              "evaluated_probability_mass": 0.5929502376870798,
+              "mode": "unique_hands_sample",
+              "note": "evaluated_probability_mass sums hypergeometric P(h) over evaluated unique hands only. It is not a full-deck fraction. normalized_weighted_score / evaluated_sample_* rates renormalize within evaluated mass. Do not read those rates as exact deck-wide percentages unless coverage is independently complete.",
+              "raw_probability_mass": 0.5929502376870798
+            }
+          },
+          "layer": "solver_outcomes",
+          "summary": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 16,
+            "hands": 16,
+            "mass_share_of_evaluated": 1.0,
+            "normalized_weighted_score": 2.9162330905306972,
+            "paired_hands": 16,
+            "paired_probability_mass": 0.5929502376870798,
+            "probability_mass": 0.5929502376870798,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.07544224765868887,
+              "follow_up_value": 2.8407908428720083,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.3173777315296566,
+              "follow_up_value": 0.08064516129032259,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.9162330905306972,
+            "weighted_score_loss": 0.3980228928199792
+          },
+          "utility_distribution": {
+            "covers_full_deck_distribution": false,
+            "evaluated_probability_mass": 0.5929502376870798,
+            "thresholds": {
+              "10": {
+                "evaluated_sample_success_rate": 0.01040582726326743,
+                "predicate": "U >= 10.0",
+                "probability_mass": 0.006170137749085118,
+                "threshold": 10.0
+              },
+              "15": {
+                "evaluated_sample_success_rate": 0.0,
+                "predicate": "U >= 15.0",
+                "probability_mass": 0,
+                "threshold": 15.0
+              },
+              "5": {
+                "evaluated_sample_success_rate": 0.18210197710718,
+                "predicate": "U >= 5.0",
+                "probability_mass": 0.10797741060898955,
+                "threshold": 5.0
+              }
+            },
+            "weighted_mean": 2.9162330905306972,
+            "weighted_median": 1.5,
+            "weighted_p10": 1.25,
+            "weighted_p25": 1.25,
+            "weighted_p75": 4.25,
+            "weighted_p90": 6.25
+          }
+        },
+        "impermanence": {
+          "conditioned": {
+            "by_role": {
+              "brick": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 2.5422152261018884,
+                  "paired_hands": 13,
+                  "paired_probability_mass": 0.538961532382585,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.07727532913566112,
+                    "follow_up_value": 2.4649398969662277,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.35489410417859185,
+                    "follow_up_value": 0.05437893531768746,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.5422152261018884,
+                  "weighted_score_loss": 0.40927303949627936
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 6.935714285714286,
+                  "paired_hands": 3,
+                  "paired_probability_mass": 0.053988705304494775,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 6.935714285714286,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.0,
+                    "follow_up_value": 0.0,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 6.935714285714286,
+                  "weighted_score_loss": 0.0
+                },
+                ">=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "extender": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 9,
+                  "hands": 9,
+                  "mass_share_of_evaluated": 0.7476586888657649,
+                  "normalized_weighted_score": 2.5669798190675017,
+                  "paired_hands": 9,
+                  "paired_probability_mass": 0.4433243972717657,
+                  "probability_mass": 0.4433243972717657,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.09394572025052192,
+                    "follow_up_value": 2.4730340988169797,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.3757828810020877,
+                    "follow_up_value": 0.09394572025052192,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.5669798190675017,
+                  "weighted_score_loss": 0.4697286012526096
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 7,
+                  "hands": 7,
+                  "mass_share_of_evaluated": 0.2523413111342352,
+                  "normalized_weighted_score": 4.054123711340206,
+                  "paired_hands": 7,
+                  "paired_probability_mass": 0.1496258404153141,
+                  "probability_mass": 0.1496258404153141,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 4.054123711340206,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.16494845360824742,
+                    "follow_up_value": -0.08247422680412371,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 4.054123711340206,
+                  "weighted_score_loss": 0.08247422680412371
+                },
+                "=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                ">=3": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "interaction": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 16,
+                  "hands": 16,
+                  "mass_share_of_evaluated": 1.0,
+                  "normalized_weighted_score": 2.9422476586888657,
+                  "paired_hands": 16,
+                  "paired_probability_mass": 0.5929502376870798,
+                  "probability_mass": 0.5929502376870798,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.07023933402705515,
+                    "follow_up_value": 2.872008324661811,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.32258064516129037,
+                    "follow_up_value": 0.049427679500520294,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.9422476586888657,
+                  "weighted_score_loss": 0.37200832466181066
+                },
+                "=1": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                "=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                ">=3": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "recovery": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 2.8541785918717797,
+                  "paired_hands": 13,
+                  "paired_probability_mass": 0.538961532382585,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.07727532913566112,
+                    "follow_up_value": 2.776903262736119,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.35489410417859185,
+                    "follow_up_value": 0.05437893531768746,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.8541785918717797,
+                  "weighted_score_loss": 0.40927303949627936
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 3.8214285714285716,
+                  "paired_hands": 3,
+                  "paired_probability_mass": 0.053988705304494775,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 3.8214285714285716,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.0,
+                    "follow_up_value": 0.0,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 3.8214285714285716,
+                  "weighted_score_loss": 0.0
+                },
+                ">=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "starter": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 2.8541785918717797,
+                  "paired_hands": 13,
+                  "paired_probability_mass": 0.538961532382585,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.07727532913566112,
+                    "follow_up_value": 2.776903262736119,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.35489410417859185,
+                    "follow_up_value": 0.05437893531768746,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 2.8541785918717797,
+                  "weighted_score_loss": 0.40927303949627936
+                },
+                ">=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 3.8214285714285716,
+                  "paired_hands": 3,
+                  "paired_probability_mass": 0.053988705304494775,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 3.8214285714285716,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": {
+                    "board_value": 0.0,
+                    "follow_up_value": 0.0,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_score": 3.8214285714285716,
+                  "weighted_score_loss": 0.0
+                }
+              }
+            },
+            "conditional_bucket_deltas": {
+              "kind": "conditional_association",
+              "note": "Adjacent joint-bucket score differences are observational. Use extender counterfactual replacement for interventional card contribution.",
+              "starter_extender": {
+                "starter>=1,extender=1_minus_starter>=1,extender=0": {
+                  "from": "starter>=1,extender=0",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender=1"
+                },
+                "starter>=1,extender=2_minus_starter>=1,extender=1": {
+                  "from": "starter>=1,extender=1",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender=2"
+                },
+                "starter>=1,extender>=3_minus_starter>=1,extender=2": {
+                  "from": "starter>=1,extender=2",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender>=3"
+                }
+              }
+            },
+            "joint": {
+              "starter>=1,extender=0": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              },
+              "starter>=1,extender=1": {
+                "complete_fraction": 1.0,
+                "evaluated_hands": 3,
+                "hands": 3,
+                "mass_share_of_evaluated": 0.09105098855359,
+                "normalized_weighted_score": 3.8214285714285716,
+                "paired_hands": 3,
+                "paired_probability_mass": 0.053988705304494775,
+                "probability_mass": 0.053988705304494775,
+                "provisional_hands": 0,
+                "weighted_categories": {
+                  "board_value": 0.0,
+                  "follow_up_value": 3.8214285714285716,
+                  "interaction_value": 0.0,
+                  "survival_value": 0.0
+                },
+                "weighted_category_loss": {
+                  "board_value": 0.0,
+                  "follow_up_value": 0.0,
+                  "interaction_value": 0.0,
+                  "survival_value": 0.0
+                },
+                "weighted_score": 3.8214285714285716,
+                "weighted_score_loss": 0.0
+              },
+              "starter>=1,extender=2": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              },
+              "starter>=1,extender>=3": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              }
+            },
+            "sampling": {
+              "covers_full_deck_distribution": false,
+              "evaluated_hands": 16,
+              "evaluated_probability_mass": 0.5929502376870798,
+              "mode": "unique_hands_sample",
+              "note": "evaluated_probability_mass sums hypergeometric P(h) over evaluated unique hands only. It is not a full-deck fraction. normalized_weighted_score / evaluated_sample_* rates renormalize within evaluated mass. Do not read those rates as exact deck-wide percentages unless coverage is independently complete.",
+              "raw_probability_mass": 0.5929502376870798
+            }
+          },
+          "layer": "solver_outcomes",
+          "summary": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 16,
+            "hands": 16,
+            "mass_share_of_evaluated": 1.0,
+            "normalized_weighted_score": 2.9422476586888657,
+            "paired_hands": 16,
+            "paired_probability_mass": 0.5929502376870798,
+            "probability_mass": 0.5929502376870798,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.07023933402705515,
+              "follow_up_value": 2.872008324661811,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": {
+              "board_value": 0.32258064516129037,
+              "follow_up_value": 0.049427679500520294,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_score": 2.9422476586888657,
+            "weighted_score_loss": 0.37200832466181066
+          },
+          "utility_distribution": {
+            "covers_full_deck_distribution": false,
+            "evaluated_probability_mass": 0.5929502376870798,
+            "thresholds": {
+              "10": {
+                "evaluated_sample_success_rate": 0.01040582726326743,
+                "predicate": "U >= 10.0",
+                "probability_mass": 0.006170137749085118,
+                "threshold": 10.0
+              },
+              "15": {
+                "evaluated_sample_success_rate": 0.0,
+                "predicate": "U >= 15.0",
+                "probability_mass": 0,
+                "threshold": 15.0
+              },
+              "5": {
+                "evaluated_sample_success_rate": 0.19250780437044746,
+                "predicate": "U >= 5.0",
+                "probability_mass": 0.11414754835807467,
+                "threshold": 5.0
+              }
+            },
+            "weighted_mean": 2.9422476586888657,
+            "weighted_median": 1.5,
+            "weighted_p10": 1.25,
+            "weighted_p25": 1.25,
+            "weighted_p75": 4.25,
+            "weighted_p90": 6.25
+          }
+        },
+        "none": {
+          "conditioned": {
+            "by_role": {
+              "brick": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 2.951488265598168,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.43216943331425295,
+                    "follow_up_value": 2.5193188322839153,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 2.951488265598168,
+                  "weighted_score_loss": null
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 6.935714285714286,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 6.935714285714286,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 6.935714285714286,
+                  "weighted_score_loss": null
+                },
+                ">=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "extender": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 9,
+                  "hands": 9,
+                  "mass_share_of_evaluated": 0.7476586888657649,
+                  "normalized_weighted_score": 3.036708420320111,
+                  "probability_mass": 0.4433243972717657,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.4697286012526096,
+                    "follow_up_value": 2.5669798190675017,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 3.036708420320111,
+                  "weighted_score_loss": null
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 7,
+                  "hands": 7,
+                  "mass_share_of_evaluated": 0.2523413111342352,
+                  "normalized_weighted_score": 4.13659793814433,
+                  "probability_mass": 0.1496258404153141,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.16494845360824742,
+                    "follow_up_value": 3.9716494845360826,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 4.13659793814433,
+                  "weighted_score_loss": null
+                },
+                "=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                ">=3": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "interaction": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 16,
+                  "hands": 16,
+                  "mass_share_of_evaluated": 1.0,
+                  "normalized_weighted_score": 3.314255983350676,
+                  "probability_mass": 0.5929502376870798,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.39281997918834544,
+                    "follow_up_value": 2.9214360041623313,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 3.314255983350676,
+                  "weighted_score_loss": null
+                },
+                "=1": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                "=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                },
+                ">=3": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "recovery": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 3.263451631368059,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.43216943331425295,
+                    "follow_up_value": 2.8312821980538065,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 3.263451631368059,
+                  "weighted_score_loss": null
+                },
+                "=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 3.8214285714285716,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 3.8214285714285716,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 3.8214285714285716,
+                  "weighted_score_loss": null
+                },
+                ">=2": {
+                  "complete_fraction": null,
+                  "evaluated_hands": 0,
+                  "hands": 0,
+                  "mass_share_of_evaluated": 0.0,
+                  "normalized_weighted_score": null,
+                  "probability_mass": 0.0,
+                  "provisional_hands": 0,
+                  "weighted_categories": null,
+                  "weighted_category_loss": null,
+                  "weighted_score": null,
+                  "weighted_score_loss": null
+                }
+              },
+              "starter": {
+                "=0": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 13,
+                  "hands": 13,
+                  "mass_share_of_evaluated": 0.90894901144641,
+                  "normalized_weighted_score": 3.263451631368059,
+                  "probability_mass": 0.538961532382585,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.43216943331425295,
+                    "follow_up_value": 2.8312821980538065,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 3.263451631368059,
+                  "weighted_score_loss": null
+                },
+                ">=1": {
+                  "complete_fraction": 1.0,
+                  "evaluated_hands": 3,
+                  "hands": 3,
+                  "mass_share_of_evaluated": 0.09105098855359,
+                  "normalized_weighted_score": 3.8214285714285716,
+                  "probability_mass": 0.053988705304494775,
+                  "provisional_hands": 0,
+                  "weighted_categories": {
+                    "board_value": 0.0,
+                    "follow_up_value": 3.8214285714285716,
+                    "interaction_value": 0.0,
+                    "survival_value": 0.0
+                  },
+                  "weighted_category_loss": null,
+                  "weighted_score": 3.8214285714285716,
+                  "weighted_score_loss": null
+                }
+              }
+            },
+            "conditional_bucket_deltas": {
+              "kind": "conditional_association",
+              "note": "Adjacent joint-bucket score differences are observational. Use extender counterfactual replacement for interventional card contribution.",
+              "starter_extender": {
+                "starter>=1,extender=1_minus_starter>=1,extender=0": {
+                  "from": "starter>=1,extender=0",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender=1"
+                },
+                "starter>=1,extender=2_minus_starter>=1,extender=1": {
+                  "from": "starter>=1,extender=1",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender=2"
+                },
+                "starter>=1,extender>=3_minus_starter>=1,extender=2": {
+                  "from": "starter>=1,extender=2",
+                  "kind": "conditional_association",
+                  "normalized_weighted_score_delta": null,
+                  "note": "Missing bucket mean; observational delta undefined. Not a counterfactual card replacement.",
+                  "to": "starter>=1,extender>=3"
+                }
+              }
+            },
+            "joint": {
+              "starter>=1,extender=0": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              },
+              "starter>=1,extender=1": {
+                "complete_fraction": 1.0,
+                "evaluated_hands": 3,
+                "hands": 3,
+                "mass_share_of_evaluated": 0.09105098855359,
+                "normalized_weighted_score": 3.8214285714285716,
+                "probability_mass": 0.053988705304494775,
+                "provisional_hands": 0,
+                "weighted_categories": {
+                  "board_value": 0.0,
+                  "follow_up_value": 3.8214285714285716,
+                  "interaction_value": 0.0,
+                  "survival_value": 0.0
+                },
+                "weighted_category_loss": null,
+                "weighted_score": 3.8214285714285716,
+                "weighted_score_loss": null
+              },
+              "starter>=1,extender=2": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              },
+              "starter>=1,extender>=3": {
+                "complete_fraction": null,
+                "evaluated_hands": 0,
+                "hands": 0,
+                "mass_share_of_evaluated": 0.0,
+                "normalized_weighted_score": null,
+                "probability_mass": 0.0,
+                "provisional_hands": 0,
+                "weighted_categories": null,
+                "weighted_category_loss": null,
+                "weighted_score": null,
+                "weighted_score_loss": null
+              }
+            },
+            "sampling": {
+              "covers_full_deck_distribution": false,
+              "evaluated_hands": 16,
+              "evaluated_probability_mass": 0.5929502376870798,
+              "mode": "unique_hands_sample",
+              "note": "evaluated_probability_mass sums hypergeometric P(h) over evaluated unique hands only. It is not a full-deck fraction. normalized_weighted_score / evaluated_sample_* rates renormalize within evaluated mass. Do not read those rates as exact deck-wide percentages unless coverage is independently complete.",
+              "raw_probability_mass": 0.5929502376870798
+            }
+          },
+          "layer": "solver_outcomes",
+          "summary": {
+            "complete_fraction": 1.0,
+            "evaluated_hands": 16,
+            "hands": 16,
+            "mass_share_of_evaluated": 1.0,
+            "normalized_weighted_score": 3.314255983350676,
+            "probability_mass": 0.5929502376870798,
+            "provisional_hands": 0,
+            "weighted_categories": {
+              "board_value": 0.39281997918834544,
+              "follow_up_value": 2.9214360041623313,
+              "interaction_value": 0.0,
+              "survival_value": 0.0
+            },
+            "weighted_category_loss": null,
+            "weighted_score": 3.314255983350676,
+            "weighted_score_loss": null
+          },
+          "utility_distribution": {
+            "covers_full_deck_distribution": false,
+            "evaluated_probability_mass": 0.5929502376870798,
+            "thresholds": {
+              "10": {
+                "evaluated_sample_success_rate": 0.01040582726326743,
+                "predicate": "U >= 10.0",
+                "probability_mass": 0.006170137749085118,
+                "threshold": 10.0
+              },
+              "15": {
+                "evaluated_sample_success_rate": 0.0,
+                "predicate": "U >= 15.0",
+                "probability_mass": 0,
+                "threshold": 15.0
+              },
+              "5": {
+                "evaluated_sample_success_rate": 0.26274713839750263,
+                "predicate": "U >= 5.0",
+                "probability_mass": 0.15579597816439922,
+                "threshold": 5.0
+              }
+            },
+            "weighted_mean": 3.314255983350676,
+            "weighted_median": 1.5,
+            "weighted_p10": 1.25,
+            "weighted_p25": 1.25,
+            "weighted_p75": 5.25,
+            "weighted_p90": 8.25
+          }
+        }
+      },
+      "expected_utility": null,
+      "floor_over_configured_interruptions": {
+        "definition": "Floor(H) = min over configured interruptions of U(H, i)",
+        "summary": {
+          "complete_fraction": 1.0,
+          "evaluated_hands": 16,
+          "hands": 16,
+          "mass_share_of_evaluated": 1.0,
+          "normalized_weighted_score": 2.9162330905306972,
+          "probability_mass": 0.5929502376870798,
+          "provisional_hands": 0,
+          "weighted_categories": {
+            "board_value": 0.39281997918834544,
+            "follow_up_value": 2.9214360041623313,
+            "interaction_value": 0.0,
+            "survival_value": 0.0
+          },
+          "weighted_category_loss": null,
+          "weighted_score": 2.9162330905306972,
+          "weighted_score_loss": null
+        },
+        "utility_distribution": {
+          "covers_full_deck_distribution": false,
+          "evaluated_probability_mass": 0.5929502376870798,
+          "thresholds": {
+            "10": {
+              "evaluated_sample_success_rate": 0.01040582726326743,
+              "predicate": "U >= 10.0",
+              "probability_mass": 0.006170137749085118,
+              "threshold": 10.0
+            },
+            "15": {
+              "evaluated_sample_success_rate": 0.0,
+              "predicate": "U >= 15.0",
+              "probability_mass": 0,
+              "threshold": 15.0
+            },
+            "5": {
+              "evaluated_sample_success_rate": 0.18210197710718,
+              "predicate": "U >= 5.0",
+              "probability_mass": 0.10797741060898955,
+              "threshold": 5.0
+            }
+          },
+          "weighted_mean": 2.9162330905306972,
+          "weighted_median": 1.5,
+          "weighted_p10": 1.25,
+          "weighted_p25": 1.25,
+          "weighted_p75": 4.25,
+          "weighted_p90": 6.25
+        }
+      }
+    },
+    "success_thresholds": [
+      5.0,
+      10.0,
+      15.0
+    ],
+    "terminology": {
+      "ceiling": "Ceiling(H) = U(H, no_interruption).",
+      "conditional_association_vs_counterfactual": "Bucket deltas are observational associations. Extender replacement analysis is the interventional counterpart.",
+      "floor": "Floor(H) = min_i U(H, i) over the configured/evaluated interruption set only.",
+      "hand_features": "Role counts and overlaps (input composition).",
+      "interruption_loss": "Loss(H, I) = Ceiling(H) - U(H, I).",
+      "playable_at_threshold": "Playable_T(H, I) := U(H, I) >= T with T explicit/configurable.",
+      "principle": "Every analytical term maps to an observable quantity, explicit mathematical function, or configurable predicate.",
+      "solver_outcomes": "U(H, I) and category scores from search."
+    }
+  },
+  "reports": {
+    "ash": {
+      "hands": [
+        {
+          "baseline_score": 4.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 4.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 4.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 4.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "baseline_score": 1.5,
+          "categories": {
+            "board_value": 0.5,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.5
+          },
+          "category_deltas": {
+            "board_value": 0.0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              82489470
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            82489470,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "baseline_score": 8.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 8.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": false,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "extender_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "recovery_count": 1,
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1,
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ],
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement",
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 69
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": false,
+            "extender_count": 1,
+            "garnets": [],
+            "recovery_count": 1,
+            "role_counts": {
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              55273560,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 37
+        },
+        {
+          "baseline_score": 5.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 5.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 5.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 5.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 62
+        },
+        {
+          "baseline_score": 1.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 1.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.21657183499288762,
+          "score": 1.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 3
+        },
+        {
+          "baseline_score": 1.5,
+          "categories": {
+            "board_value": 0.5,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.5
+          },
+          "category_deltas": {
+            "board_value": 0.0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "baseline_score": 8.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 8.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 66
+        },
+        {
+          "baseline_score": 8.0,
+          "categories": {
+            "board_value": 0.5,
+            "follow_up_value": 3.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.5
+          },
+          "category_deltas": {
+            "board_value": 3.5,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              82489470
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.5,
+          "score_loss": 4.5,
+          "turn_order": "first",
+          "visited_states": 365
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              82489470,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "baseline_score": 6.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 6.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 6.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 6.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 9
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 9
+        },
+        {
+          "baseline_score": 7.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 7.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 7.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              60303688,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            60303688,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 7.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 62
+        },
+        {
+          "baseline_score": 8.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 4.0,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              60303688,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            60303688,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "score_loss": 5.0,
+          "turn_order": "first",
+          "visited_states": 320
+        },
+        {
+          "baseline_score": 10.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 10.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 10.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              45883110,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            45883110,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 10.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 118
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": false,
+            "extender_count": 1,
+            "garnets": [],
+            "recovery_count": 1,
+            "role_counts": {
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19304410,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "ash",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 37
+        }
+      ],
+      "summary": {
+        "brick_fraction": 0.8125,
+        "complete_fraction": 1.0,
+        "hands": 16,
+        "paired_hands": 16,
+        "provisional_hands": 0,
+        "weighted_categories": {
+          "board_value": 0.07544224765868887,
+          "follow_up_value": 2.8407908428720083,
+          "interaction_value": 0.0,
+          "survival_value": 0.0
+        },
+        "weighted_category_loss": {
+          "board_value": 0.3173777315296566,
+          "follow_up_value": 0.08064516129032259,
+          "interaction_value": 0.0,
+          "survival_value": 0.0
+        },
+        "weighted_score": 2.9162330905306972,
+        "weighted_score_loss": 0.3980228928199792
+      }
+    },
+    "impermanence": {
+      "hands": [
+        {
+          "baseline_score": 4.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 4.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 4.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 4.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 35
+        },
+        {
+          "baseline_score": 1.5,
+          "categories": {
+            "board_value": 0.5,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.5
+          },
+          "category_deltas": {
+            "board_value": 0.0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              82489470
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            82489470,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 35
+        },
+        {
+          "baseline_score": 8.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 8.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": false,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "extender_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "recovery_count": 1,
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1,
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ],
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement",
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 142
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": false,
+            "extender_count": 1,
+            "garnets": [],
+            "recovery_count": 1,
+            "role_counts": {
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              55273560,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 108
+        },
+        {
+          "baseline_score": 5.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 5.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 5.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 5.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 96
+        },
+        {
+          "baseline_score": 1.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 1.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.21657183499288762,
+          "score": 1.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 3
+        },
+        {
+          "baseline_score": 1.5,
+          "categories": {
+            "board_value": 0.5,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.5
+          },
+          "category_deltas": {
+            "board_value": 0.0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 35
+        },
+        {
+          "baseline_score": 8.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 8.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "impermanence",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 100
+        },
+        {
+          "baseline_score": 8.0,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 6.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 6.0
+          },
+          "category_deltas": {
+            "board_value": 4.0,
+            "follow_up_value": -2.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              87746184,
+              82489470,
+              30271097
+            ],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              17751597
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.006170137749085118,
+          "score": 6.0,
+          "score_loss": 2.0,
+          "turn_order": "first",
+          "visited_states": 454
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              82489470,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 35
+        },
+        {
+          "baseline_score": 6.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 6.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 6.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 6.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 9
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 9
+        },
+        {
+          "baseline_score": 7.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 7.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 7.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              60303688,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            60303688,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.006170137749085118,
+          "score": 7.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 96
+        },
+        {
+          "baseline_score": 8.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 4.0,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              60303688,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            60303688,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "score_loss": 5.0,
+          "turn_order": "first",
+          "visited_states": 376
+        },
+        {
+          "baseline_score": 10.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 10.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 10.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": true,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              45883110,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            45883110,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.006170137749085118,
+          "score": 10.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 159
+        },
+        {
+          "baseline_score": 3.25,
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "category_deltas": {
+            "board_value": 0,
+            "follow_up_value": 0.0,
+            "interaction_value": 0,
+            "survival_value": 0.0
+          },
+          "classification": {
+            "brick": false,
+            "extender_count": 1,
+            "garnets": [],
+            "recovery_count": 1,
+            "role_counts": {
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19304410,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "impermanence",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "score_loss": 0.0,
+          "turn_order": "first",
+          "visited_states": 108
+        }
+      ],
+      "summary": {
+        "brick_fraction": 0.8125,
+        "complete_fraction": 1.0,
+        "hands": 16,
+        "paired_hands": 16,
+        "provisional_hands": 0,
+        "weighted_categories": {
+          "board_value": 0.07023933402705515,
+          "follow_up_value": 2.872008324661811,
+          "interaction_value": 0.0,
+          "survival_value": 0.0
+        },
+        "weighted_category_loss": {
+          "board_value": 0.32258064516129037,
+          "follow_up_value": 0.049427679500520294,
+          "interaction_value": 0.0,
+          "survival_value": 0.0
+        },
+        "weighted_score": 2.9422476586888657,
+        "weighted_score_loss": 0.37200832466181066
+      }
+    },
+    "none": {
+      "hands": [
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 4.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 4.25
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 4.25,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "categories": {
+            "board_value": 0.5,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.5
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              82489470
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            82489470,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 8.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.25
+          },
+          "classification": {
+            "brick": false,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "extender_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "recovery_count": 1,
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1,
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ],
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement",
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "turn_order": "first",
+          "visited_states": 59
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "classification": {
+            "brick": false,
+            "extender_count": 1,
+            "garnets": [],
+            "recovery_count": 1,
+            "role_counts": {
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              55273560,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            55273560,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "turn_order": "first",
+          "visited_states": 27
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 5.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 5.25
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 5.25,
+          "turn_order": "first",
+          "visited_states": 55
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 1.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.25
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            91152256,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.21657183499288762,
+          "score": 1.25,
+          "turn_order": "first",
+          "visited_states": 3
+        },
+        {
+          "categories": {
+            "board_value": 0.5,
+            "follow_up_value": 1.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 1.5
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              19304410
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 1.5,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 8.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.25
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            91152256,
+            91152256,
+            91152256,
+            95515789
+          ],
+          "interruption": "none",
+          "probability": 0.006170137749085118,
+          "score": 8.25,
+          "turn_order": "first",
+          "visited_states": 59
+        },
+        {
+          "categories": {
+            "board_value": 4.0,
+            "follow_up_value": 4.0,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.0
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              41373230,
+              82489470,
+              30271097
+            ],
+            "hand": [
+              91152256,
+              91152256,
+              91152256,
+              95515789
+            ],
+            "monster": [
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.006170137749085118,
+          "score": 8.0,
+          "turn_order": "first",
+          "visited_states": 319
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19096726,
+              82489470,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19096726,
+            82489470,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "turn_order": "first",
+          "visited_states": 11
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 6.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 6.25
+          },
+          "classification": {
+            "brick": true,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 6.25,
+          "turn_order": "first",
+          "visited_states": 9
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "classification": {
+            "brick": true,
+            "extender_count": 1,
+            "garnets": [],
+            "role_counts": {
+              "extender": 1
+            },
+            "role_overlaps": {},
+            "roles_present": [
+              "extender"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              30271097,
+              91152256,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            30271097,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 3.25,
+          "turn_order": "first",
+          "visited_states": 9
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 7.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 7.25
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              45883110,
+              60303688,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            45883110,
+            60303688,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.006170137749085118,
+          "score": 7.25,
+          "turn_order": "first",
+          "visited_states": 55
+        },
+        {
+          "categories": {
+            "board_value": 4.0,
+            "follow_up_value": 4.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 8.25
+          },
+          "classification": {
+            "brick": true,
+            "garnets": [],
+            "role_counts": {},
+            "role_overlaps": {},
+            "roles_present": []
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [
+              41373230,
+              60303688,
+              30271097
+            ],
+            "hand": [
+              91152256,
+              95515789,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [
+              45883110
+            ],
+            "spell_trap": []
+          },
+          "hand": [
+            60303688,
+            91152256,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.04164842980632454,
+          "score": 8.25,
+          "turn_order": "first",
+          "visited_states": 303
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 10.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 10.25
+          },
+          "classification": {
+            "brick": true,
+            "brick_count": 1,
+            "engine_requirement_count": 1,
+            "garnets": [
+              17751597
+            ],
+            "role_counts": {
+              "brick": 1,
+              "engine_requirement": 1
+            },
+            "role_overlaps": {
+              "17751597": [
+                "brick",
+                "engine_requirement"
+              ]
+            },
+            "roles_present": [
+              "brick",
+              "engine_requirement"
+            ]
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              17751597,
+              45883110,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            17751597,
+            45883110,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.006170137749085118,
+          "score": 10.25,
+          "turn_order": "first",
+          "visited_states": 111
+        },
+        {
+          "categories": {
+            "board_value": 0,
+            "follow_up_value": 3.25,
+            "interaction_value": 0,
+            "survival_value": 0.0,
+            "total_score": 3.25
+          },
+          "classification": {
+            "brick": false,
+            "extender_count": 1,
+            "garnets": [],
+            "recovery_count": 1,
+            "role_counts": {
+              "extender": 1,
+              "recovery": 1,
+              "starter": 1
+            },
+            "role_overlaps": {
+              "55273560": [
+                "extender",
+                "recovery",
+                "starter"
+              ]
+            },
+            "roles_present": [
+              "extender",
+              "recovery",
+              "starter"
+            ],
+            "starter_count": 1
+          },
+          "complete": true,
+          "endboard": {
+            "banished": [],
+            "grave": [],
+            "hand": [
+              19304410,
+              55273560,
+              91152256,
+              91152256,
+              91152256
+            ],
+            "monster": [],
+            "spell_trap": []
+          },
+          "hand": [
+            19304410,
+            55273560,
+            91152256,
+            91152256,
+            91152256
+          ],
+          "interruption": "none",
+          "probability": 0.006170137749085118,
+          "score": 3.25,
+          "turn_order": "first",
+          "visited_states": 27
+        }
+      ],
+      "summary": {
+        "brick_fraction": 0.8125,
+        "complete_fraction": 1.0,
+        "hands": 16,
+        "provisional_hands": 0,
+        "weighted_categories": {
+          "board_value": 0.39281997918834544,
+          "follow_up_value": 2.9214360041623313,
+          "interaction_value": 0.0,
+          "survival_value": 0.0
+        },
+        "weighted_score": 3.314255983350676
+      }
+    }
+  },
+  "role_density": {
+    "brick": {
+      "hand_size": 5,
+      "opening_at_least_probability": {
+        "0": 1.0,
+        "1": 0.125
+      },
+      "opening_count_probability": {
+        "0": 0.875,
+        "1": 0.125
+      },
+      "role_copies_in_deck": 1
+    },
+    "extender": {
+      "hand_size": 5,
+      "opening_at_least_probability": {
+        "0": 1.0,
+        "1": 0.3375506072874494,
+        "2": 0.03643724696356276,
+        "3": 0.0010121457489878543
+      },
+      "opening_count_probability": {
+        "0": 0.6624493927125507,
+        "1": 0.30111336032388664,
+        "2": 0.0354251012145749,
+        "3": 0.0010121457489878543
+      },
+      "role_copies_in_deck": 3
+    },
+    "interaction": {
+      "hand_size": 5,
+      "opening_at_least_probability": {
+        "0": 1.0
+      },
+      "opening_count_probability": {
+        "0": 1.0
+      },
+      "role_copies_in_deck": 0
+    },
+    "recovery": {
+      "hand_size": 5,
+      "opening_at_least_probability": {
+        "0": 1.0,
+        "1": 0.125
+      },
+      "opening_count_probability": {
+        "0": 0.875,
+        "1": 0.125
+      },
+      "role_copies_in_deck": 1
+    },
+    "starter": {
+      "hand_size": 5,
+      "opening_at_least_probability": {
+        "0": 1.0,
+        "1": 0.2371794871794872,
+        "2": 0.01282051282051282
+      },
+      "opening_count_probability": {
+        "0": 0.7628205128205128,
+        "1": 0.22435897435897437,
+        "2": 0.01282051282051282
+      },
+      "role_copies_in_deck": 2
+    }
+  }
+}

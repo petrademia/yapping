@@ -15,6 +15,7 @@ from matchup_config import load_config
 from search_opening import run_search
 from trace_albaz_combo import ROOT, SCRIPTS
 from yapping import SearchStats, report_provenance
+from yapping._ocgcore import Duel
 from yapping.benchmark import aggregate_budget_rows, summarize_search_stats
 
 
@@ -29,7 +30,7 @@ def load_benchmark(path=None):
     return data
 
 
-def run_case(scenario, *, max_nodes, max_depth, config, replay_mode):
+def run_case(scenario, *, max_nodes, max_depth, config, replay_mode, adapter):
     stats = SearchStats()
     started = time.perf_counter()
     result, final, _ = run_search(
@@ -40,6 +41,7 @@ def run_case(scenario, *, max_nodes, max_depth, config, replay_mode):
         ecclesia_copies=int(scenario.get("ecclesia_copies", 1)),
         config=config,
         replay_mode=replay_mode,
+        adapter=adapter,
         stats=stats,
     )
     runtime = time.perf_counter() - started
@@ -56,6 +58,10 @@ def run_case(scenario, *, max_nodes, max_depth, config, replay_mode):
         "score": result.score,
         "best_line_length": len(result.actions),
         "runtime_seconds": runtime,
+        "ms_per_visited_state": (
+            (runtime * 1000.0 / result.visited_states)
+            if result.visited_states else None
+        ),
         "search_stats": summarize_search_stats(stats.as_dict()),
         "endboard": final.zones,
     }
@@ -68,16 +74,22 @@ def run_benchmark(benchmark, config=None):
     replay_mode = benchmark.get("replay_mode", "cursor")
     max_depth = int(benchmark.get("max_depth", 180))
     budgets = [int(value) for value in benchmark.get("node_budgets", (1000, 5000, 10000, 50000))]
+    # OCGCore permits only one live adapter; reuse across the sweep.
+    adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     rows = []
-    for scenario in benchmark["scenarios"]:
-        for max_nodes in budgets:
-            rows.append(run_case(
-                scenario,
-                max_nodes=max_nodes,
-                max_depth=max_depth,
-                config=config,
-                replay_mode=replay_mode,
-            ))
+    try:
+        for scenario in benchmark["scenarios"]:
+            for max_nodes in budgets:
+                rows.append(run_case(
+                    scenario,
+                    max_nodes=max_nodes,
+                    max_depth=max_depth,
+                    config=config,
+                    replay_mode=replay_mode,
+                    adapter=adapter,
+                ))
+    finally:
+        del adapter
     complete = all(row["complete"] for row in rows)
     return {
         "benchmark": benchmark.get("name"),
@@ -94,6 +106,8 @@ def run_benchmark(benchmark, config=None):
         "metrics_note": (
             "Branching is search-relevant legal-action count after skip/dedup in "
             "search_opening.legal. Runtime includes replay reconstruction. "
+            "ms_per_visited_state is a coarse replay+search overhead proxy, not a "
+            "separated replay/eval/legal timing split. "
             "future_guided_comparison fields stay null until Level 8 guidance exists."
         ),
         "oracle_data_readiness": {

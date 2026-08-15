@@ -90,6 +90,10 @@ cutoffs, transposition hits/misses, runtime, completeness, and score across
 node budgets. Future policy-guided comparisons must reuse the same
 `scenario_id` values; `future_guided_comparison` fields stay null until Level 8.
 
+Empirical readiness writeup: `reports/level7_readiness.md` (with data under
+`reports/data/`). Recommendation there is evidence-based and may be
+**CONDITIONAL GO** rather than an automatic advance to training.
+
 ### Oracle data readiness (Level 6)
 
 `tools/training_data.py` can export versioned examples with state, legal
