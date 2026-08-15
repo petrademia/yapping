@@ -1,8 +1,0 @@
-{
-  "name": "BrandedEndboardReach-v1",
-  "base": "../albaz.json",
-  "opening_hand": [73819701, 55273560, 91152256, 91152256, 91152256],
-  "target_endboard": [44146295, 17751597, 55273560],
-  "terminal_turn": 1,
-  "max_steps": 80
-}

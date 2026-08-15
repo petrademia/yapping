@@ -6,6 +6,7 @@ import json
 from analyze_ash import (CARD_WEIGHTS, ReplayCursor, action_name,
                           endboard_score, evaluation_context, replay,
                           score_breakdown)
+from recovery_report import build_recovery_report, format_recovery_report
 from trace_albaz_combo import (
     ASH_BLOSSOM,
     CELTIC_GUARDIAN,
@@ -15,6 +16,7 @@ from trace_albaz_combo import (
     INFINITE_IMPERMANENCE,
     NIBIRU,
     card_id,
+    fixture_deck,
     INCREDIBLE_ECCLESIA,
     ROOT,
     SCRIPTS,
@@ -87,9 +89,9 @@ def terminal(snapshot, config):
     return snapshot.decision["turn"] >= config.get("terminal_turn", 2)
 
 
-def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
-           ecclesia_copies=1, recovery_only=False, config=None,
-           replay_mode="cursor", adapter=None, controlled_player=0):
+def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
+               ecclesia_copies=1, recovery_only=False, config=None,
+               replay_mode="cursor", adapter=None, controlled_player=0):
     config = config or load_config()
     config = {**config, "controlled_player": controlled_player}
     matchup = config if config.get("opponent_deck") else None
@@ -110,6 +112,15 @@ def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=Non
         max_nodes=max_nodes,
     )
     final = replay_fn(result.actions)
+    return result, final, config
+
+
+def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
+           ecclesia_copies=1, recovery_only=False, config=None,
+           replay_mode="cursor", adapter=None, controlled_player=0):
+    result, final, config = run_search(
+        interruption, max_nodes, max_depth, opening_hand, ecclesia_copies,
+        recovery_only, config, replay_mode, adapter, controlled_player)
     print(f"Opening-hand minimax against known {interruption}")
     if opening_hand is not None:
         print("opening hand: " + ", ".join(map(str, opening_hand)))
@@ -136,6 +147,64 @@ def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=Non
     return result, final
 
 
+def search_recovery_report(interruption="ash", max_nodes=20_000, max_depth=180,
+                           opening_hand=None, ecclesia_copies=1, recovery_only=False,
+                           config=None, replay_mode="cursor", adapter=None,
+                           controlled_player=0):
+    """Pair uninterrupted ceiling with the interrupted line and print attribution."""
+    config = config or load_config()
+    adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    if interruption == "none":
+        result, final, config = run_search(
+            interruption, max_nodes, max_depth, opening_hand, ecclesia_copies,
+            recovery_only, config, replay_mode, adapter, controlled_player)
+        ceiling_score = interrupted_score = result.score
+        ceiling_complete = interrupted_complete = result.complete
+    else:
+        ceiling_result, _, config = run_search(
+            "none", max_nodes, max_depth, opening_hand, ecclesia_copies,
+            recovery_only, config, replay_mode, adapter, controlled_player)
+        result, final, config = run_search(
+            interruption, max_nodes, max_depth, opening_hand, ecclesia_copies,
+            recovery_only, config, replay_mode, adapter, controlled_player)
+        ceiling_score = ceiling_result.score
+        interrupted_score = result.score
+        ceiling_complete = ceiling_result.complete
+        interrupted_complete = result.complete
+    hand = list(opening_hand) if opening_hand is not None else list(
+        (config.get("main_deck") or fixture_deck())[:5])
+    report = build_recovery_report(
+        opening_hand=hand,
+        interruption=interruption,
+        ceiling_score=ceiling_score,
+        interrupted_score=interrupted_score,
+        ceiling_complete=ceiling_complete,
+        interrupted_complete=interrupted_complete,
+        actions=final.actions,
+        endboard=final.zones,
+        score_breakdown=score_breakdown(final, config["weights"]),
+        config=config,
+    )
+    print(f"Opening-hand minimax recovery report against known {interruption}")
+    if opening_hand is not None:
+        print("opening hand: " + ", ".join(map(str, opening_hand)))
+    print(f"Ecclesia copies: {ecclesia_copies}")
+    print(f"recovery-only: {recovery_only}")
+    print(f"replay-mode: {replay_mode}")
+    print(f"turn-order: {'first' if controlled_player == 0 else 'second'}")
+    print("provenance: " + json.dumps(report_provenance(
+        database=ROOT / "assets/cards.cdb",
+        scripts=SCRIPTS,
+        max_nodes=max_nodes,
+        max_depth=max_depth,
+        complete=report["complete"],
+        revision_root=ROOT,
+    ), sort_keys=True))
+    print(format_recovery_report(report))
+    print("evaluation context: " + json.dumps(evaluation_context(final, config=config), sort_keys=True))
+    return result, final, report
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("interruption", choices=CARDS, default="ash", nargs="?")
@@ -144,9 +213,17 @@ if __name__ == "__main__":
     parser.add_argument("--hand", type=card_id, nargs=5, metavar="CARD")
     parser.add_argument("--ecclesia-copies", type=int, default=1)
     parser.add_argument("--recovery-only", action="store_true")
+    parser.add_argument("--recovery-report", action="store_true")
     parser.add_argument("--config", type=str)
     parser.add_argument("--replay-mode", choices=["cursor", "oracle"], default="cursor")
     arguments = parser.parse_args()
-    search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
-           arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
-           load_config(arguments.config), arguments.replay_mode)
+    config = load_config(arguments.config)
+    if arguments.recovery_report:
+        search_recovery_report(
+            arguments.interruption, arguments.max_nodes, arguments.max_depth,
+            arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
+            config, arguments.replay_mode)
+    else:
+        search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
+               arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
+               config, arguments.replay_mode)
