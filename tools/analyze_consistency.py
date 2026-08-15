@@ -15,7 +15,13 @@ from analyze_ash import score_categories
 from search_opening import search
 from trace_albaz_combo import ROOT, SCRIPTS
 from yapping._ocgcore import Duel
-from yapping import hand_features, normalize_card_roles, report_provenance
+from yapping import (
+    conditioned_hand_utility,
+    hand_features,
+    normalize_card_roles,
+    report_provenance,
+    role_density_opening_profile,
+)
 
 
 _worker_adapter = None
@@ -226,6 +232,11 @@ if __name__ == "__main__":
     parser.add_argument("--max-depth", type=int, default=40)
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--extenders", action="store_true")
+    parser.add_argument(
+        "--conditioned",
+        action="store_true",
+        help="add role-conditioned utility summaries (and role-density opening profile)",
+    )
     args = parser.parse_args()
     config = load_config(args.config)
     hands = list(sample_hands(config["main_deck"], args.hands, args.seed))
@@ -255,12 +266,24 @@ if __name__ == "__main__":
             raise ValueError("--extenders currently requires --workers 1")
         add_extender_marginals(reports, config, args.max_nodes, args.max_depth)
         aggregate_extenders(reports)
+    conditioned = None
+    role_density = None
+    if args.conditioned:
+        conditioned = {
+            name: conditioned_hand_utility(report["hands"])
+            for name, report in reports.items()
+        }
+        card_roles = normalize_card_roles(config.get("card_roles"))
+        if card_roles:
+            role_density = role_density_opening_profile(
+                config["main_deck"], card_roles
+            )
     complete = all(
         row["complete"]
         for report in reports.values()
         for row in report["hands"]
     )
-    print(json.dumps({
+    payload = {
         "config": config["name"],
         "provenance": report_provenance(
             database=ROOT / "assets/cards.cdb", scripts=SCRIPTS,
@@ -268,5 +291,9 @@ if __name__ == "__main__":
             complete=complete, revision_root=ROOT,
         ),
         "reports": reports,
-    },
-                     indent=2, sort_keys=True))
+    }
+    if conditioned is not None:
+        payload["conditioned"] = conditioned
+    if role_density is not None:
+        payload["role_density"] = role_density
+    print(json.dumps(payload, indent=2, sort_keys=True))
