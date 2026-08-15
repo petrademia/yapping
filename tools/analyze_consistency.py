@@ -15,7 +15,7 @@ from analyze_ash import score_categories
 from search_opening import search
 from trace_albaz_combo import ROOT, SCRIPTS
 from yapping._ocgcore import Duel
-from yapping import report_provenance
+from yapping import hand_features, normalize_card_roles, report_provenance
 
 
 _worker_adapter = None
@@ -44,12 +44,22 @@ def sample_hands(deck, amount, seed):
 
 
 def classify(hand, config):
+    """Legacy brick/garnet labels plus optional multi-label role features."""
     anchors = set(config.get("anchors", []))
     garnets = set(config.get("garnets", []))
-    return {
+    result = {
         "brick": not bool(anchors.intersection(hand)),
         "garnets": sorted(garnets.intersection(hand)),
     }
+    card_roles = normalize_card_roles(config.get("card_roles"))
+    if card_roles:
+        features = hand_features(hand, card_roles)
+        result["role_counts"] = features["role_counts"]
+        result["roles_present"] = features["roles_present"]
+        result["role_overlaps"] = features["role_overlaps"]
+        for role, amount in features["role_counts"].items():
+            result[f"{role}_count"] = amount
+    return result
 
 
 def summarize(rows):

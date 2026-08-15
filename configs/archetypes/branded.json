@@ -138,6 +138,23 @@
     "card_advantage": 1,
     "garnet_penalty": 1
   },
+  "card_roles": {
+    "73819701": ["starter"],
+    "55273560": ["starter", "extender", "recovery"],
+    "95515789": ["extender", "brick"],
+    "30271097": ["extender"],
+    "17751597": ["brick", "engine_requirement"],
+    "68468459": ["brick"],
+    "62962630": ["starter"],
+    "44362883": ["starter"],
+    "84192580": ["starter"],
+    "1984618": ["starter", "engine_requirement"],
+    "14558127": ["interaction"],
+    "59438930": ["interaction"],
+    "94145021": ["interaction"],
+    "10045474": ["interaction"],
+    "23434538": ["interaction"]
+  },
   "metadata": {
     "format": "Master Duel",
     "engine": "OCGCore",
