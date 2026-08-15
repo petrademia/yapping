@@ -194,7 +194,7 @@ def minimax_replay(
             else:
                 beta = min(beta, best_score)
             if goal_score is not None and maximize and best_score >= goal_score:
-                return best_score, best_path, True, True
+                return best_score, best_path, False, True
             if beta <= alpha:
                 if collector is not None:
                     collector.cutoffs += 1

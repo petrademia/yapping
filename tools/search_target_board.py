@@ -11,6 +11,7 @@ from target_board import (
     ProgressClock,
     ZONES,
     build_report,
+    choose_result,
     coverage,
     parse_targets,
     validate_hand_in_deck,
@@ -112,7 +113,7 @@ def main(argv=None):
         on_leaf=on_leaf,
     )
     info = coverage(final.zones, targets)
-    emit(build_report(
+    search_payload = build_report(
         event="result",
         coverage_info=info,
         targets=targets,
@@ -124,7 +125,14 @@ def main(argv=None):
         complete=result.complete,
         max_nodes=args.max_nodes,
         max_depth=args.max_depth,
-    ))
+    )
+    best_score, best_payload = clock.best if clock.best is not None else (None, None)
+    payload = dict(choose_result(info["coverage"], search_payload, best_score, best_payload))
+    payload["event"] = "result"
+    payload["visited_states"] = result.visited_states
+    payload["elapsed_seconds"] = time.monotonic() - started
+    payload["complete"] = result.complete
+    emit(payload)
     return 0
 
 

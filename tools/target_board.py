@@ -104,6 +104,17 @@ def build_report(
     }
 
 
+def choose_result(
+    search_coverage: float,
+    search_payload: dict[str, Any],
+    best_score: float | None,
+    best_payload: dict[str, Any] | None,
+) -> dict[str, Any]:
+    if best_payload is not None and best_score is not None and best_score > search_coverage:
+        return best_payload
+    return search_payload
+
+
 class ProgressClock:
     """Track the best leaf and emit it every interval_seconds (0 disables dumps)."""
 

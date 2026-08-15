@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).parents[1] / "tools"))
 from target_board import (  # noqa: E402
     ProgressClock,
     build_report,
+    choose_result,
     coverage,
     parse_target,
     parse_targets,
@@ -185,7 +186,20 @@ def test_progress_clock_keeps_higher_score():
     assert clock.best[1]["coverage"] == 2
 
 
-import argparse
+def test_choose_result_prefers_clock_best_when_coverage_is_higher():
+    search = {"event": "result", "coverage": 1, "actions": ["search"]}
+    best = {"event": "progress", "coverage": 2, "actions": ["best"]}
+    assert choose_result(1, search, 2.0, best) is best
+
+
+def test_choose_result_keeps_search_when_best_is_missing_or_not_better():
+    search = {"event": "result", "coverage": 2, "actions": ["search"]}
+    best = {"event": "progress", "coverage": 2, "actions": ["best"]}
+    assert choose_result(2, search, None, None) is search
+    assert choose_result(2, search, 2.0, best) is search
+    assert choose_result(2, search, 1.0, best) is search
+
+
 from search_target_board import build_parser, main  # noqa: E402
 
 

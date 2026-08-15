@@ -158,3 +158,4 @@ def test_minimax_goal_score_stops_at_first_hit():
     )
     assert result.score >= 1.0
     assert result.visited_states < baseline.visited_states
+    assert result.complete is False
