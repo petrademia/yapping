@@ -92,7 +92,8 @@ def terminal(snapshot, config):
 def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
                ecclesia_copies=1, recovery_only=False, config=None,
                replay_mode="cursor", adapter=None, controlled_player=0,
-               stats=None):
+               stats=None, evaluate=None, is_terminal=None, goal_score=None,
+               on_leaf=None):
     config = config or load_config()
     config = {**config, "controlled_player": controlled_player}
     matchup = config if config.get("opponent_deck") else None
@@ -102,16 +103,22 @@ def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand
                           controlled_player)
     replay_fn = cursor if replay_mode == "cursor" else lambda path: replay(
         path, card, opening_hand, ecclesia_copies, adapter, matchup, controlled_player)
+    evaluate_fn = evaluate or (lambda snapshot: endboard_score(snapshot, config["weights"]))
+    terminal_fn = is_terminal or (
+        (lambda snapshot: recovery_terminal(snapshot, config)) if recovery_only
+        else lambda snapshot: terminal(snapshot, config)
+    )
     result = minimax_replay(
         replay_fn,
         lambda snapshot: legal(snapshot, config),
-        lambda snapshot: endboard_score(snapshot, config["weights"]),
-        (lambda snapshot: recovery_terminal(snapshot, config)) if recovery_only
-        else lambda snapshot: terminal(snapshot, config),
+        evaluate_fn,
+        terminal_fn,
         lambda snapshot: snapshot.decision["player"],
         max_depth=max_depth,
         max_nodes=max_nodes,
         stats=stats,
+        goal_score=goal_score,
+        on_leaf=on_leaf,
     )
     final = replay_fn(result.actions)
     return result, final, config

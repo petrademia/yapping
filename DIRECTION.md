@@ -74,7 +74,10 @@ Research workflow before advancing a method:
     baseline → measure bottleneck → hypothesis → smallest method → compare → decide
 
 Do not introduce MCTS, RL, or neural guidance merely because it is more
-advanced. Levels 0-2 are the inner solver spine. Level 3 is the outer loop
+advanced. Levels 0-2 are the inner solver spine. Level 1 includes a
+goal-conditioned mode: required endboard pieces, first-hit stop, and a
+best-partial result if the node budget hits first
+(`tools/search_target_board.py`). Level 3 is the outer loop
 (consistency sampling, role-conditioned and quantified utility) plus search
 complexity benchmarks that later ML must beat. Levels 4-5 are hidden-
 information search. Levels 6-10 consume the deterministic oracle. Level 11 is

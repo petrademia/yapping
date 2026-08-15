@@ -164,3 +164,41 @@ def test_progress_clock_keeps_higher_score():
     clock.note_leaf(2.0, {"coverage": 2})
     assert clock.best[0] == 2.0
     assert clock.best[1]["coverage"] == 2
+
+
+import argparse
+from search_target_board import build_parser  # noqa: E402
+
+
+def test_parser_requires_target_and_five_card_hand():
+    parser = build_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args([])
+    with pytest.raises(SystemExit):
+        parser.parse_args(["--target", "monster=44146295"])
+    args = parser.parse_args([
+        "--hand", "1", "2", "3", "4", "5",
+        "--target", "monster=44146295",
+    ])
+    assert args.hand == [1, 2, 3, 4, 5]
+    assert args.targets == ["monster=44146295"]
+    assert args.progress_every == 5.0
+
+
+def test_parser_rejects_unknown_zone():
+    parser = build_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args([
+            "--hand", "1", "2", "3", "4", "5",
+            "--target", "field=1",
+        ])
+
+
+def test_parser_rejects_negative_progress_every():
+    parser = build_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args([
+            "--hand", "1", "2", "3", "4", "5",
+            "--target", "monster=1",
+            "--progress-every", "-1",
+        ])
