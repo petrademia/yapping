@@ -12,6 +12,7 @@ from target_board import (  # noqa: E402
     coverage,
     parse_target,
     parse_targets,
+    validate_hand_in_deck,
     validate_targets_in_deck,
 )
 
@@ -88,6 +89,24 @@ def test_coverage_zero_is_valid_partial():
     assert result["coverage"] == 0
     assert result["complete_match"] is False
     assert result["missing"] == [{"zone": "monster", "card": MIRRORJADE}]
+
+
+def test_validate_hand_in_deck_accepts_subset():
+    validate_hand_in_deck([1, 2, 2, 3, 4, 5, 6], [1, 2, 2, 3, 4])
+
+
+def test_validate_hand_in_deck_rejects_missing_card():
+    with pytest.raises(ValueError):
+        validate_hand_in_deck([1, 2, 3, 4, 5], [1, 2, 3, 4, 99])
+    with pytest.raises(ValueError):
+        validate_hand_in_deck([1, 2, 3, 4, 5], [1, 2, 2, 3, 4])
+
+
+def test_validate_hand_in_deck_rejects_wrong_length():
+    with pytest.raises(ValueError):
+        validate_hand_in_deck([1, 2, 3, 4, 5, 6], [1, 2, 3, 4])
+    with pytest.raises(ValueError):
+        validate_hand_in_deck([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])
 
 
 def test_validate_targets_in_deck_rejects_card_absent_from_lists():
@@ -167,7 +186,7 @@ def test_progress_clock_keeps_higher_score():
 
 
 import argparse
-from search_target_board import build_parser  # noqa: E402
+from search_target_board import build_parser, main  # noqa: E402
 
 
 def test_parser_requires_target_and_five_card_hand():
@@ -202,3 +221,13 @@ def test_parser_rejects_negative_progress_every():
             "--target", "monster=1",
             "--progress-every", "-1",
         ])
+
+
+def test_main_missing_config_returns_2(capsys):
+    code = main([
+        "--config", "/no/such/config.json",
+        "--hand", "1", "2", "3", "4", "5",
+        "--target", "monster=1",
+    ])
+    assert code == 2
+    assert capsys.readouterr().err

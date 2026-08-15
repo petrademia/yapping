@@ -13,10 +13,10 @@ from target_board import (
     build_report,
     coverage,
     parse_targets,
+    validate_hand_in_deck,
     validate_targets_in_deck,
 )
 from trace_albaz_combo import card_id
-from yapping.hands import validate_hand_in_deck
 
 
 def _nonneg_float(value):
@@ -67,7 +67,7 @@ def main(argv=None):
         targets = parse_targets(args.targets, card_id)
         validate_hand_in_deck(config["main_deck"], args.hand)
         validate_targets_in_deck(config["main_deck"], config["extra_deck"], targets)
-    except ValueError as error:
+    except (ValueError, FileNotFoundError, OSError) as error:
         print(error, file=sys.stderr)
         return 2
 

@@ -49,6 +49,17 @@ def coverage(
     }
 
 
+def validate_hand_in_deck(deck: Sequence[int], hand: Sequence[int]) -> None:
+    if len(hand) != 5:
+        raise ValueError("hand must contain exactly 5 cards")
+    remaining = list(deck)
+    for card in hand:
+        try:
+            remaining.remove(card)
+        except ValueError:
+            raise ValueError(f"hand card {card} is not in this deck") from None
+
+
 def validate_targets_in_deck(
     main_deck: Sequence[int],
     extra_deck: Sequence[int],
