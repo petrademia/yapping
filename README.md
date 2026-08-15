@@ -282,9 +282,29 @@ python tools/analyze_monster_negation.py impermanence
 python tools/search_hidden_ash.py ash
 python tools/search_sampled_hidden.py ash
 python tools/analyze_consistency.py --hands 20
+python tools/analyze_consistency.py --hands 20 --conditioned
 python tools/compare_hidden.py ash
 python tools/verify_replay_equivalence.py ghost_ogre
 ```
+
+With `--conditioned`, the JSON report adds role-conditioned utility buckets
+(and a theoretical role-density opening profile when `card_roles` are set).
+Example shape for extender counts among evaluated hands:
+
+| Extender count | probability mass (evaluated) | weighted utility |
+| --- | --- | --- |
+| 0 | sum of P(h) in bucket | E[U \| extender=0] |
+| 1 | … | E[U \| extender=1] |
+| 2 | … | E[U \| extender=2] |
+| 3+ | … | E[U \| extender≥3] |
+
+Joint buckets such as `starter≥1, extender=1` answer “how useful is opening N
+extenders **given** a starter?”, not “what is the globally optimal number of
+extenders in the 40.” The latter needs changing the deck list and re-evaluating
+the induced hand distribution (Phase 3D/3E).
+
+Sampled unique hands report `raw_probability_mass` that typically is far below
+1.0; do not read bucket mass as a full-deck fraction.
 
 Output distinguishes proven searches from provisional node-limited evaluations. A score is not presented as optimal unless the search reports completion.
 
@@ -294,7 +314,7 @@ YAPPING separates tactical line selection from deck-level consistency.
 
 Inner problem: given an exact opening hand and opponent responses, choose the best legal line under the selected objective.
 
-Outer problem: across likely opening hands, measure how often the deck reaches a valuable board, survives disruption, bricks, or consumes too many garnets.
+Outer problem: across likely opening hands, measure how often the deck reaches a valuable board, survives disruption, bricks, or consumes too many garnets. Role-conditioned summaries estimate `E[U | hand features]` from solver rows; they do not yet optimize deck ratios.
 
 Current methods:
 
@@ -303,6 +323,7 @@ Current methods:
 - exact belief-state search for small hidden-world sets;
 - sampled determinization for larger hidden-world estimates;
 - hypergeometric weighting for opening-hand consistency;
+- multi-label card roles and conditioned hand-utility aggregation;
 - oracle-labelled data for later policy/value models.
 
 Monte Carlo Tree Search and learned policy/value models remain future stages. They should be evaluated against the deterministic oracle.

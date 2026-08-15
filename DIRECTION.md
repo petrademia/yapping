@@ -117,6 +117,9 @@ hypergeometric/combinatorial treatment for single-role counts; joint role
 events need careful enumeration because cards are drawn without replacement
 and one card can satisfy multiple roles.
 
+Status: role counts and single-role hypergeometric helpers exist; conditioned
+solver-utility aggregation over those features is the bridge into 3C.
+
 ### Phase 3C — Deck consistency evaluation
 
 Enumerate or sample opening hands (reusing `--hand` plumbing). Run the
@@ -125,10 +128,19 @@ results by hypergeometric probability; classify bricks/garnets (legacy) and
 role features. Report a consistency distribution, not a single number, and
 carry each hand's `complete` flag into the aggregate.
 
+`conditioned_hand_utility` summarizes `E[U | role composition]` over evaluated
+hands (including starter/extender joints and optional score-loss). Sampled
+unique-hand runs must report raw probability mass and must not claim full-deck
+coverage.
+
 ### Phase 3D — Card/ratio sensitivity
 
 Measure how utility changes when copy counts or role densities shift
 (counterfactuals such as extender replacement already exist; generalize).
+
+A first primitive is `role_density_opening_profile`: theoretical opening-count
+probabilities from deck role-copy counts, reported beside conditioned utility.
+Changing the list and re-running search remains the path to ratio decisions.
 
 ### Phase 3E — Deck composition optimization
 

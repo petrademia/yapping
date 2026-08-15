@@ -22,6 +22,14 @@ from .roles import (
     role_copies_in_deck,
     roles_for,
 )
+from .consistency import (
+    conditioned_hand_utility,
+    role_density_opening_profile,
+    summarize_by_predicate,
+    summarize_joint_conditions,
+    summarize_role_counts,
+    summarize_rows,
+)
 from .variants import DeckVariant, SlotCandidate
 
 __all__ = [
@@ -37,4 +45,6 @@ __all__ = [
     "DeckVariant", "SlotCandidate",
     "normalize_card_roles", "roles_for", "cards_with_role", "count_roles",
     "hand_features", "role_copies_in_deck",
+    "conditioned_hand_utility", "summarize_rows", "summarize_by_predicate",
+    "summarize_role_counts", "summarize_joint_conditions", "role_density_opening_profile",
 ]
