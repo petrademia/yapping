@@ -94,7 +94,11 @@ endif()
 pybind11_add_module(_ocgcore_ignis MODULE cpp/adapter_ignis.cpp)
 target_link_libraries(_ocgcore_ignis PRIVATE yapping_ocgcore_ignis SQLite::SQLite3)
 target_compile_features(_ocgcore_ignis PRIVATE cxx_std_17)
-set_target_properties(_ocgcore_ignis PROPERTIES
+set_target_properties(
+  yapping_lua53
+  yapping_ocgcore_ignis
+  _ocgcore_ignis
+  PROPERTIES
   C_VISIBILITY_PRESET hidden
   CXX_VISIBILITY_PRESET hidden
   VISIBILITY_INLINES_HIDDEN ON)
