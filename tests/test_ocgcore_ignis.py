@@ -67,6 +67,22 @@ def test_search_opening_accepts_engine_ignis():
     assert "engine: ignis" in result.stdout
 
 
+# Strict xfail, not skip: the Fluoro-authored line cannot replay on Ignis
+# because material selection arrives as MSG_SELECT_UNSELECT_CARD instead of
+# MSG_SELECT_CARD + MSG_SELECT_SUM. See
+# reports/ignis_albaz_combo_divergence.txt. If this ever passes, the recorded
+# divergence is stale and must be revisited.
+@pytest.mark.xfail(strict=True, reason="scripted line diverges at the first Synchro summon")
+@pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")
+def test_ignis_albaz_combo_completes():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/trace_albaz_combo.py"), "--engine", "ignis"],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    assert result.returncode == 0, result.stderr[-2000:]
+    assert "FULL COMBO COMPLETE" in result.stdout
+
+
 def test_engine_paths_do_not_cross_stacks():
     fluoro_cdb, fluoro_scripts = engine_paths("fluoro")
     ignis_cdb, ignis_scripts = engine_paths("ignis")
