@@ -6,6 +6,7 @@ import json
 from analyze_ash import (CARD_WEIGHTS, ReplayCursor, action_name,
                           endboard_score, evaluation_context, replay,
                           score_breakdown)
+from fork_replay import ForkReplayCursor
 from recovery_report import build_recovery_report, format_recovery_report
 from trace_albaz_combo import (
     ASH_BLOSSOM,
@@ -99,29 +100,43 @@ def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand
     matchup = experiment_matchup(config, opening_hand=opening_hand)
     card = config["interruptions"].get(interruption)
     adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, matchup,
-                          controlled_player)
-    replay_fn = cursor if replay_mode == "cursor" else lambda path: replay(
-        path, card, opening_hand, ecclesia_copies, adapter, matchup, controlled_player)
+    cursor = None
+    if replay_mode == "oracle":
+        replay_fn = lambda path: replay(
+            path, card, opening_hand, ecclesia_copies, adapter, matchup,
+            controlled_player)
+    elif replay_mode == "fork":
+        cursor = ForkReplayCursor(card, opening_hand, ecclesia_copies, adapter,
+                                  matchup, controlled_player)
+        replay_fn = cursor
+    else:
+        cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, matchup,
+                              controlled_player)
+        replay_fn = cursor
     evaluate_fn = evaluate or (lambda snapshot: endboard_score(snapshot, config["weights"]))
     terminal_fn = is_terminal or (
         (lambda snapshot: recovery_terminal(snapshot, config)) if recovery_only
         else lambda snapshot: terminal(snapshot, config)
     )
-    result = minimax_replay(
-        replay_fn,
-        lambda snapshot: legal(snapshot, config),
-        evaluate_fn,
-        terminal_fn,
-        lambda snapshot: snapshot.decision["player"],
-        max_depth=max_depth,
-        max_nodes=max_nodes,
-        stats=stats,
-        goal_score=goal_score,
-        on_leaf=on_leaf,
-    )
-    final = replay_fn(result.actions)
-    return result, final, config
+    try:
+        result = minimax_replay(
+            replay_fn,
+            lambda snapshot: legal(snapshot, config),
+            evaluate_fn,
+            terminal_fn,
+            lambda snapshot: snapshot.decision["player"],
+            max_depth=max_depth,
+            max_nodes=max_nodes,
+            stats=stats,
+            goal_score=goal_score,
+            on_leaf=on_leaf,
+        )
+        final = replay_fn(result.actions)
+        return result, final, config
+    finally:
+        close = getattr(cursor, "close", None)
+        if close is not None:
+            close()
 
 
 def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
@@ -224,15 +239,21 @@ if __name__ == "__main__":
     parser.add_argument("--recovery-only", action="store_true")
     parser.add_argument("--recovery-report", action="store_true")
     parser.add_argument("--config", type=str)
-    parser.add_argument("--replay-mode", choices=["cursor", "oracle"], default="cursor")
+    parser.add_argument("--replay-mode", choices=["cursor", "oracle", "fork"],
+                        default="cursor")
     arguments = parser.parse_args()
     config = load_config(arguments.config)
-    if arguments.recovery_report:
-        search_recovery_report(
-            arguments.interruption, arguments.max_nodes, arguments.max_depth,
-            arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
-            config, arguments.replay_mode)
-    else:
-        search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
-               arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
-               config, arguments.replay_mode)
+    try:
+        if arguments.recovery_report:
+            search_recovery_report(
+                arguments.interruption, arguments.max_nodes, arguments.max_depth,
+                arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
+                config, arguments.replay_mode)
+        else:
+            search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
+                   arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
+                   config, arguments.replay_mode)
+    except RuntimeError as error:
+        if "fork replay" in str(error):
+            raise SystemExit(f"error: {error}") from None
+        raise

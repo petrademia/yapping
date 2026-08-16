@@ -144,6 +144,16 @@ live duels at recent prefixes (or one duel per DFS depth) and replay from
 seed only on a pool miss. The change is contained in the replay callback;
 `minimax_replay` and `hidden_minimax_replay` do not change.
 
+`--replay-mode fork` is the Phase 1 mechanism: one `os.fork` copy-on-write
+worker per current DFS prefix. Default `--replay-mode` stays `cursor`.
+
+On macOS this does not land. A child that `step()`s a forked OCGCore duel
+segfaults in `libsqlite3` (`sqlite3_reset` → `os_log_type_enabled`) around
+140 visits on Ghost Ogre. Fake-adapter IPC is fine; the native card reader
+is not fork-safe here. Ghost Ogre cursor baseline on this machine: about
+2-3 ms/state. `--replay-mode fork` raises on Darwin unless
+`YAPPING_FORK_ALLOW_DARWIN=1`. Linux remains the intended host.
+
 - Prerequisite for phases 3-4; do first.
 - Measure states/second on the Ghost Ogre fixture before and after.
 - Exit: all existing fixtures produce identical scores, action lines, and
