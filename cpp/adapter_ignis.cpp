@@ -25,7 +25,7 @@ struct Action {
   uint32_t card{};
   uint8_t controller{};
   uint8_t location{};
-  uint8_t sequence{};
+  uint32_t sequence{};
   uint64_t description{};
   int32_t response{};
   std::vector<uint8_t> response_bytes;
@@ -194,16 +194,21 @@ class IgnisDuelAdapter {
     options.payload3 = this;
     options.cardReaderDone = &read_card_done_callback;
     options.payload4 = this;
+    options.enableUnsafeLibraries = 0;
 
     const int created = OCG_CreateDuel(&duel_, &options);
     if (created != OCG_DUEL_CREATION_SUCCESS || !duel_) {
       duel_ = nullptr;
       throw std::runtime_error("OCGCore failed to create duel: status " + std::to_string(created));
     }
+    // A duel whose bootstrap scripts are missing would answer queries about a
+    // board no card effect can ever touch, so tear it down rather than expose it.
     for (const char* bootstrap : {"constant.lua", "utility.lua"})
-      if (!read_script(bootstrap, duel_))
+      if (!read_script(bootstrap, duel_)) {
+        close_duel();
         throw std::runtime_error(std::string("cannot load Ignis script ") + bootstrap +
                                  " from " + script_dir_.string());
+      }
 
     load_deck(deck0, 0);
     load_deck(deck1, 1);
@@ -244,7 +249,7 @@ class IgnisDuelAdapter {
     return result;
   }
 
-  std::vector<uint32_t> cards(uint8_t player, uint32_t location) const {
+  std::vector<uint32_t> cards(uint8_t player, uint8_t location) const {
     ensure_duel();
     uint32_t length = 0;
     const OCG_QueryInfo info{QUERY_CODE, player, location, 0, 0};
@@ -392,7 +397,12 @@ class IgnisDuelAdapter {
         const auto* bytes = static_cast<const uint8_t*>(message);
         if (decode(std::vector<uint8_t>(bytes, bytes + length))) return;
       }
-      if (!errors_.empty()) throw std::runtime_error(errors_.back());
+      if (!errors_.empty()) {
+        // Drain the log so a later step() reports its own failure, not this one.
+        const std::string reason = errors_.back();
+        errors_.clear();
+        throw std::runtime_error(reason);
+      }
       if (status == OCG_DUEL_STATUS_END) return;
       if (status == OCG_DUEL_STATUS_AWAITING && actions_.empty()) continue;
       if (status == OCG_DUEL_STATUS_CONTINUE) continue;
@@ -476,7 +486,7 @@ class IgnisDuelAdapter {
         action.controller = reader.u8();
         action.location = reader.u8();
         // Only the reposition group writes a single-byte sequence.
-        action.sequence = static_cast<uint8_t>(command == 2 ? reader.u8() : reader.u32());
+        action.sequence = command == 2 ? reader.u8() : reader.u32();
         if (command == 5) {
           action.description = reader.u64();
           reader.skip(1);
@@ -503,7 +513,7 @@ class IgnisDuelAdapter {
       const Location where = reader.location();
       action.controller = where.controller;
       action.location = where.location;
-      action.sequence = static_cast<uint8_t>(where.sequence);
+      action.sequence = where.sequence;
       action.description = reader.u64();
       reader.skip(1);
       action.response = static_cast<int32_t>(index);
@@ -553,8 +563,9 @@ class IgnisDuelAdapter {
         action.kind = disabled_field ? "disable_place" : "place";
         action.controller = controller;
         action.location = location;
-        action.sequence = static_cast<uint8_t>(sequence_offset + zone);
-        action.response_bytes = {controller, location, action.sequence};
+        action.sequence = static_cast<uint32_t>(sequence_offset + zone);
+        // Zone placement answers with a raw (controller, location, sequence) triple.
+        action.response_bytes = {controller, location, static_cast<uint8_t>(action.sequence)};
         actions_.push_back(std::move(action));
       }
     };
@@ -578,7 +589,7 @@ class IgnisDuelAdapter {
       uint32_t card;
       uint8_t controller;
       uint8_t location;
-      uint8_t sequence;
+      uint32_t sequence;
       uint32_t weight;
     };
     std::vector<Candidate> candidates;
@@ -588,13 +599,13 @@ class IgnisDuelAdapter {
       if (tribute) {
         candidate.controller = reader.u8();
         candidate.location = reader.u8();
-        candidate.sequence = static_cast<uint8_t>(reader.u32());
+        candidate.sequence = reader.u32();
         candidate.weight = reader.u8();
       } else {
         const Location where = reader.location();
         candidate.controller = where.controller;
         candidate.location = where.location;
-        candidate.sequence = static_cast<uint8_t>(where.sequence);
+        candidate.sequence = where.sequence;
         candidate.weight = 1;
       }
       candidates.push_back(candidate);
@@ -668,7 +679,7 @@ class IgnisDuelAdapter {
       const Location where = reader.location();
       action.controller = where.controller;
       action.location = where.location;
-      action.sequence = static_cast<uint8_t>(where.sequence);
+      action.sequence = where.sequence;
       const auto values = sum_values(reader.u32());
       bool sum_ok = false;
       for (int total : totals)
@@ -697,7 +708,7 @@ class IgnisDuelAdapter {
         const Location where = reader.location();
         action.controller = where.controller;
         action.location = where.location;
-        action.sequence = static_cast<uint8_t>(where.sequence);
+        action.sequence = where.sequence;
         append_le<int32_t>(action.response_bytes, 1);
         append_le<int32_t>(action.response_bytes, static_cast<int32_t>(response_index));
         actions_.push_back(std::move(action));

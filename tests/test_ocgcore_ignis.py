@@ -103,6 +103,20 @@ def test_ignis_spell_then_normal_summon(tmp_path):
 
 
 @pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")
+def test_ignis_reset_without_scripts_leaves_no_live_duel(tmp_path):
+    from yapping._ocgcore_ignis import Duel
+
+    database = tmp_path / "cards.cdb"
+    _tiny_cdb(database)
+    duel = Duel(str(database), str(tmp_path / "missing-scripts"))
+    with pytest.raises(RuntimeError, match="constant.lua"):
+        duel.reset([POT_OF_GREED] * 40, [POT_OF_GREED] * 40, seed=7)
+    for query in (duel.counts, duel.state_key, lambda: duel.cards(0, 2)):
+        with pytest.raises(RuntimeError, match="duel is not active"):
+            query()
+
+
+@pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")
 def test_ignis_reset_reports_starting_hand_and_state_key(tmp_path):
     from yapping._ocgcore_ignis import Duel
 
