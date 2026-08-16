@@ -249,6 +249,8 @@ if __name__ == "__main__":
                         default="cursor")
     parser.add_argument("--engine", choices=["fluoro", "ignis"], default="fluoro")
     arguments = parser.parse_args()
+    if arguments.engine == "ignis" and arguments.replay_mode == "fork":
+        parser.error("Ignis fork replay is not supported")
     config = load_config(arguments.config)
     try:
         if arguments.recovery_report:

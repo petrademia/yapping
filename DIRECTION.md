@@ -306,9 +306,10 @@ pre-release ids remap in MAPPING before they reach YAPPING. Each backend
 keeps its own cdb, scripts, and adapter. Do not treat Ignis as faster per
 search node until the same combo tree is measured after an adapter exists.
 
-Exit for the first Ignis slice: one adapter can create a duel, load a
-CardScripts-backed card the Fluoro pin lacks, and return legal actions.
-Existing Fluoro fixtures must still pass on the Fluoro backend.
+The first proof for this Ignis slice is the Albaz combo gate: the adapter can
+create a duel, run CardScripts-backed effects, and return legal actions. That
+gate rejected the hypothesis that the same scripted line matches across both
+backends. Existing Fluoro fixtures must still pass on the Fluoro backend.
 
 ### The match hypothesis died at the combo gate
 
@@ -325,6 +326,7 @@ Consequence: cross-engine comparison needs prompt-protocol-agnostic action
 selection (or per-engine lines), not a shared scripted trace. Do not compare
 search results across backends until that exists - the two engines do not
 expose the same decision tree even when they agree on the game state.
+The Ash search comparison has not been run.
 
 ## Non-goals for now
 

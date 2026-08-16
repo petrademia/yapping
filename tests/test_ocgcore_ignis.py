@@ -67,6 +67,16 @@ def test_search_opening_accepts_engine_ignis():
     assert "engine: ignis" in result.stdout
 
 
+def test_search_opening_rejects_ignis_fork_replay():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/search_opening.py"), "ash",
+         "--engine", "ignis", "--replay-mode", "fork"],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    assert result.returncode != 0
+    assert "Ignis fork replay is not supported" in result.stderr
+
+
 # This currently fails wherever Ignis assets are present, and that failure is
 # the recorded experiment result: the Fluoro-authored line cannot replay on
 # Ignis because material selection arrives as MSG_SELECT_UNSELECT_CARD instead
@@ -101,7 +111,10 @@ def test_make_duel_rejects_unknown_engine():
 @pytest.mark.skipif(not fluoro_assets_ready(), reason="Fluoro cdb/scripts missing")
 def test_make_duel_fluoro_returns_existing_adapter():
     duel = make_duel("fluoro")
-    assert type(duel).__module__ == "yapping._ocgcore"
+    try:
+        assert type(duel).__module__ == "yapping._ocgcore"
+    finally:
+        del duel
 
 
 @pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")

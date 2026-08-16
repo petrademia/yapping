@@ -3,7 +3,6 @@ import os
 import json
 from pathlib import Path
 
-from yapping._ocgcore import Duel
 from yapping.ocg import make_duel
 
 
@@ -241,7 +240,7 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
     filler = list(opponent_deck or [CELTIC_GUARDIAN] * 40)
     opponent = ([opponent_card] + filler[1:]
                 if opponent_card and not opponent_set else filler)
-    duel = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    duel = adapter or make_duel("fluoro")
     if controlled_player not in (0, 1):
         raise ValueError("controlled_player must be 0 or 1")
     if controlled_player == 0:
