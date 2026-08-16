@@ -63,6 +63,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(lua53)
 file(GLOB LUA53_SOURCES CONFIGURE_DEPENDS "${lua53_SOURCE_DIR}/src/*.c")
 list(REMOVE_ITEM LUA53_SOURCES "${lua53_SOURCE_DIR}/src/lua.c" "${lua53_SOURCE_DIR}/src/luac.c")
+# The edo9300 core includes Lua's headers without a linkage wrapper and refuses
+# to run unless C++ exceptions unwind through lua_pcall, so Lua 5.3 must be
+# compiled as C++ for this backend.
+set_source_files_properties(${LUA53_SOURCES} PROPERTIES LANGUAGE CXX)
 add_library(yapping_lua53 STATIC ${LUA53_SOURCES})
 target_include_directories(yapping_lua53 PUBLIC "${lua53_SOURCE_DIR}/src")
 if(APPLE)
