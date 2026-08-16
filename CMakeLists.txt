@@ -53,3 +53,57 @@ pybind11_add_module(_ocgcore MODULE cpp/adapter.cpp)
 target_link_libraries(_ocgcore PRIVATE yapping_ocgcore SQLite::SQLite3)
 target_compile_features(_ocgcore PRIVATE cxx_std_17)
 install(TARGETS _ocgcore DESTINATION yapping)
+
+FetchContent_Declare(
+  lua53
+  URL https://www.lua.org/ftp/lua-5.3.6.tar.gz
+  URL_HASH SHA256=fc5fd69bb8736323f026672b1b7235da613d7177e72558893a0bdcd320466d60
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(lua53)
+file(GLOB LUA53_SOURCES CONFIGURE_DEPENDS "${lua53_SOURCE_DIR}/src/*.c")
+list(REMOVE_ITEM LUA53_SOURCES "${lua53_SOURCE_DIR}/src/lua.c" "${lua53_SOURCE_DIR}/src/luac.c")
+# The edo9300 core includes Lua's headers without a linkage wrapper and refuses
+# to run unless C++ exceptions unwind through lua_pcall, so Lua 5.3 must be
+# compiled as C++ for this backend.
+set_source_files_properties(${LUA53_SOURCES} PROPERTIES LANGUAGE CXX)
+add_library(yapping_lua53 STATIC ${LUA53_SOURCES})
+target_include_directories(yapping_lua53 PUBLIC "${lua53_SOURCE_DIR}/src")
+if(APPLE)
+  target_compile_definitions(yapping_lua53 PRIVATE LUA_USE_MACOSX)
+elseif(UNIX)
+  target_compile_definitions(yapping_lua53 PRIVATE LUA_USE_LINUX)
+endif()
+
+FetchContent_Declare(
+  ocgcore_ignis
+  GIT_REPOSITORY https://github.com/edo9300/ygopro-core.git
+  GIT_TAG 9a0c558c2d686542f7914a6d529fd7aa57746aed
+  GIT_SHALLOW FALSE
+  SOURCE_SUBDIR cmake-unused
+)
+FetchContent_MakeAvailable(ocgcore_ignis)
+
+file(GLOB IGNIS_CORE_SOURCES CONFIGURE_DEPENDS "${ocgcore_ignis_SOURCE_DIR}/*.cpp")
+add_library(yapping_ocgcore_ignis STATIC ${IGNIS_CORE_SOURCES})
+target_include_directories(yapping_ocgcore_ignis PUBLIC "${ocgcore_ignis_SOURCE_DIR}")
+target_link_libraries(yapping_ocgcore_ignis PUBLIC yapping_lua53)
+target_compile_features(yapping_ocgcore_ignis PUBLIC cxx_std_17)
+if(APPLE)
+  set_source_files_properties(
+    "${ocgcore_ignis_SOURCE_DIR}/processor_visit.cpp"
+    PROPERTIES COMPILE_OPTIONS "-fno-exceptions")
+endif()
+
+pybind11_add_module(_ocgcore_ignis MODULE cpp/adapter_ignis.cpp)
+target_link_libraries(_ocgcore_ignis PRIVATE yapping_ocgcore_ignis SQLite::SQLite3)
+target_compile_features(_ocgcore_ignis PRIVATE cxx_std_17)
+set_target_properties(
+  yapping_lua53
+  yapping_ocgcore_ignis
+  _ocgcore_ignis
+  PROPERTIES
+  C_VISIBILITY_PRESET hidden
+  CXX_VISIBILITY_PRESET hidden
+  VISIBILITY_INLINES_HIDDEN ON)
+install(TARGETS _ocgcore_ignis DESTINATION yapping)

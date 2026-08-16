@@ -291,6 +291,43 @@ trustworthy data at scale. Constrained or offline RL may follow once the
 imitation baseline is reliable, but it must not replace OCGCore legality or
 the exact search oracle.
 
+## Dual OCGCore backends (Fluoro + Ignis)
+
+The default oracle stays Fluorohydride/ygopro-core + ygopro-scripts + the
+MyCard `cards.cdb` pin. That stack is what current fixtures reproduce.
+
+A second oracle is in scope: edo9300/ygopro-core + ProjectIgnis/CardScripts +
+BabelCDB. CardScripts target that stack and Lua 5.3; they are not drop-in on
+Fluorohydride. Do not mix the two script trees or the two card databases in
+one process.
+
+Canonical card ids in MAPPING exports remain MyCard passwords. Ignis
+pre-release ids remap in MAPPING before they reach YAPPING. Each backend
+keeps its own cdb, scripts, and adapter. Do not treat Ignis as faster per
+search node until the same combo tree is measured after an adapter exists.
+
+The first proof for this Ignis slice is the Albaz combo gate: the adapter can
+create a duel, run CardScripts-backed effects, and return legal actions. That
+gate rejected the hypothesis that the same scripted line matches across both
+backends. Existing Fluoro fixtures must still pass on the Fluoro backend.
+
+### The match hypothesis died at the combo gate
+
+The hypothesis that one scripted line could be replayed on both backends is
+dead. `tools/trace_albaz_combo.py --engine ignis` stops at the first Synchro
+summon (Ecclesia and the Dark Dragon): Fluorohydride sends
+`MSG_SELECT_CARD` then `MSG_SELECT_SUM` for material selection, while
+edo9300 + CardScripts sends `MSG_SELECT_UNSELECT_CARD` twice. Both prompts
+are well formed, both reach the same board, but the legal action set at each
+decision point differs, so a single hardcoded action sequence cannot address
+both. Evidence: `reports/ignis_albaz_combo_divergence.txt`.
+
+Consequence: cross-engine comparison needs prompt-protocol-agnostic action
+selection (or per-engine lines), not a shared scripted trace. Do not compare
+search results across backends until that exists - the two engines do not
+expose the same decision tree even when they agree on the game state.
+The Ash search comparison has not been run.
+
 ## Non-goals for now
 
 - Core-level duel cloning or serialization: phase 1's prefix reuse should be

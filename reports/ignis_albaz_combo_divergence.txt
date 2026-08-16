@@ -1,0 +1,188 @@
+Ignis Albaz combo gate: scripted line diverges (Task 5, Step 3)
+
+Command: PYTHONPATH=src:tools .venv/bin/python tools/trace_albaz_combo.py --engine ignis
+Date: 2026-08-16T06:35:21Z
+
+Classification: script/core semantics differ, NOT an adapter or decoder bug.
+
+The Fluoro-authored trace expects MSG_SELECT_CARD (15) followed by
+MSG_SELECT_SUM (23) for Synchro material selection. edo9300/ygopro-core with
+ProjectIgnis CardScripts sends MSG_SELECT_UNSELECT_CARD (26) twice instead.
+Both prompts are well formed and both reach the same Synchro summon; only the
+prompt protocol and therefore the legal action set differ. See
+.superpowers/sdd/task-5-report.md for the message-level evidence.
+
+=== stdout ===
+engine: ignis
+
+initial: player=0 counts={'deck0': 35, 'hand0': 5, 'monster0': 0, 'spell_trap0': 0, 'grave0': 0, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'summon', 'card': 73819701, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+1 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+2 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+3 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+4 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 4, 'description': 0, 'cards': []}
+5 {'kind': 'monster_set', 'card': 73819701, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+6 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+7 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+8 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+9 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 4, 'description': 0, 'cards': []}
+10 {'kind': 'activate', 'card': 73819701, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 77405566795776, 'cards': []}
+11 {'kind': 'end_phase', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+12 {'kind': 'shuffle', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after Fallen hand effect: player=0 counts={'deck0': 35, 'hand0': 5, 'monster0': 0, 'spell_trap0': 0, 'grave0': 0, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'select_card', 'card': 41373230, 'controller': 0, 'location': 64, 'sequence': 5, 'description': 0, 'cards': []}
+1 {'kind': 'select_card', 'card': 78397661, 'controller': 0, 'location': 64, 'sequence': 4, 'description': 0, 'cards': []}
+2 {'kind': 'select_card', 'card': 74405783, 'controller': 0, 'location': 64, 'sequence': 3, 'description': 0, 'cards': []}
+3 {'kind': 'select_card', 'card': 87746184, 'controller': 0, 'location': 64, 'sequence': 2, 'description': 0, 'cards': []}
+4 {'kind': 'select_card', 'card': 44146295, 'controller': 0, 'location': 64, 'sequence': 1, 'description': 0, 'cards': []}
+5 {'kind': 'select_card', 'card': 76666602, 'controller': 0, 'location': 64, 'sequence': 0, 'description': 0, 'cards': []}
+
+after sending Titaniklad: player=1 counts={'deck0': 35, 'hand0': 5, 'monster0': 0, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 35, 'hand0': 5, 'monster0': 0, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 35, 'hand0': 5, 'monster0': 0, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 0, 'description': 0, 'cards': []}
+1 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 1, 'description': 0, 'cards': []}
+2 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 2, 'description': 0, 'cards': []}
+3 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 3, 'description': 0, 'cards': []}
+4 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 4, 'description': 0, 'cards': []}
+
+after place: player=0 counts={'deck0': 35, 'hand0': 5, 'monster0': 0, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'position', 'card': 73819701, 'controller': 0, 'location': 0, 'sequence': 1, 'description': 0, 'cards': []}
+1 {'kind': 'position', 'card': 73819701, 'controller': 0, 'location': 0, 'sequence': 4, 'description': 0, 'cards': []}
+
+after position: player=0 counts={'deck0': 35, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'yes', 'card': 73819701, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 221, 'cards': []}
+1 {'kind': 'no', 'card': 73819701, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 221, 'cards': []}
+
+after accepting Fallen field trigger: player=1 counts={'deck0': 35, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 35, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 35, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'select_card', 'card': 55273560, 'controller': 0, 'location': 1, 'sequence': 34, 'description': 0, 'cards': []}
+1 {'kind': 'select_card', 'card': 60303688, 'controller': 0, 'location': 1, 'sequence': 29, 'description': 0, 'cards': []}
+
+after selecting Incredible Ecclesia: player=0 counts={'deck0': 35, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 1, 'description': 0, 'cards': []}
+1 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 2, 'description': 0, 'cards': []}
+2 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 3, 'description': 0, 'cards': []}
+3 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 4, 'description': 0, 'cards': []}
+
+after place: player=0 counts={'deck0': 35, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'position', 'card': 55273560, 'controller': 0, 'location': 0, 'sequence': 1, 'description': 0, 'cards': []}
+1 {'kind': 'position', 'card': 55273560, 'controller': 0, 'location': 0, 'sequence': 4, 'description': 0, 'cards': []}
+
+after position: player=0 counts={'deck0': 34, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'chain', 'card': 55273560, 'controller': 0, 'location': 4, 'sequence': 1, 'description': 57958528450561, 'cards': []}
+1 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=1 counts={'deck0': 34, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 34, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+1 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+2 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+3 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+4 {'kind': 'special_summon', 'card': 74405783, 'controller': 0, 'location': 64, 'sequence': 3, 'description': 0, 'cards': []}
+5 {'kind': 'special_summon', 'card': 78397661, 'controller': 0, 'location': 64, 'sequence': 4, 'description': 0, 'cards': []}
+6 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+7 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+8 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+9 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+10 {'kind': 'activate', 'card': 55273560, 'controller': 0, 'location': 4, 'sequence': 1, 'description': 57958528450561, 'cards': []}
+11 {'kind': 'end_phase', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+12 {'kind': 'shuffle', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+Incredible Ecclesia summoned: player=0 counts={'deck0': 34, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 1, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+1 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+2 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+3 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+4 {'kind': 'special_summon', 'card': 74405783, 'controller': 0, 'location': 64, 'sequence': 3, 'description': 0, 'cards': []}
+5 {'kind': 'special_summon', 'card': 78397661, 'controller': 0, 'location': 64, 'sequence': 4, 'description': 0, 'cards': []}
+6 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+7 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+8 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+9 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+10 {'kind': 'activate', 'card': 55273560, 'controller': 0, 'location': 4, 'sequence': 1, 'description': 57958528450561, 'cards': []}
+11 {'kind': 'end_phase', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+12 {'kind': 'shuffle', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after activating Incredible Ecclesia: player=1 counts={'deck0': 34, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 34, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 34, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'select_card', 'card': 82489470, 'controller': 0, 'location': 1, 'sequence': 33, 'description': 0, 'cards': []}
+
+after selecting Golden Swordsoul: player=0 counts={'deck0': 34, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 1, 'description': 0, 'cards': []}
+1 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 2, 'description': 0, 'cards': []}
+2 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 3, 'description': 0, 'cards': []}
+3 {'kind': 'place', 'card': 0, 'controller': 0, 'location': 4, 'sequence': 4, 'description': 0, 'cards': []}
+
+after place: player=0 counts={'deck0': 34, 'hand0': 4, 'monster0': 1, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'position', 'card': 82489470, 'controller': 0, 'location': 0, 'sequence': 1, 'description': 0, 'cards': []}
+1 {'kind': 'position', 'card': 82489470, 'controller': 0, 'location': 0, 'sequence': 4, 'description': 0, 'cards': []}
+
+after position: player=0 counts={'deck0': 33, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=1 counts={'deck0': 33, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'pass', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after pass: player=0 counts={'deck0': 33, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+1 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+2 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+3 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+4 {'kind': 'special_summon', 'card': 74405783, 'controller': 0, 'location': 64, 'sequence': 3, 'description': 0, 'cards': []}
+5 {'kind': 'special_summon', 'card': 78397661, 'controller': 0, 'location': 64, 'sequence': 4, 'description': 0, 'cards': []}
+6 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+7 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+8 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+9 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+10 {'kind': 'end_phase', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+11 {'kind': 'shuffle', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+Golden Swordsoul summoned: player=0 counts={'deck0': 33, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+1 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+2 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+3 {'kind': 'summon', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+4 {'kind': 'special_summon', 'card': 74405783, 'controller': 0, 'location': 64, 'sequence': 3, 'description': 0, 'cards': []}
+5 {'kind': 'special_summon', 'card': 78397661, 'controller': 0, 'location': 64, 'sequence': 4, 'description': 0, 'cards': []}
+6 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 0, 'description': 0, 'cards': []}
+7 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 1, 'description': 0, 'cards': []}
+8 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 2, 'description': 0, 'cards': []}
+9 {'kind': 'monster_set', 'card': 91152256, 'controller': 0, 'location': 2, 'sequence': 3, 'description': 0, 'cards': []}
+10 {'kind': 'end_phase', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+11 {'kind': 'shuffle', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+after choosing Ecclesia and the Dark Dragon: player=0 counts={'deck0': 33, 'hand0': 4, 'monster0': 2, 'spell_trap0': 0, 'grave0': 2, 'deck1': 35, 'hand1': 5, 'monster1': 0, 'spell_trap1': 0, 'grave1': 0}
+0 {'kind': 'select_toggle', 'card': 82489470, 'controller': 0, 'location': 4, 'sequence': 1, 'description': 0, 'cards': []}
+1 {'kind': 'cancel', 'card': 0, 'controller': 0, 'location': 0, 'sequence': 0, 'description': 0, 'cards': []}
+
+=== stderr ===
+Traceback (most recent call last):
+  File "/Users/petra/Projects/yugioh/yapping-ignis-second-engine/tools/trace_albaz_combo.py", line 476, in <module>
+    main(arguments.engine)
+    ~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/petra/Projects/yugioh/yapping-ignis-second-engine/tools/trace_albaz_combo.py", line 300, in main
+    decision = choose(duel, decision, "select_card", GOLDEN_SWORDSOUL)
+  File "/Users/petra/Projects/yugioh/yapping-ignis-second-engine/tools/trace_albaz_combo.py", line 176, in choose
+    raise RuntimeError(f"missing {kind} {card}")
+RuntimeError: missing select_card 82489470
+
+=== exit code ===
+1

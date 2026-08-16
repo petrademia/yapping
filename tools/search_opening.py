@@ -23,7 +23,7 @@ from trace_albaz_combo import (
     SCRIPTS,
 )
 from yapping import minimax_replay, report_provenance
-from yapping._ocgcore import Duel
+from yapping.ocg import engine_paths, make_duel
 from matchup_config import experiment_matchup, load_config
 
 
@@ -94,12 +94,12 @@ def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand
                ecclesia_copies=1, recovery_only=False, config=None,
                replay_mode="cursor", adapter=None, controlled_player=0,
                stats=None, evaluate=None, is_terminal=None, goal_score=None,
-               on_leaf=None):
+               on_leaf=None, engine="fluoro"):
     config = config or load_config()
     config = {**config, "controlled_player": controlled_player}
     matchup = experiment_matchup(config, opening_hand=opening_hand)
     card = config["interruptions"].get(interruption)
-    adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    adapter = adapter or make_duel(engine)
     cursor = None
     if replay_mode == "oracle":
         replay_fn = lambda path: replay(
@@ -141,24 +141,28 @@ def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand
 
 def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=None,
            ecclesia_copies=1, recovery_only=False, config=None,
-           replay_mode="cursor", adapter=None, controlled_player=0):
+           replay_mode="cursor", adapter=None, controlled_player=0,
+           engine="fluoro"):
     result, final, config = run_search(
         interruption, max_nodes, max_depth, opening_hand, ecclesia_copies,
-        recovery_only, config, replay_mode, adapter, controlled_player)
+        recovery_only, config, replay_mode, adapter, controlled_player,
+        engine=engine)
     print(f"Opening-hand minimax against known {interruption}")
     if opening_hand is not None:
         print("opening hand: " + ", ".join(map(str, opening_hand)))
     print(f"Ecclesia copies: {ecclesia_copies}")
     print(f"recovery-only: {recovery_only}")
     print(f"replay-mode: {replay_mode}")
+    print(f"engine: {engine}")
     print(f"turn-order: {'first' if controlled_player == 0 else 'second'}")
     score_label = "score" if result.complete else "provisional score at search limit"
     print(f"{score_label}: {result.score:.2f}")
     print(f"visited states: {result.visited_states}")
     print(f"complete: {result.complete}")
+    database, scripts = engine_paths(engine)
     print("provenance: " + json.dumps(report_provenance(
-        database=ROOT / "assets/cards.cdb",
-        scripts=SCRIPTS,
+        database=database,
+        scripts=scripts,
         max_nodes=max_nodes,
         max_depth=max_depth,
         complete=result.complete,
@@ -174,10 +178,10 @@ def search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand=Non
 def search_recovery_report(interruption="ash", max_nodes=20_000, max_depth=180,
                            opening_hand=None, ecclesia_copies=1, recovery_only=False,
                            config=None, replay_mode="cursor", adapter=None,
-                           controlled_player=0):
+                           controlled_player=0, engine="fluoro"):
     """Pair uninterrupted ceiling with the interrupted line and print attribution."""
     config = config or load_config()
-    adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    adapter = adapter or make_duel(engine)
     if interruption == "none":
         result, final, config = run_search(
             interruption, max_nodes, max_depth, opening_hand, ecclesia_copies,
@@ -215,10 +219,12 @@ def search_recovery_report(interruption="ash", max_nodes=20_000, max_depth=180,
     print(f"Ecclesia copies: {ecclesia_copies}")
     print(f"recovery-only: {recovery_only}")
     print(f"replay-mode: {replay_mode}")
+    print(f"engine: {engine}")
     print(f"turn-order: {'first' if controlled_player == 0 else 'second'}")
+    database, scripts = engine_paths(engine)
     print("provenance: " + json.dumps(report_provenance(
-        database=ROOT / "assets/cards.cdb",
-        scripts=SCRIPTS,
+        database=database,
+        scripts=scripts,
         max_nodes=max_nodes,
         max_depth=max_depth,
         complete=report["complete"],
@@ -241,18 +247,21 @@ if __name__ == "__main__":
     parser.add_argument("--config", type=str)
     parser.add_argument("--replay-mode", choices=["cursor", "oracle", "fork"],
                         default="cursor")
+    parser.add_argument("--engine", choices=["fluoro", "ignis"], default="fluoro")
     arguments = parser.parse_args()
+    if arguments.engine == "ignis" and arguments.replay_mode == "fork":
+        parser.error("Ignis fork replay is not supported")
     config = load_config(arguments.config)
     try:
         if arguments.recovery_report:
             search_recovery_report(
                 arguments.interruption, arguments.max_nodes, arguments.max_depth,
                 arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
-                config, arguments.replay_mode)
+                config, arguments.replay_mode, engine=arguments.engine)
         else:
             search(arguments.interruption, arguments.max_nodes, arguments.max_depth,
                    arguments.hand, arguments.ecclesia_copies, arguments.recovery_only,
-                   config, arguments.replay_mode)
+                   config, arguments.replay_mode, engine=arguments.engine)
     except RuntimeError as error:
         if "fork replay" in str(error):
             raise SystemExit(f"error: {error}") from None

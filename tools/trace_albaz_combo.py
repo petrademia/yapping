@@ -1,8 +1,9 @@
+import argparse
 import os
 import json
 from pathlib import Path
 
-from yapping._ocgcore import Duel
+from yapping.ocg import make_duel
 
 
 FALLEN_WHITE = 73819701
@@ -239,7 +240,7 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
     filler = list(opponent_deck or [CELTIC_GUARDIAN] * 40)
     opponent = ([opponent_card] + filler[1:]
                 if opponent_card and not opponent_set else filler)
-    duel = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
+    duel = adapter or make_duel("fluoro")
     if controlled_player not in (0, 1):
         raise ValueError("controlled_player must be 0 or 1")
     if controlled_player == 0:
@@ -251,7 +252,7 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
     return duel, decision
 
 
-def main():
+def main(engine="fluoro"):
     main_deck = None
     extra_deck = None
     opening_hand = None
@@ -265,11 +266,14 @@ def main():
             FALLEN_WHITE, INCREDIBLE_ECCLESIA,
             ASH_BLOSSOM, ASH_BLOSSOM, GHOST_OGRE,
         ]
+    adapter = make_duel(engine)
     duel, decision = new_duel(
         opponent_card=INTERRUPTIONS.get(INTERRUPTION),
         opponent_set=INTERRUPTION == "called_by",
         opening_hand=opening_hand, main_deck=main_deck, extra_deck=extra_deck,
+        adapter=adapter,
     )
+    print(f"engine: {engine}")
     show("initial", decision, duel)
     decision = choose(duel, decision, "activate", FALLEN_WHITE)
     show("after Fallen hand effect", decision, duel)
@@ -464,8 +468,11 @@ def main():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--engine", choices=["fluoro", "ignis"], default="fluoro")
+    arguments = parser.parse_args()
     try:
-        main()
+        main(arguments.engine)
     except LineInterrupted as interrupted:
         print("INTERRUPTION RESULT " + json.dumps({
             "interruption": INTERRUPTION,

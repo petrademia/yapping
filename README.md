@@ -119,8 +119,13 @@ Clone the pinned script repository beside YAPPING:
 cd ~/projects/yugioh
 git clone https://github.com/Fluorohydride/ygopro-scripts.git fluorohydride-ygopro-scripts
 git -C fluorohydride-ygopro-scripts checkout 090e881772f488e1256c456b827d5cbed4facf79
+git clone https://github.com/ProjectIgnis/CardScripts.git projectignis-card-scripts
+git -C projectignis-card-scripts checkout 9a5738639924bbbf3b86c4599f3f7e70ea8711a6
 cd yapping
+./tools/fetch_ignis_cards_db.sh
 ```
+
+BabelCDB is Ignis-only and must not replace `assets/cards.cdb`.
 
 Create the environment and install the package:
 
