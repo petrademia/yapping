@@ -388,7 +388,18 @@ class IgnisDuelAdapter {
     OCG_DuelSetResponse(duel_, bytes.data(), static_cast<uint32_t>(bytes.size()));
   }
 
+  // Whatever goes wrong here, the log must not survive into the next step() and
+  // be reported there as if it were that step's own failure.
   void advance() {
+    try {
+      process_until_decision();
+    } catch (...) {
+      errors_.clear();
+      throw;
+    }
+  }
+
+  void process_until_decision() {
     for (int iterations = 0; iterations < 10000; ++iterations) {
       const int status = OCG_DuelProcess(duel_);
       uint32_t length = 0;
@@ -397,12 +408,7 @@ class IgnisDuelAdapter {
         const auto* bytes = static_cast<const uint8_t*>(message);
         if (decode(std::vector<uint8_t>(bytes, bytes + length))) return;
       }
-      if (!errors_.empty()) {
-        // Drain the log so a later step() reports its own failure, not this one.
-        const std::string reason = errors_.back();
-        errors_.clear();
-        throw std::runtime_error(reason);
-      }
+      if (!errors_.empty()) throw std::runtime_error(errors_.back());
       if (status == OCG_DUEL_STATUS_END) return;
       if (status == OCG_DUEL_STATUS_AWAITING && actions_.empty()) continue;
       if (status == OCG_DUEL_STATUS_CONTINUE) continue;

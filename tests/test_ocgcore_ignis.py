@@ -102,8 +102,9 @@ def test_ignis_spell_then_normal_summon(tmp_path):
     assert duel.cards(0, 4) == [CELTIC_GUARDIAN]
 
 
-@pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")
 def test_ignis_reset_without_scripts_leaves_no_live_duel(tmp_path):
+    # Needs no CardScripts or BabelCDB: a temp cdb and a missing scripts
+    # directory are exactly the inputs under test.
     from yapping._ocgcore_ignis import Duel
 
     database = tmp_path / "cards.cdb"
