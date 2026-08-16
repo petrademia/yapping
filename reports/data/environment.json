@@ -1,10 +1,12 @@
 {
-  "commit": "018d84d0c18a38603876b1e758b46dd267d92a66",
-  "commit_subject": "add search measurement baseline (#4)",
+  "commit": "ef7f6b57940b9b388b9f90ba586c14b0f334a5e9",
+  "commit_subject": "Agent/level7 readiness experiments (#5)",
   "platform": "Darwin 25.6.0 arm64",
   "python": "3.14.6",
   "cxx": "Apple clang 21.0.0",
-  "cards_cdb_sha256": "c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f",
-  "pytest": "97 passed",
+  "cards_cdb_sha256": "f81958a2e0c238ddf5060482e1a2fc2c0d4a7f75917e76c388cab1a28fa43d4c",
+  "scripts_revision": "090e881772f488e1256c456b827d5cbed4facf79",
+  "ocgcore_pin": "ee5c2ec7d6acfb583bfb7e26e6ee667db46677fa",
+  "pytest": "107 passed",
   "scripts_path": "fluorohydride-ygopro-scripts (adjacent)"
 }

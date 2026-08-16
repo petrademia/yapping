@@ -28,7 +28,7 @@ endif()
 FetchContent_Declare(
   ocgcore
   GIT_REPOSITORY https://github.com/Fluorohydride/ygopro-core.git
-  GIT_TAG db4fd16a99991802511b9a89e0025dd2f51f5e36
+  GIT_TAG ee5c2ec7d6acfb583bfb7e26e6ee667db46677fa
   GIT_SHALLOW FALSE
   SOURCE_SUBDIR cmake-unused
 )
