@@ -32,3 +32,15 @@ def test_make_duel_rejects_unknown_engine():
 def test_make_duel_fluoro_returns_existing_adapter():
     duel = make_duel("fluoro")
     assert type(duel).__module__ == "yapping._ocgcore"
+
+
+@pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")
+def test_ignis_module_imports():
+    from yapping._ocgcore_ignis import Duel
+    cdb, scripts = engine_paths("ignis")
+    duel = Duel(str(cdb), str(scripts))
+    assert hasattr(duel, "reset")
+    assert hasattr(duel, "step")
+    assert hasattr(duel, "counts")
+    assert hasattr(duel, "cards")
+    assert hasattr(duel, "state_key")
