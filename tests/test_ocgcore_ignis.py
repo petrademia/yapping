@@ -67,12 +67,11 @@ def test_search_opening_accepts_engine_ignis():
     assert "engine: ignis" in result.stdout
 
 
-# Strict xfail, not skip: the Fluoro-authored line cannot replay on Ignis
-# because material selection arrives as MSG_SELECT_UNSELECT_CARD instead of
-# MSG_SELECT_CARD + MSG_SELECT_SUM. See
-# reports/ignis_albaz_combo_divergence.txt. If this ever passes, the recorded
-# divergence is stale and must be revisited.
-@pytest.mark.xfail(strict=True, reason="scripted line diverges at the first Synchro summon")
+# This currently fails wherever Ignis assets are present, and that failure is
+# the recorded experiment result: the Fluoro-authored line cannot replay on
+# Ignis because material selection arrives as MSG_SELECT_UNSELECT_CARD instead
+# of MSG_SELECT_CARD + MSG_SELECT_SUM. See
+# reports/ignis_albaz_combo_divergence.txt.
 @pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")
 def test_ignis_albaz_combo_completes():
     result = subprocess.run(
