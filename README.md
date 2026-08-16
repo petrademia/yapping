@@ -84,7 +84,7 @@ yapping/
 
 The adapter targets:
 
-- [Fluorohydride/ygopro-core](https://github.com/Fluorohydride/ygopro-core), pinned to db4fd16a99991802511b9a89e0025dd2f51f5e36;
+- [Fluorohydride/ygopro-core](https://github.com/Fluorohydride/ygopro-core), pinned to ee5c2ec7d6acfb583bfb7e26e6ee667db46677fa;
 - [Fluorohydride/ygopro-scripts](https://github.com/Fluorohydride/ygopro-scripts), pinned to 090e881772f488e1256c456b827d5cbed4facf79;
 - Lua 5.4.7, fetched by CMake;
 - SQLite for cards.cdb;
@@ -140,7 +140,7 @@ Option 2: run the checked downloader from the repository root:
 ./tools/fetch_cards_db.sh
 ```
 
-The validated database comes from [mycard/ygopro-database](https://github.com/mycard/ygopro-database/blob/master/locales/en-US/cards.cdb), pinned by the downloader to commit f3d9f81e619ec51427dd66d39e09b10f5ee2a41c. The script verifies the SHA-256 before replacing the local file.
+The validated database comes from [mycard/ygopro-database](https://github.com/mycard/ygopro-database/blob/master/locales/en-US/cards.cdb), pinned by the downloader to commit 8f36c87c2faea4d24a6062410f9dfe0cd6848865. The script verifies the SHA-256 before replacing the local file.
 
 [Project Ignis BabelCDB](https://github.com/ProjectIgnis/BabelCDB) is another EDOPro-compatible source, but its database may not be byte-identical to the MyCard database and should not be mixed when reproducing an existing result.
 
@@ -154,7 +154,7 @@ PYTHONPATH=src python -m pytest -q tests/test_card_rules.py
 The database used for the validated Branded fixtures has SHA-256:
 
 ```text
-c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f
+f81958a2e0c238ddf5060482e1a2fc2c0d4a7f75917e76c388cab1a28fa43d4c
 ```
 
 A different compatible database may still work, but exact experiment results should record its checksum.

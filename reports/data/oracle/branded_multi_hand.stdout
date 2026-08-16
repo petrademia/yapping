@@ -1,0 +1,116 @@
+[export-multi] hand=2357f6e5c5ffb75c scenario=none complete=False visited=10000 score=18.25 sec=30.6 examples=58
+[export-multi] hand=2357f6e5c5ffb75c scenario=ash complete=False visited=10000 score=16.0 sec=29.9 examples=56
+[export-multi] hand=2357f6e5c5ffb75c scenario=impermanence complete=False visited=10000 score=18.0 sec=33.9 examples=63
+[export-multi] hand=df1b73ea88389d0c scenario=none complete=False visited=10000 score=23.5 sec=459.6 examples=115
+[export-multi] hand=df1b73ea88389d0c scenario=ash complete=False visited=10000 score=14.5 sec=454.0 examples=91
+[export-multi] hand=df1b73ea88389d0c scenario=impermanence complete=False visited=10000 score=15.5 sec=432.6 examples=130
+[export-multi] hand=99bc74f6d6a054e8 scenario=none complete=False visited=10000 score=17.75 sec=25.5 examples=91
+[export-multi] hand=99bc74f6d6a054e8 scenario=ash complete=False visited=10000 score=14.75 sec=25.2 examples=86
+[export-multi] hand=99bc74f6d6a054e8 scenario=impermanence complete=False visited=10000 score=17.75 sec=23.3 examples=92
+[export-multi] hand=ac4f6f3829885ad1 scenario=none complete=False visited=10000 score=19.25 sec=25.2 examples=62
+[export-multi] hand=ac4f6f3829885ad1 scenario=ash complete=False visited=10000 score=17.0 sec=28.1 examples=46
+[export-multi] hand=ac4f6f3829885ad1 scenario=impermanence complete=False visited=10000 score=19.25 sec=23.5 examples=63
+[export-multi] hand=5d8c35476426a5f2 scenario=none complete=False visited=10000 score=23.5 sec=22.8 examples=84
+[export-multi] hand=5d8c35476426a5f2 scenario=ash complete=False visited=10000 score=19.25 sec=22.6 examples=66
+[export-multi] hand=5d8c35476426a5f2 scenario=impermanence complete=False visited=10000 score=23.25 sec=22.9 examples=89
+[export-multi] hand=8b343660d0a094bf scenario=none complete=False visited=10000 score=19.75 sec=28.3 examples=100
+[export-multi] hand=8b343660d0a094bf scenario=ash complete=False visited=10000 score=19.75 sec=28.6 examples=100
+[export-multi] hand=8b343660d0a094bf scenario=impermanence complete=False visited=10000 score=19.75 sec=26.1 examples=101
+[export-multi] hand=499db02faa051e7f scenario=none complete=False visited=10000 score=18.0 sec=21.1 examples=70
+[export-multi] hand=499db02faa051e7f scenario=ash complete=False visited=10000 score=18.0 sec=21.0 examples=70
+[export-multi] hand=499db02faa051e7f scenario=impermanence complete=False visited=10000 score=17.25 sec=20.8 examples=91
+[export-multi] hand=1ca463506a5a715b scenario=none complete=False visited=10000 score=19.5 sec=35.4 examples=81
+[export-multi] hand=1ca463506a5a715b scenario=ash complete=False visited=10000 score=13.5 sec=33.5 examples=79
+[export-multi] hand=1ca463506a5a715b scenario=impermanence complete=False visited=10000 score=19.5 sec=32.6 examples=82
+[export-multi] hand=b59a57a8e08d5dd5 scenario=none complete=False visited=10000 score=18.75 sec=351.4 examples=66
+[export-multi] hand=b59a57a8e08d5dd5 scenario=ash complete=False visited=10000 score=12.75 sec=355.4 examples=57
+[export-multi] hand=b59a57a8e08d5dd5 scenario=impermanence complete=False visited=10000 score=15.5 sec=337.0 examples=63
+[export-multi] hand=c1b95e41661677a1 scenario=none complete=False visited=10000 score=19.75 sec=20.6 examples=48
+[export-multi] hand=c1b95e41661677a1 scenario=ash complete=False visited=10000 score=13.75 sec=20.5 examples=33
+[export-multi] hand=c1b95e41661677a1 scenario=impermanence complete=False visited=10000 score=19.75 sec=20.4 examples=49
+[export-multi] hand=9794f130047951e0 scenario=none complete=True visited=197 score=2.75 sec=0.7 examples=13
+[export-multi] hand=9794f130047951e0 scenario=ash complete=True visited=238 score=2.75 sec=0.8 examples=13
+[export-multi] hand=9794f130047951e0 scenario=impermanence complete=True visited=239 score=2.75 sec=0.7 examples=13
+[export-multi] hand=1cdd4338c9fc0b88 scenario=none complete=True visited=274 score=15.25 sec=0.8 examples=10
+[export-multi] hand=1cdd4338c9fc0b88 scenario=ash complete=True visited=289 score=15.25 sec=0.9 examples=10
+[export-multi] hand=1cdd4338c9fc0b88 scenario=impermanence complete=True visited=372 score=15.25 sec=1.1 examples=10
+[export-multi] hand=891e55bb37829263 scenario=none complete=False visited=10000 score=18.25 sec=228.1 examples=75
+[export-multi] hand=891e55bb37829263 scenario=ash complete=False visited=10000 score=18.25 sec=222.9 examples=74
+[export-multi] hand=891e55bb37829263 scenario=impermanence complete=False visited=10000 score=16.0 sec=239.2 examples=99
+[export-multi] hand=6ca09dc43212081c scenario=none complete=False visited=10000 score=15.0 sec=41.6 examples=180
+[export-multi] hand=6ca09dc43212081c scenario=ash complete=False visited=10000 score=9.75 sec=40.6 examples=180
+[export-multi] hand=6ca09dc43212081c scenario=impermanence complete=False visited=10000 score=9.75 sec=44.9 examples=180
+[export-multi] hand=774813b4cf1d787a scenario=none complete=False visited=10000 score=23.5 sec=23.4 examples=100
+[export-multi] hand=774813b4cf1d787a scenario=ash complete=False visited=10000 score=19.25 sec=22.6 examples=74
+[export-multi] hand=774813b4cf1d787a scenario=impermanence complete=False visited=10000 score=20.5 sec=25.9 examples=94
+[export-multi] hand=7d513c6eb0788e75 scenario=none complete=False visited=10000 score=17.75 sec=297.8 examples=89
+[export-multi] hand=7d513c6eb0788e75 scenario=ash complete=False visited=10000 score=14.5 sec=293.5 examples=37
+[export-multi] hand=7d513c6eb0788e75 scenario=impermanence complete=False visited=10000 score=10.0 sec=312.2 examples=14
+{
+  "audit": {
+    "complete_examples": 69,
+    "depth_distribution": {
+      "0": 6,
+      "1": 6,
+      "2": 6,
+      "3": 6,
+      "4": 6,
+      "5": 6,
+      "6": 6,
+      "7": 6,
+      "8": 6,
+      "9": 6,
+      "10": 3,
+      "11": 3,
+      "12": 3
+    },
+    "duplicate_state_rate": 0.17391304347826086,
+    "duplicate_state_rows": 12,
+    "examples_with_chosen_action_only_labels": 36,
+    "examples_with_full_action_value_labels": 60,
+    "hand_id_distribution_top": {
+      "1cdd4338c9fc0b88": 30,
+      "9794f130047951e0": 39
+    },
+    "incomplete_examples": 0,
+    "interruption_distribution": {
+      "ash": 23,
+      "impermanence": 23,
+      "none": 23
+    },
+    "leakage": {
+      "state_keys_shared_across_hands": 0,
+      "state_keys_shared_across_scenarios": 0,
+      "state_keys_shared_across_trajectories": 0
+    },
+    "multi_legal_chosen_only": 0,
+    "multi_legal_examples": 33,
+    "multi_legal_full_action_values": 24,
+    "multi_legal_percentage": 47.82608695652174,
+    "note": "Full action-value tables are expected mainly at depth 0 from minimax root_action_values; deeper states typically label only the chosen action. Behavior cloning needs (s, a*), not full Q.",
+    "opening_hand_distribution_top": {
+      "[10045474, 17751597, 45883110, 55273560, 62962630]": 30,
+      "[10045474, 19096726, 23434538, 82738008, 95515789]": 39
+    },
+    "oracle_action_kind_distribution": {
+      "end_phase": 6,
+      "pass": 39,
+      "place": 12,
+      "set": 12
+    },
+    "pass_percentage": 56.52173913043478,
+    "single_legal_examples": 36,
+    "states_per_hand": 28.5,
+    "total_examples": 69,
+    "unique_hand_ids": 2,
+    "unique_multi_legal_states": 27,
+    "unique_opening_hands": 2,
+    "unique_oracle_actions": 4,
+    "unique_state_keys": 57
+  },
+  "complete_searches": 6,
+  "exported_examples": 69,
+  "incomplete_searches": 42,
+  "summary_output": "reports/data/oracle/branded_multi_hand_summary.json",
+  "total_runtime_seconds": 4895.772637791997
+}

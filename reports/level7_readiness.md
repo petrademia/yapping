@@ -1,6 +1,6 @@
 # Level 7 readiness — experimental baseline
 
-Status: evidence report for commit `018d84d` (plus experiment-branch instrumentation fix).
+Status: evidence report re-run after bumping OCGCore, ygopro-scripts, and cards.cdb. Measured on commit `ef7f6b5` plus local pin updates.
 
 Research workflow: baseline → measure bottleneck → hypothesis → smallest method → compare → decide.
 
@@ -12,13 +12,14 @@ This handoff **does not** implement MCTS, RL, or neural search guidance.
 
 | Item | Value |
 |------|-------|
-| Commit | `018d84d0c18a38603876b1e758b46dd267d92a66` — add search measurement baseline (#4) |
+| Commit | `ef7f6b57940b9b388b9f90ba586c14b0f334a5e9` — Agent/level7 readiness experiments (#5) |
 | Platform | Darwin 25.6.0 arm64 (Apple Silicon) |
 | Python | 3.14.6 |
 | C++ | Apple clang 21.0.0 |
-| cards.cdb SHA-256 | `c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f` (matches README pin) |
-| Scripts | adjacent `fluorohydride-ygopro-scripts` |
-| Portable tests | **97 passed** (`PYTHONPATH=src:tools .venv/bin/python -m pytest -q`) |
+| OCGCore | `ee5c2ec7d6acfb583bfb7e26e6ee667db46677fa` |
+| cards.cdb SHA-256 | `f81958a2e0c238ddf5060482e1a2fc2c0d4a7f75917e76c388cab1a28fa43d4c` (matches README pin) |
+| Scripts | `090e881772f488e1256c456b827d5cbed4facf79` (adjacent `fluorohydride-ygopro-scripts`) |
+| Tests | **107 passed** (`PYTHONPATH=src:tools .venv/bin/python -m pytest -q`) |
 
 Machine-readable copy: `reports/data/environment.json`.
 
@@ -34,18 +35,18 @@ Fixed scenarios from `configs/benchmarks/albaz_search_baseline.json` (default Al
 
 | Scenario | Budget | States | Runtime (s) | Complete | Utility | Line len |
 |----------|-------:|-------:|------------:|----------|--------:|---------:|
-| none | 1,000 | 1,000 | 1.43 | no | 16.00 | 40 |
-| none | 5,000 | 5,000 | 7.11 | no | 16.00 | 42 |
-| none | 10,000 | 10,000 | 19.15 | no | 16.00 | 42 |
-| none | 50,000 | 10,975 | 17.91 | **yes** | 16.00 | 42 |
-| ash | 1,000 | 1,000 | 1.42 | no | 5.75 | 48 |
-| ash | 5,000 | 5,000 | 7.60 | no | 7.75 | 20 |
-| ash | 10,000 | 10,000 | 16.31 | no | 10.75 | 41 |
-| ash | 50,000 | 13,643 | 22.15 | **yes** | **8.25** | 45 |
-| impermanence | 1,000 | 1,000 | 1.29 | no | 8.75 | 46 |
-| impermanence | 5,000 | 5,000 | 7.30 | no | 14.00 | 53 |
-| impermanence | 10,000 | 10,000 | 16.84 | no | 13.00 | 43 |
-| impermanence | 50,000 | 12,528 | 20.43 | **yes** | **8.75** | 34 |
+| none | 1,000 | 1,000 | 1.41 | no | 16.00 | 40 |
+| none | 5,000 | 5,000 | 7.36 | no | 16.00 | 42 |
+| none | 10,000 | 10,000 | 23.86 | no | 16.00 | 42 |
+| none | 50,000 | 10,975 | 18.40 | **yes** | 16.00 | 42 |
+| ash | 1,000 | 1,000 | 1.51 | no | 5.75 | 48 |
+| ash | 5,000 | 5,000 | 7.38 | no | 7.75 | 20 |
+| ash | 10,000 | 10,000 | 15.97 | no | 10.75 | 41 |
+| ash | 50,000 | 13,643 | 22.30 | **yes** | **8.25** | 45 |
+| impermanence | 1,000 | 1,000 | 1.39 | no | 8.75 | 46 |
+| impermanence | 5,000 | 5,000 | 7.34 | no | 14.00 | 53 |
+| impermanence | 10,000 | 10,000 | 17.05 | no | 13.00 | 43 |
+| impermanence | 50,000 | 12,528 | 21.22 | **yes** | **8.75** | 34 |
 
 Completion budgets (this fixture): none ≈ 11k states, ash ≈ 14k, impermanence ≈ 13k.
 
@@ -74,7 +75,7 @@ Depth bands (complete impermanence): largest mean branching in bands `11–20` a
 1. **none:** utility is already 16.00 at 1k nodes and stays there through completion. Extra compute buys completeness/line polish, not utility.
 2. **ash / impermanence:** provisional utilities are **non-monotonic** and can **overshoot** the complete-search utility (ash 10.75 at 10k → 8.25 complete; imperm 14.00 at 5k → 8.75 complete). Best-line length also jumps around before completion.
 3. **Completeness** is reached before 50k for all three scenarios on this fixture.
-4. **Most expensive complete run:** ash (13.6k states, 22.1s).
+4. **Most expensive complete run:** ash (13.6k states, 22.3s).
 5. Runtime scales roughly with visited states (~1.3–1.9 ms/state).
 
 **Critical label hygiene:** incomplete-search utilities are not safe oracle targets for learning.
@@ -87,8 +88,8 @@ Proxy metric: `runtime_seconds / visited_states` (includes ReplayCursor reconstr
 
 | Statistic | ms / visited state |
 |-----------|-------------------:|
-| Mean | 1.55 |
-| Median | 1.57 |
+| Mean | 1.62 |
+| Median | 1.55 |
 
 Evidence:
 
@@ -96,7 +97,7 @@ Evidence:
 - Search-relevant branching is small (~1.3–1.6), so fan-out alone does not explain cost.
 - DIRECTION’s replay-pressure hypothesis is **consistent** with these measurements, but without separated timers we cannot prove replay dominates evaluator/legal/bookkeeping.
 
-**Verdict:** replay/reconstruction overhead is **material** (order ~1.5 ms/state on this machine for this fixture). Ranked **dominant among measured factors for this fixture**, with the caveat that the split is still coarse.
+**Verdict:** replay/reconstruction overhead is **material** (order ~1.6 ms/state on this machine for this fixture). Ranked **dominant among measured factors for this fixture**, with the caveat that the split is still coarse. Utilities, completeness, and visited-state counts are unchanged versus the previous pin.
 
 Detailed micro-timing (replay vs eval vs legal) was **not** added; it would require more invasive hooks than this handoff allows.
 
@@ -143,7 +144,7 @@ Hand-feature access (input composition, **not** playability), evaluated-sample r
 
 **Note:** random hands on the filler-heavy Albaz list mostly terminate quickly (often tens of visited states). That is a property of this toy deck distribution, not a failure of the consistency tooling.
 
-A second pass with `branded_albaz_v1.json` failed: sampled branded cards are not present in the Albaz fixture duel construction (`opening hand card … is not in this deck`). Documented limitation; not patched in this handoff.
+A branded `branded_albaz_v1.json` consistency pass was started (12 hands, seed 7, 20k nodes) but stopped after 38 minutes without a finished report. A concurrent branded multi-hand oracle export was already using the same machine. This re-run does not replace that limitation with new branded consistency numbers.
 
 ---
 
@@ -214,7 +215,7 @@ Schema fields themselves validate; provenance/completeness flags are present.
 
 Derived from this fixture/machine, not assumed a priori:
 
-1. **Per-visited-state overhead (~1.5 ms), consistent with material replay/reconstruction cost** — primary cost driver given low branching.
+1. **Per-visited-state overhead (~1.6 ms), consistent with material replay/reconstruction cost** — primary cost driver given low branching.
 2. **Need for complete-search budgets before trusting utilities** — incomplete labels mislead.
 3. **Oracle action-value coverage on multi-legal trajectory states** — blocks broad policy imitation.
 4. **Oracle / consistency dataset diversity** (hands, real deck lists) — current exports are too narrow for learning claims.

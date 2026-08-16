@@ -3,8 +3,8 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET="$ROOT/assets/cards.cdb"
-COMMIT="f3d9f81e619ec51427dd66d39e09b10f5ee2a41c"
-EXPECTED="c54901ab8dc1b2edec17b7ea65e309ab050b8fd05e0d314ebaab7f02db2ed70f"
+COMMIT="8f36c87c2faea4d24a6062410f9dfe0cd6848865"
+EXPECTED="f81958a2e0c238ddf5060482e1a2fc2c0d4a7f75917e76c388cab1a28fa43d4c"
 URL="https://raw.githubusercontent.com/mycard/ygopro-database/$COMMIT/locales/en-US/cards.cdb"
 
 command -v curl >/dev/null || {

@@ -23,7 +23,7 @@ from trace_albaz_combo import (
 )
 from yapping import minimax_replay, report_provenance
 from yapping._ocgcore import Duel
-from matchup_config import load_config
+from matchup_config import experiment_matchup, load_config
 
 
 # Cards that can legally interrupt the opponent's first turn from hand.
@@ -96,7 +96,7 @@ def run_search(interruption="ash", max_nodes=20_000, max_depth=180, opening_hand
                on_leaf=None):
     config = config or load_config()
     config = {**config, "controlled_player": controlled_player}
-    matchup = config if config.get("opponent_deck") else None
+    matchup = experiment_matchup(config, opening_hand=opening_hand)
     card = config["interruptions"].get(interruption)
     adapter = adapter or Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
     cursor = ReplayCursor(card, opening_hand, ecclesia_copies, adapter, matchup,

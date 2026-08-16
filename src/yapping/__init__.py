@@ -20,6 +20,8 @@ from .combo import load_combo
 from .evaluation import EndboardEvaluator, EvaluationState
 from .provenance import report_provenance
 from .learning import ORACLE_SCHEMA_VERSION, action_descriptor, snapshot_observation, validate_example
+from .hands import hand_id, sample_unique_hands, trajectory_id, validate_hand_in_deck
+from .oracle_dataset import audit_oracle_rows
 from .roles import (
     cards_with_role,
     count_roles,
@@ -67,6 +69,8 @@ __all__ = [
     "EndboardEvaluator", "EvaluationState",
     "report_provenance",
     "ORACLE_SCHEMA_VERSION", "action_descriptor", "snapshot_observation", "validate_example",
+    "hand_id", "trajectory_id", "validate_hand_in_deck", "sample_unique_hands",
+    "audit_oracle_rows",
     "DeckVariant", "SlotCandidate",
     "normalize_card_roles", "roles_for", "cards_with_role", "count_roles",
     "hand_features", "role_copies_in_deck",

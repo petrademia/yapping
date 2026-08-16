@@ -11,12 +11,13 @@ from collections import Counter
 from pathlib import Path
 
 from analyze_ash import ReplayCursor
-from matchup_config import load_config
+from matchup_config import experiment_matchup, load_config
 from search_opening import legal, search
 from trace_albaz_combo import ROOT, SCRIPTS
 from training_data import evaluate
 from yapping import (
     ORACLE_SCHEMA_VERSION,
+    audit_oracle_rows,
     report_provenance,
     snapshot_observation,
     validate_example,
@@ -35,7 +36,8 @@ def export_interruption(path: Path, interruption: str, max_nodes: int, max_depth
     gc.collect()
     card = config["interruptions"].get(interruption)
     adapter = Duel(str(ROOT / "assets/cards.cdb"), str(SCRIPTS))
-    cursor = ReplayCursor(card, None, 1, adapter, None)
+    matchup = experiment_matchup(config, opening_hand=None)
+    cursor = ReplayCursor(card, None, 1, adapter, matchup)
     cursor(())
     rows = []
     try:
@@ -79,66 +81,24 @@ def export_interruption(path: Path, interruption: str, max_nodes: int, max_depth
 
 
 def audit_rows(rows, path: Path | None = None) -> dict:
-    for row in rows:
-        validate_example(row)
-    unique_states = {row["state_key"] for row in rows}
-    depths = Counter(int(row.get("depth", -1)) for row in rows)
-    interruptions = Counter(row.get("interruption") for row in rows)
-    complete_count = sum(bool(row["complete"]) for row in rows)
+    result = audit_oracle_rows(rows)
+    result["path"] = str(path) if path else None
     root = [row for row in rows if int(row.get("depth", -1)) == 0]
     trajectory = [row for row in rows if int(row.get("depth", -1)) > 0]
+    result["root_examples"] = len(root)
+    result["trajectory_examples"] = len(trajectory)
+    result["incomplete_search_examples"] = result["incomplete_examples"]
+    from yapping.oracle_dataset import action_value_coverage
 
-    def coverage(row):
-        legal_set = {str(index) for index in row["legal_actions"]}
-        labelled = set(row["oracle_action_values"])
-        return {
-            "full_legal_coverage": labelled == legal_set,
-            "chosen_only": labelled == {str(row["oracle_action"])},
-        }
-
-    coverages = [coverage(row) for row in rows]
-    descriptors = Counter()
-    for row in rows:
-        legal_actions = row["observation"].get("legal_actions") or []
-        indices = row["observation"].get("legal_action_indices") or row["legal_actions"]
-        if row["oracle_action"] in indices:
-            position = list(indices).index(row["oracle_action"])
-            if position < len(legal_actions):
-                descriptors[legal_actions[position].get("kind", "?")] += 1
-
-    result = {
-        "path": str(path) if path else None,
-        "total_examples": len(rows),
-        "unique_state_keys": len(unique_states),
-        "duplicate_state_rows": len(rows) - len(unique_states),
-        "root_examples": len(root),
-        "trajectory_examples": len(trajectory),
-        "complete_examples": complete_count,
-        "incomplete_search_examples": len(rows) - complete_count,
-        "examples_with_full_action_value_labels": sum(
-            item["full_legal_coverage"] for item in coverages
-        ),
-        "examples_with_chosen_action_only_labels": sum(
-            item["chosen_only"] for item in coverages
-        ),
-        "root_full_action_value_labels": sum(
-            coverage(row)["full_legal_coverage"] for row in root
-        ),
-        "trajectory_full_action_value_labels": sum(
-            coverage(row)["full_legal_coverage"] for row in trajectory
-        ),
-        "depth_distribution": dict(sorted(depths.items())),
-        "interruption_distribution": dict(interruptions),
-        "oracle_action_index_distribution": dict(
-            Counter(str(row["oracle_action"]) for row in rows)
-        ),
-        "oracle_action_kind_distribution": dict(descriptors),
-        "note": (
-            "Full action-value tables are expected mainly at depth 0 from "
-            "minimax root_action_values; deeper states typically label only "
-            "the chosen action."
-        ),
-    }
+    result["root_full_action_value_labels"] = sum(
+        action_value_coverage(row)["full_legal_coverage"] for row in root
+    )
+    result["trajectory_full_action_value_labels"] = sum(
+        action_value_coverage(row)["full_legal_coverage"] for row in trajectory
+    )
+    result["oracle_action_index_distribution"] = dict(
+        Counter(str(row["oracle_action"]) for row in rows)
+    )
     if path is not None and path.exists() and rows:
         result["tabular_plumbing_check"] = evaluate(path)
         result["tabular_plumbing_note"] = (
