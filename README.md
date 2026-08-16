@@ -92,11 +92,21 @@ The adapter targets:
 
 OCGCore is fetched during the native build and is not copied into this repository. Card scripts and cards.cdb are runtime inputs.
 
-Linux or WSL is the recommended development environment because the native build and optional fork-based replay experiments target Linux process semantics.
+CI runs on Ubuntu. macOS is a supported development machine. The optional fork replay benchmark in `tools/benchmark_replay.py` is the only path that depends on POSIX `fork()` copy-on-write behavior.
 
-## Setup on Linux or WSL
+## Setup
 
-Install native prerequisites:
+Install native prerequisites.
+
+On macOS (Homebrew, plus Xcode Command Line Tools if `clang` is missing):
+
+```bash
+brew install cmake ninja
+```
+
+SQLite comes from the macOS SDK. If CMake cannot find it, run `brew install sqlite`.
+
+On Linux or WSL:
 
 ```bash
 sudo apt-get update
@@ -147,7 +157,8 @@ The validated database comes from [mycard/ygopro-database](https://github.com/my
 Check the file:
 
 ```bash
-sha256sum assets/cards.cdb
+# Linux: sha256sum   macOS: shasum -a 256
+shasum -a 256 assets/cards.cdb 2>/dev/null || sha256sum assets/cards.cdb
 PYTHONPATH=src python -m pytest -q tests/test_card_rules.py
 ```
 
