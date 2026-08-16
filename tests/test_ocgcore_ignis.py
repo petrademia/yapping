@@ -1,4 +1,6 @@
 import sqlite3
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -11,6 +13,7 @@ from yapping.ocg import (
 )
 
 REPO = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1]
 
 POT_OF_GREED = 55144522
 CELTIC_GUARDIAN = 91152256
@@ -41,6 +44,27 @@ def _choose(duel, decision, kind, card=None):
         if action["kind"] == kind and (card is None or action["card"] == card):
             return duel.step(index)
     raise AssertionError(f"missing {kind} {card}: {decision['actions']}")
+
+
+@pytest.mark.skipif(not fluoro_assets_ready(), reason="Fluoro cdb/scripts missing")
+def test_search_opening_default_engine_is_fluoro():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/search_opening.py"), "ash",
+         "--max-nodes", "8", "--max-depth", "12"],
+        cwd=ROOT, capture_output=True, text=True, check=True,
+    )
+    assert "engine: fluoro" in result.stdout
+
+
+@pytest.mark.skipif(not ignis_assets_ready(), reason="Ignis cdb/scripts missing")
+def test_search_opening_accepts_engine_ignis():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "tools/search_opening.py"), "ash",
+         "--engine", "ignis", "--max-nodes", "8", "--max-depth", "12"],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    assert result.returncode == 0, result.stderr[-2000:]
+    assert "engine: ignis" in result.stdout
 
 
 def test_engine_paths_do_not_cross_stacks():

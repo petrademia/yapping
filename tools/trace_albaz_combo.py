@@ -1,8 +1,10 @@
+import argparse
 import os
 import json
 from pathlib import Path
 
 from yapping._ocgcore import Duel
+from yapping.ocg import make_duel
 
 
 FALLEN_WHITE = 73819701
@@ -251,7 +253,7 @@ def new_duel(opponent_ash=False, opponent_card=None, opponent_set=False,
     return duel, decision
 
 
-def main():
+def main(engine="fluoro"):
     main_deck = None
     extra_deck = None
     opening_hand = None
@@ -265,11 +267,14 @@ def main():
             FALLEN_WHITE, INCREDIBLE_ECCLESIA,
             ASH_BLOSSOM, ASH_BLOSSOM, GHOST_OGRE,
         ]
+    adapter = make_duel(engine)
     duel, decision = new_duel(
         opponent_card=INTERRUPTIONS.get(INTERRUPTION),
         opponent_set=INTERRUPTION == "called_by",
         opening_hand=opening_hand, main_deck=main_deck, extra_deck=extra_deck,
+        adapter=adapter,
     )
+    print(f"engine: {engine}")
     show("initial", decision, duel)
     decision = choose(duel, decision, "activate", FALLEN_WHITE)
     show("after Fallen hand effect", decision, duel)
@@ -464,8 +469,11 @@ def main():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--engine", choices=["fluoro", "ignis"], default="fluoro")
+    arguments = parser.parse_args()
     try:
-        main()
+        main(arguments.engine)
     except LineInterrupted as interrupted:
         print("INTERRUPTION RESULT " + json.dumps({
             "interruption": INTERRUPTION,
